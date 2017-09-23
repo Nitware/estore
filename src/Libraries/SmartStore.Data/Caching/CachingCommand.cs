@@ -160,7 +160,6 @@ namespace SmartStore.Data.Caching
 			{
 				_command.DesignTimeVisible = value;
 			}
-            //added comment
 		}
 
 		protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
