@@ -1109,6 +1109,9 @@
     <Content Include="Scripts\jquery-ui\position.js" />
     <Content Include="Scripts\jquery-ui\widget.js" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
+    <Content Include="Scripts\jquery.backgroundpos.js" />
+    <Content Include="Scripts\jquery.sequence.custom.js" />
+    <Content Include="Scripts\jquery.sequence.js" />
     <Content Include="Scripts\jquery.sortable.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
@@ -1270,6 +1273,10 @@
     <Content Include="Themes\FlexBlue\Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Themes\Flex\Content\css\slider.less" />
+    <Content Include="Themes\Flex\Content\slider.less" />
+    <Content Include="Themes\Flex\Content\variables.custom.less" />
+    <Content Include="Themes\Flex\Content\variables.less" />
     <None Include="Themes\Flex\Content\vendors\photoswipe\LICENSE" />
     <None Include="Themes\Flex\Content\vendors\drift\LICENSE" />
     <Content Include="Themes\Flex\Content\vendors\photoswipe\photoswipe-ui-default.js" />
@@ -2044,6 +2051,11 @@
     <Content Include="Themes\Flex\Content\_choice.scss" />
     <Content Include="Themes\Flex\Content\_layout.scss" />
     <Content Include="Views\ShoppingCart\Partials\_RewardPointsBox.cshtml" />
+    <Content Include="Views\ContentSlider\CreateSlide.cshtml" />
+    <Content Include="Views\ContentSlider\EditSlide.cshtml" />
+    <Content Include="Views\ContentSlider\Index.cshtml" />
+    <Content Include="Views\ContentSlider\_CreateOrUpdate.cshtml" />
+    <Content Include="Views\Home\ContentSlider.cshtml" />
     <None Include="Web.EFMigrations.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

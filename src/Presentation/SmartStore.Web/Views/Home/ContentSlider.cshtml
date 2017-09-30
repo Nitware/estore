@@ -1,0 +1,182 @@
+﻿@model ContentSliderSettings
+@using SmartStore.Core.Domain.Cms;
+@using SmartStore.Web.Framework.Theming;
+@functions
+{
+	private string GetSliderBgExpression()
+	{
+		string result = "";
+
+		if (Model.BackgroundPictureUrl.HasValue())
+		{
+			int height = 450;
+			if (!string.IsNullOrEmpty(Model.ContentSliderHeight))
+			{
+				int.TryParse(Model.ContentSliderHeight, out height);
+				height = height > 450 ? height : 450;
+			}
+			result = "height:" + height + "px;background-image:url('{0}');".FormatInvariant(Url.Content(Model.BackgroundPictureUrl));
+		}
+
+		return result;
+	}
+
+}
+
+@{
+	var isActive = Model.IsActive && Model.Slides.Where(x => x.Published).Any();
+
+	if (isActive)
+	{
+		//Html.AddCssFileParts(false, Html.ThemePath("Content/bootstrap/carousel.less"));
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+		//Html.AddCssFileParts(false, Html.ThemePath("Content/slider.less"));
+		//Html.AddScriptParts("~/bundles/sequencejs");
+	}
+}
+
+@if (isActive)
+{
+	<style>
+		div.carousel-item {			
+			background: no-repeat center center scroll;
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+		}
+		.slide {
+			position: relative;
+			width: 100%;
+			max-width: 1280px;			
+			margin: 0;
+			background-color: #2786ce;
+			background-repeat: repeat;
+			background-position: 0 50%;
+			display: block;
+			overflow: hidden;
+			box-shadow: inset 0px 10px 8px -10px rgba(0, 0, 0, 0.5), inset 0px -10px 8px -10px rgba(0, 0, 0, 0.4);
+			-webkit-transition: background-position 1.5s ease-out;
+			transition: background-position 1.5s ease-out;
+			-webkit-transform: translate3d(0, 0, 0);
+			transform: translate3d(0, 0, 0);
+			-webkit-perspective: 1000;
+			-moz-perspective: 1000;
+			perspective: 1000;
+			-webkit-transform-style: preserve-3d;
+			transform-style: preserve-3d;
+			-moz-backface-visibility: hidden;
+			-ms-backface-visibility: hidden;
+			-o-backface-visibility: hidden;
+			backface-visibility: hidden;
+		}
+		.carousel-item img{padding:15px;}
+		.carousel-caption {
+			top: 15%;
+		}
+		
+	</style>
+	<div id="myCarousel" class="carousel slide" data-ride="carousel" style=" @(GetSliderBgExpression())">
+		<!-- Indicators -->
+
+		<ol class="carousel-indicators">
+			@for (int i = 0; i < Model.Slides.Where(d=>d.Published).Count(); i++)
+			{
+				<li data-target="#myCarousel" data-slide-to="@i" class="@(i == 0 ? "active" : "")"></li>
+			}
+		</ol>
+
+		<!-- Wrapper for slides -->
+		<div class="carousel-inner">
+			@for (int i = 0; i < Model.Slides.Count(); i++)
+			{
+				ContentSliderSlideSettings slide = Model.Slides[i];
+				if (slide.Published)
+				{
+					<div class="carousel-item @(i == 0 ? "active" : "")">
+						@if (!String.IsNullOrEmpty(@slide.PictureUrl))
+						{
+							<img src="@Url.Content(slide.PictureUrl)" alt="@slide.Title" />						
+						}
+						<div class="carousel-caption d-none d-md-block">
+							@if (!String.IsNullOrEmpty(@slide.Title))
+							{
+								<h3 class="title">@Html.Raw(@slide.Title)</h3>
+							}
+							@if (!String.IsNullOrEmpty(@slide.Text))
+							{
+								<div class="info">@Html.Raw(slide.Text)</div>
+							}
+							@if (slide.Button1.Published || slide.Button2.Published || slide.Button3.Published)
+							{
+								<div class="buttons">
+									@if (slide.Button1.Published && slide.Button1.Url.HasValue())
+									{
+										<a class="btn @slide.Button1.Type" href="@slide.Button1.Url">@slide.Button1.Text</a>}
+									@if (slide.Button2.Published && slide.Button2.Url.HasValue())
+									{
+										<a class="btn @slide.Button2.Type" href="@slide.Button2.Url">@slide.Button2.Text</a>}
+									@if (slide.Button3.Published && slide.Button3.Url.HasValue())
+									{
+										<a class="btn @slide.Button3.Type" href="@slide.Button3.Url">@slide.Button3.Text</a>}
+								</div>							
+							}
+
+						</div>
+					</div>
+				}
+			}
+		</div>
+
+		<!-- Left and right controls -->
+		@if (Model.Slides.Count > 1)
+		{
+
+			<a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="sr-only">Previous</span>
+			</a>
+			<a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="sr-only">Next</span>
+			</a>
+		}
+
+		@if (Model.AutoPlay && Model.Slides.Count > 1)
+		{
+			<div class="carousel-pause"></div>
+		}
+	</div>
+
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+	@*<script src="~/Content/bootstrap/js/bootstrap-collapse.js"></script>*@
+
+	<script type="text/javascript">
+        @*$(function () {
+            var sequence = null;
+            var options = {
+                autoPlay: @(Model.AutoPlay ? "true" : "false"),
+                autoPlayDelay: @(Model.AutoPlayDelay),
+                pagination: true,
+                showPaginationOnInit: true,
+                nextButton: true,
+                prevButton: true,
+                pauseButton: true,
+                pauseOnHover: false,
+                animateStartingFrameIn: false,
+                fadeFrameWhenSkipped: false,
+                transitionThreshold: 500,
+                bgSlide: '@(GetThemeVariable("SliderBgSlide", "on"))', // off | on | opposite
+                bgSlideIncrement: 50
+            };
+
+            sequence = $("#slider").sequence(options).data("sequence");
+            $.sequence.applyTheme(sequence); // applyTheme is an extension in sequence.jquery.custom.js
+        });*@
+	</script>
+
+}
+<div class="clearfix"></div>

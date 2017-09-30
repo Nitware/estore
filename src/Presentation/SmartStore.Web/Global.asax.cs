@@ -47,7 +47,7 @@ namespace SmartStore.Web
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 			routes.IgnoreRoute("{resource}.ashx/{*pathInfo}");
 			routes.IgnoreRoute(".db/{*virtualpath}");
-
+			
 			// register routes (core, admin, plugins, etc)
 			var routePublisher = engine.Resolve<IRoutePublisher>();
 			routePublisher.RegisterRoutes(routes);

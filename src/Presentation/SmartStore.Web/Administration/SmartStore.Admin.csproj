@@ -39,6 +39,7 @@
     <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
     <NuGetPackageImportStamp>1e5b888b</NuGetPackageImportStamp>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -176,6 +177,7 @@
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\CheckoutAttributeController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
+    <Compile Include="Controllers\ContentSliderController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
@@ -275,6 +277,7 @@
     <Compile Include="Models\Plugins\LicensePluginModel.cs" />
     <Compile Include="Models\Plugins\LocalPluginsModel.cs" />
     <Compile Include="Models\Plugins\ProviderModelList.cs" />
+    <Compile Include="Models\Settings\ContentSliderSettingsModel.cs" />
     <Compile Include="Models\Settings\SearchSettingsModel.cs" />
     <Compile Include="Models\Settings\DataExchangeSettingsModel.cs" />
     <Compile Include="Models\UrlRecord\UrlRecordListModel.cs" />
@@ -384,6 +387,7 @@
     <Compile Include="Validators\Catalog\ProductAttributeOptionModelValidator.cs" />
     <Compile Include="Validators\Common\AddressValidator.cs" />
     <Compile Include="Validators\Common\GenericAttributeValidator.cs" />
+    <Compile Include="Validators\ContentSlider\ContentSliderValidator.cs" />
     <Compile Include="Validators\DataExchange\ExportDeplomentValidator.cs" />
     <Compile Include="Validators\DataExchange\CsvConfigurationValidator.cs" />
     <Compile Include="Validators\DataExchange\ImportProfileValidator.cs" />
@@ -826,6 +830,10 @@
     <Content Include="Views\ProductAttribute\_CreateOrUpdateOption.cshtml" />
     <Content Include="Views\Setting\Partials\CommonFacet.cshtml" />
     <Content Include="Views\Plugin\Partials\LicenseLabel.cshtml" />
+    <Content Include="Views\ContentSlider\CreateSlide.cshtml" />
+    <Content Include="Views\ContentSlider\EditSlide.cshtml" />
+    <Content Include="Views\ContentSlider\Index.cshtml" />
+    <Content Include="Views\ContentSlider\_CreateOrUpdate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\admin.less" />
@@ -1561,15 +1569,14 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>43797</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost:43798/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>True</UseCustomServer>
-          <CustomServerUrl>http://www.smartstore.net</CustomServerUrl>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>http://localhost:33864/admin</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

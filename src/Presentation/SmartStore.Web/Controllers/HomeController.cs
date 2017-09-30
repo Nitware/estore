@@ -24,6 +24,9 @@ using SmartStore.Web.Infrastructure.Cache;
 using SmartStore.Web.Models.Catalog;
 using SmartStore.Web.Models.Common;
 using SmartStore.Web.Models.Topics;
+using SmartStore.Core.Infrastructure;
+using SmartStore.Core.Domain.Cms;
+using SmartStore.Services.Media;
 
 namespace SmartStore.Web.Controllers
 {
@@ -82,6 +85,34 @@ namespace SmartStore.Web.Controllers
         {
 			return View();
         }
+
+		[ChildActionOnly]
+		public ActionResult ContentSlider()
+		{
+			var pictureService = EngineContext.Current.Resolve<IPictureService>();
+			var settings = _services.Settings.LoadSetting<ContentSliderSettings>();
+
+			settings.BackgroundPictureUrl = pictureService.GetPictureUrl(settings.BackgroundPictureId, 0, false);
+
+			var slides = settings.Slides
+				.Where(s =>
+					s.LanguageCulture == _services.WorkContext.WorkingLanguage.LanguageCulture &&
+					(!s.LimitedToStores || (s.SelectedStoreIds != null && s.SelectedStoreIds.Contains(_services.StoreContext.CurrentStore.Id)))
+				)
+				.OrderBy(s => s.DisplayOrder);
+
+			foreach (var slide in slides)
+			{
+				slide.PictureUrl = pictureService.GetPictureUrl(slide.PictureId, 0, false);
+				slide.Button1.Url = CheckButtonUrl(slide.Button1.Url);
+				slide.Button2.Url = CheckButtonUrl(slide.Button2.Url);
+				slide.Button3.Url = CheckButtonUrl(slide.Button3.Url);
+			}
+
+			settings.Slides = slides.ToList();
+
+			return PartialView(settings);
+		}
 
 		public ActionResult StoreClosed()
 		{
@@ -191,5 +222,35 @@ namespace SmartStore.Web.Controllers
 		{
             return RedirectPermanent(_services.StoreContext.CurrentStore.Url);
 		}
-    }
+
+		#region helper functions
+
+		private string CheckButtonUrl(string url)
+		{
+			if (!String.IsNullOrEmpty(url))
+			{
+				if (url.StartsWith("//") || url.StartsWith("/") || url.StartsWith("http://") || url.StartsWith("https://"))
+				{
+					//  //www.domain.de/dir
+					//  http://www.domain.de/dir
+					// nothing needs to be done
+					return url;
+				}
+				else if (url.StartsWith("~/"))
+				{
+					//  ~/directory
+					return Url.Content(url);
+				}
+				else
+				{
+					//  directory
+					return Url.Content("~/" + url);
+				}
+			}
+
+			return url.EmptyNull();
+		}
+
+		#endregion helper functions
+	}
 }
