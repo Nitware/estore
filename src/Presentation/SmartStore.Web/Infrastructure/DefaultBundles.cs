@@ -29,6 +29,13 @@ namespace SmartStore.Web.Infrastructure
 					"~/Content/fileupload/jquery.fileupload.js",
 					"~/Content/fileupload/jquery.fileupload-single-ui.js"));
 
+			/* sequence js
+			-----------------------------------------------------*/
+			bundles.Add(new CustomScriptBundle("~/bundles/sequencejs").Include(
+				"~/Scripts/jquery.backgroundpos.js",
+				"~/Scripts/jquery.sequence.js",
+				"~/Scripts/jquery.sequence.custom.js"));
+
 			bundles.Add(new CustomStyleBundle("~/css/fileupload").Include(
 				"~/Content/fileupload/jquery.fileupload-single-ui.css"));
 

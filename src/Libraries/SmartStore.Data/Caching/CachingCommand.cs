@@ -19,6 +19,8 @@ namespace SmartStore.Data.Caching
 		private readonly CacheTransactionInterceptor _cacheTransactionInterceptor;
 		private readonly DbCachingPolicy _policy;
 
+        //private readonl db
+
 		public CachingCommand(
 			DbCommand command, 
 			CommandTreeFacts commandTreeFacts,

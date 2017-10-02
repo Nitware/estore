@@ -121,6 +121,7 @@
     <Compile Include="Caching\CachingCommandDefinition.cs" />
     <Compile Include="Caching\CachingDataReader.cs" />
     <Compile Include="Caching\CachingProviderServices.cs" />
+    <Compile Include="Caching\Class1.cs" />
     <Compile Include="Caching\CommandTreeFacts.cs" />
     <Compile Include="Caching\DbCacheUtil.cs" />
     <Compile Include="Caching\EfDbCache.cs" />

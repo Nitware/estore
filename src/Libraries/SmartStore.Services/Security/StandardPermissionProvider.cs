@@ -35,7 +35,8 @@ namespace SmartStore.Services.Security
         public static readonly PermissionRecord ManageShippingSettings = new PermissionRecord { Name = "Admin area. Manage Shipping Settings", SystemName = "ManageShippingSettings", Category = "Configuration" };
         public static readonly PermissionRecord ManageCurrencies = new PermissionRecord { Name = "Admin area. Manage Currencies", SystemName = "ManageCurrencies", Category = "Configuration" };
         public static readonly PermissionRecord ManageDeliveryTimes = new PermissionRecord { Name = "Admin area. Manage Delivery Times", SystemName = "ManageDeliveryTimes", Category = "Configuration" };
-        public static readonly PermissionRecord ManageThemes = new PermissionRecord { Name = "Admin area. Manage Themes", SystemName = "ManageThemes", Category = "Configuration" };
+		public static readonly PermissionRecord ManageContentSlider = new PermissionRecord { Name = "Admin area. Manage Content Slider", SystemName = "ManageContentSlider", Category = "Configuration" };
+		public static readonly PermissionRecord ManageThemes = new PermissionRecord { Name = "Admin area. Manage Themes", SystemName = "ManageThemes", Category = "Configuration" };
         public static readonly PermissionRecord ManageMeasures = new PermissionRecord { Name = "Admin area. Manage Measures", SystemName = "ManageMeasures", Category = "Configuration" };
         public static readonly PermissionRecord ManageActivityLog = new PermissionRecord { Name = "Admin area. Manage Activity Log", SystemName = "ManageActivityLog", Category = "Configuration" };
         public static readonly PermissionRecord ManageAcl = new PermissionRecord { Name = "Admin area. Manage ACL", SystemName = "ManageACL", Category = "Configuration" };
