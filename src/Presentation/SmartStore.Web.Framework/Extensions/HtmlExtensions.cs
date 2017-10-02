@@ -471,7 +471,7 @@ namespace SmartStore.Web.Framework
 					return new { zoneModel = zoneModel, model = model, area = "" };
 				}
 			}
-
+            
 			return null;
 		}
 
