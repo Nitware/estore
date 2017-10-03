@@ -58,8 +58,10 @@ namespace SmartStore.Services.Security
         public static readonly PermissionRecord EnableWishlist = new PermissionRecord { Name = "Public store. Enable wishlist", SystemName = "EnableWishlist", Category = "PublicStore" };
         public static readonly PermissionRecord PublicStoreAllowNavigation = new PermissionRecord { Name = "Public store. Allow navigation", SystemName = "PublicStoreAllowNavigation", Category = "PublicStore" };
 
+		//content slider
+		public static readonly PermissionRecord ConfigurationContentSlider = new PermissionRecord { Name = "Admin area. Manage Content Slider", SystemName = "ManageContentSlider", Category = "Configuration" };
 
-        public virtual IEnumerable<PermissionRecord> GetPermissions()
+		public virtual IEnumerable<PermissionRecord> GetPermissions()
         {
             return new[] 
             {
@@ -110,6 +112,7 @@ namespace SmartStore.Services.Security
                 EnableShoppingCart,
                 EnableWishlist,
                 PublicStoreAllowNavigation,
+				ConfigurationContentSlider
             };
         }
 
@@ -169,6 +172,7 @@ namespace SmartStore.Services.Security
                         EnableShoppingCart,
                         EnableWishlist,
                         PublicStoreAllowNavigation,
+						ConfigurationContentSlider
                     }
                 },
                 new DefaultPermissionRecord 

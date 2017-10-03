@@ -29,7 +29,8 @@
 	if (isActive)
 	{
 		//Html.AddCssFileParts(false, Html.ThemePath("Content/bootstrap/carousel.less"));
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+
+<link href = "~/Content/bootstral_4_slider.css" rel = "stylesheet" />
 		//Html.AddCssFileParts(false, Html.ThemePath("Content/slider.less"));
 		//Html.AddScriptParts("~/bundles/sequencejs");
 	}
@@ -71,11 +72,25 @@
 			backface-visibility: hidden;
 		}
 		.carousel-item img{padding:15px;}
+		.carousel-item div.image {
+			float: left;
+			width: 45%;
+		}
 		.carousel-caption {
-			top: 15%;
+			position:relative;
+			top: 120px;
+			width: 52%;
+			float: left;
+			right:auto;
+			bottom:auto;
+			left:auto;
+		}
+		.btn-custom {
+			padding: 12px 55px;
 		}
 		
 	</style>
+	<div class="clearfix"></div>
 	<div id="myCarousel" class="carousel slide" data-ride="carousel" style=" @(GetSliderBgExpression())">
 		<!-- Indicators -->
 
@@ -95,8 +110,9 @@
 				{
 					<div class="carousel-item @(i == 0 ? "active" : "")">
 						@if (!String.IsNullOrEmpty(@slide.PictureUrl))
-						{
-							<img src="@Url.Content(slide.PictureUrl)" alt="@slide.Title" />						
+						{<div class="image">
+							<img src="@Url.Content(slide.PictureUrl)" alt="@slide.Title" />
+						</div>
 						}
 						<div class="carousel-caption d-none d-md-block">
 							@if (!String.IsNullOrEmpty(@slide.Title))
@@ -112,13 +128,13 @@
 								<div class="buttons">
 									@if (slide.Button1.Published && slide.Button1.Url.HasValue())
 									{
-										<a class="btn @slide.Button1.Type" href="@slide.Button1.Url">@slide.Button1.Text</a>}
+										<a class="btn @slide.Button1.Type btn-custom" href="@slide.Button1.Url">@slide.Button1.Text</a>}
 									@if (slide.Button2.Published && slide.Button2.Url.HasValue())
 									{
-										<a class="btn @slide.Button2.Type" href="@slide.Button2.Url">@slide.Button2.Text</a>}
+										<a class="btn @slide.Button2.Type btn-custom" href="@slide.Button2.Url">@slide.Button2.Text</a>}
 									@if (slide.Button3.Published && slide.Button3.Url.HasValue())
 									{
-										<a class="btn @slide.Button3.Type" href="@slide.Button3.Url">@slide.Button3.Text</a>}
+										<a class="btn @slide.Button3.Type btn-custom" href="@slide.Button3.Url">@slide.Button3.Text</a>}
 								</div>							
 							}
 
