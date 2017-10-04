@@ -18,6 +18,7 @@
 		<div class="module-item@(!plugin.Installed ? " inactive" : "") clearfix" data-system-name="@plugin.SystemName" data-friendly-name="@plugin.FriendlyName">
 			<div class="module-icon">
 				<img class="icon img-responsive" src="@Url.Content(plugin.IconUrl)" />
+                @*<div>@Url.Content(plugin.IconUrl)</div>*@
 			</div>
 			<div class="module-data module-data-cols-2 clearfix@(!plugin.Installed ? " inactive" : "")">
 				<!-- General -->

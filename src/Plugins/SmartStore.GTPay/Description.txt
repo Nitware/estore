@@ -1,0 +1,9 @@
+﻿FriendlyName: GTPay
+Description: Contains GTPay payment methods like Master Card, Visa Card, etc.
+Group: Payment
+SystemName: SmartStore.GTPay
+Version: 3.0.3
+MinAppVersion: 3.0.0
+DisplayOrder: 0
+FileName: SmartStore.GTPay.dll
+ResourceRootKey: Plugins.SmartStore.GTPay
