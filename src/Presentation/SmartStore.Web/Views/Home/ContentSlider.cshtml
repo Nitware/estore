@@ -29,7 +29,9 @@
 	if (isActive)
 	{
 		//Html.AddCssFileParts(false, Html.ThemePath("Content/bootstrap/carousel.less"));
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+
+	<link href = "/Content/bootstral_4_slider.css" rel = "stylesheet" />
+
 		//Html.AddCssFileParts(false, Html.ThemePath("Content/slider.less"));
 		//Html.AddScriptParts("~/bundles/sequencejs");
 	}
@@ -49,13 +51,16 @@
 			position: relative;
 			width: 100%;
 			max-width: 1280px;			
-			margin: 0;
-			background-color: #2786ce;
+
+			margin: 0;			
+
 			background-repeat: repeat;
 			background-position: 0 50%;
 			display: block;
 			overflow: hidden;
-			box-shadow: inset 0px 10px 8px -10px rgba(0, 0, 0, 0.5), inset 0px -10px 8px -10px rgba(0, 0, 0, 0.4);
+
+		
+
 			-webkit-transition: background-position 1.5s ease-out;
 			transition: background-position 1.5s ease-out;
 			-webkit-transform: translate3d(0, 0, 0);
@@ -70,12 +75,53 @@
 			-o-backface-visibility: hidden;
 			backface-visibility: hidden;
 		}
-		.carousel-item img{padding:15px;}
-		.carousel-caption {
-			top: 15%;
+
+		.carousel-item img{padding:15px;max-height:450px;}
+		.carousel-item div.image {
+			float: left;
+			width: 45%;
 		}
-		
+		.carousel-caption {
+			position:relative;
+			top: 50px;
+			width: 52%;
+			float: left;
+			right:auto;
+			bottom:auto;
+			left:auto;
+			text-align:left;
+		}
+			.carousel-caption .title {
+				color: rgba(0,0,0,0.8);
+				text-transform: capitalize;
+				max-height: 7.8rem;
+				line-height: 1.3;
+				overflow: hidden;
+				-webkit-animation-delay: 1.2s;
+				animation-delay: 1.2s;
+				font-size: 3rem;
+				font-weight: 300;
+				margin-bottom: .5rem;
+			}
+
+			.carousel-caption .detail {
+				color: rgba(0,0,0,0.6);
+				animation-delay: 1.4s;
+				margin-bottom: 0.5rem;
+
+			}
+			.btn-custom {
+				padding: 12px 55px;
+			}
+		.fa-6 {
+			font-size:100px;
+		} 
+		.carousel-control-prev:hover, .carousel-control-next:hover {
+			color: gray;
+		}
 	</style>
+	<div class="clearfix"></div>
+
 	<div id="myCarousel" class="carousel slide" data-ride="carousel" style=" @(GetSliderBgExpression())">
 		<!-- Indicators -->
 
@@ -95,8 +141,11 @@
 				{
 					<div class="carousel-item @(i == 0 ? "active" : "")">
 						@if (!String.IsNullOrEmpty(@slide.PictureUrl))
-						{
-							<img src="@Url.Content(slide.PictureUrl)" alt="@slide.Title" />						
+
+						{<div class="image">
+							<img src="@Url.Content(slide.PictureUrl)" alt="@slide.Title" />
+						</div>
+
 						}
 						<div class="carousel-caption d-none d-md-block">
 							@if (!String.IsNullOrEmpty(@slide.Title))
@@ -105,20 +154,23 @@
 							}
 							@if (!String.IsNullOrEmpty(@slide.Text))
 							{
-								<div class="info">@Html.Raw(slide.Text)</div>
+								<div class="detail">@Html.Raw(slide.Text)</div>
+
 							}
 							@if (slide.Button1.Published || slide.Button2.Published || slide.Button3.Published)
 							{
 								<div class="buttons">
 									@if (slide.Button1.Published && slide.Button1.Url.HasValue())
 									{
-										<a class="btn @slide.Button1.Type" href="@slide.Button1.Url">@slide.Button1.Text</a>}
+
+										<a class="btn @slide.Button1.Type btn-custom" href="@slide.Button1.Url">@slide.Button1.Text</a>}
 									@if (slide.Button2.Published && slide.Button2.Url.HasValue())
 									{
-										<a class="btn @slide.Button2.Type" href="@slide.Button2.Url">@slide.Button2.Text</a>}
+										<a class="btn @slide.Button2.Type btn-custom" href="@slide.Button2.Url">@slide.Button2.Text</a>}
 									@if (slide.Button3.Published && slide.Button3.Url.HasValue())
 									{
-										<a class="btn @slide.Button3.Type" href="@slide.Button3.Url">@slide.Button3.Text</a>}
+										<a class="btn @slide.Button3.Type btn-custom" href="@slide.Button3.Url">@slide.Button3.Text</a>}
+
 								</div>							
 							}
 
@@ -133,11 +185,13 @@
 		{
 
 			<a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+				<span class="fa fa-angle-left fa-6" aria-hidden="true"></span>
 				<span class="sr-only">Previous</span>
 			</a>
 			<a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="fa fa-angle-right fa-6" aria-hidden="true"></span>
+
 				<span class="sr-only">Next</span>
 			</a>
 		}
