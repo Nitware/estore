@@ -7,18 +7,19 @@ using System.Web.Mvc;
 using SmartStore.Web.Framework.Controllers;
 using System.ComponentModel.DataAnnotations;
 using SmartStore.Services.Payments;
-using FluentValidation;
+using SmartStore.GTPay.Providers;
+using SmartStore.Core.Plugins;
+using SmartStore.Web.Framework.Plugins;
 using SmartStore.Web.Framework.Security;
 using SmartStore.GTPay.Models;
 using SmartStore.GTPay.Settings;
 using SmartStore.Web.Framework.Settings;
+using FluentValidation;
 using Autofac;
-using SmartStore.GTPay.Providers;
-using SmartStore.Core.Plugins;
-using SmartStore.Web.Framework.Plugins;
 
 namespace SmartStore.GTPay.Controllers
 {
+    
     public class GTPayController : PaymentControllerBase
     {
         private readonly IComponentContext _ctx;
@@ -126,8 +127,8 @@ namespace SmartStore.GTPay.Controllers
         [NonAction]
         public override IList<string> ValidatePaymentForm(FormCollection form)
         {
-            IValidator validator;
-            ValidationResult validationResult = null;
+            //IValidator validator;
+            //ValidationResult validationResult = null;
             var warnings = new List<string>();
 
             string type = form["GTPayMethodType"].NullEmpty();
@@ -254,9 +255,9 @@ namespace SmartStore.GTPay.Controllers
         #region ATMCard
 
         [AdminAuthorize, ChildActionOnly]
-        public ActionResult ATMCardConfigure()
+        public ActionResult CardConfigure()
         {
-            var model = ConfigureGet<GTPayATMCardConfigurationModel, GTPayATMCardPaymentSettings>((m, s) =>
+            var model = ConfigureGet<GTPayCardConfigurationModel, GTPayCardPaymentSettings>((m, s) =>
             {
                 m.TransactionStatus = s.TransactionStatus;
                 m.TransactionStatusValues = GetTransactModes();
@@ -276,37 +277,37 @@ namespace SmartStore.GTPay.Controllers
         }
 
         [HttpPost, AdminAuthorize, ChildActionOnly, ValidateInput(false)]
-        public ActionResult ATMCardConfigure(GTPayATMCardConfigurationModel model, FormCollection form)
+        public ActionResult CardConfigure(GTPayCardConfigurationModel model, FormCollection form)
         {
             if (!ModelState.IsValid)
-                return ATMCardConfigure();
+                return CardConfigure();
 
-            ConfigurePost<GTPayATMCardConfigurationModel, GTPayATMCardPaymentSettings>(model, form, s =>
+            ConfigurePost<GTPayCardConfigurationModel, GTPayCardPaymentSettings>(model, form, s =>
             {
                 s.TransactionStatus = model.TransactionStatus;
                 s.ExcludedCards = string.Join(",", model.ExcludedATMCards ?? new string[0]);
             });
 
-            return ATMCardConfigure();
+            return CardConfigure();
         }
 
-        public ActionResult ATMCardPaymentInfo()
+        public ActionResult CardPaymentInfo()
         {
-            var model = PaymentInfoGet<GTPayATMCardPaymentInfoModel, GTPayATMCardPaymentSettings>((m, s) =>
+            var model = PaymentInfoGet<GTPayCardPaymentInfoModel, GTPayCardPaymentSettings>((m, s) =>
             {
                 var excludedCreditCards = s.ExcludedCards.SplitSafe(",");
 
-                //foreach (var creditCard in ATMCardProvider.CardTypes)
-                //{
-                //    if (!excludedCreditCards.Any(x => x.IsCaseInsensitiveEqual(creditCard.Value)))
-                //    {
-                //        m.ATMCardTypes.Add(new SelectListItem
-                //        {
-                //            Text = creditCard.Text,
-                //            Value = creditCard.Value
-                //        });
-                //    }
-                //}
+                foreach (var card in CardProvider.CardTypes)
+                {
+                    if (!excludedCreditCards.Any(x => x.IsCaseInsensitiveEqual(card.Value)))
+                    {
+                        m.CardTypes.Add(new SelectListItem
+                        {
+                            Text = card.Text,
+                            Value = card.Value
+                        });
+                    }
+                }
             });
 
             PluginDescriptor pluginDescriptor = _pluginFinder.GetPluginDescriptorBySystemName("SmartStore.GTPay");
@@ -352,6 +353,27 @@ namespace SmartStore.GTPay.Controllers
             //    selectedYear.Selected = true;
 
             return PartialView(model);
+        }
+
+        public ActionResult PayGatewayResponse()
+        {
+            System.Collections.Specialized.NameValueCollection responseData = _httpContext.Request.Params;
+
+            if (responseData != null)
+            {
+                ViewBag.gtpay_tranx_id = responseData["gtpay_tranx_id"];
+                ViewBag.gtpay_tranx_status_code = responseData["gtpay_tranx_status_code"];
+                ViewBag.gtpay_tranx_status_msg = responseData["gtpay_tranx_status_msg"];
+                ViewBag.gtpay_tranx_amt = responseData["gtpay_tranx_amt"];
+                ViewBag.gtpay_tranx_curr = responseData["gtpay_tranx_curr"];
+                ViewBag.gtpay_cust_id = responseData["gtpay_cust_id"];
+                ViewBag.gtpay_gway_name = responseData["gtpay_gway_name"];
+                ViewBag.gtpay_echo_data = responseData["gtpay_echo_data"];
+                ViewBag.gtpay_tranx_amt_small_denom = responseData["gtpay_tranx_amt_small_denom"];
+                ViewBag.gtpay_verification_hash = responseData["gtpay_verification_hash"];
+            }
+
+            return View();
         }
 
         #endregion

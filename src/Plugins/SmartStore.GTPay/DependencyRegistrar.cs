@@ -47,36 +47,7 @@ namespace SmartStore.GTPay
             get { return 1; }
         }
 
-        static HttpContextBase HttpContextBaseFactory(IComponentContext ctx)
-        {
-            if (IsRequestValid())
-            {
-                return new HttpContextWrapper(HttpContext.Current);
-            }
-
-            // TODO: determine store url
-
-            // register FakeHttpContext when HttpContext is not available
-            return new FakeHttpContext("~/");
-        }
-        static bool IsRequestValid()
-        {
-            if (HttpContext.Current == null)
-                return false;
-
-            try
-            {
-                // The "Request" property throws at application startup on IIS integrated pipeline mode
-                var req = HttpContext.Current.Request;
-            }
-            catch (System.Exception)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
+      
 
 
     }

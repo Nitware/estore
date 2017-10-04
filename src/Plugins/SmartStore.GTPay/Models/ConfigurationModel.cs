@@ -23,9 +23,7 @@ namespace SmartStore.GTPay.Models
         public bool AdditionalFeePercentage { get; set; }
     }
 
-    //public class GTPayCashOnDeliveryConfigurationModel : GTPayConfigurationModelBase { }
-
-    public class GTPayATMCardConfigurationModel : GTPayConfigurationModelBase
+    public class GTPayCardConfigurationModel : GTPayConfigurationModelBase
     {
         public List<SelectListItem> TransactionStatusValues { get; set; }
         [SmartResourceDisplayName("Plugins.Payments.GTPay.Fields.TransactionStatus")]
@@ -37,9 +35,9 @@ namespace SmartStore.GTPay.Models
     }
 
     //public class GTPayPayInStoreConfigurationModel : GTPayConfigurationModelBase { }
-
     //public class GTPayPrepaymentConfigurationModel : GTPayConfigurationModelBase { }
-  
+    //public class GTPayCashOnDeliveryConfigurationModel : GTPayConfigurationModelBase { }
+
 
 
 }

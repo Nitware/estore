@@ -16,26 +16,31 @@ namespace SmartStore.GTPay.Models
         public string DescriptionText { get; set; }
     }
 
-    public class GTPayATMCardPaymentInfoModel : GTPayInfoModelBase
+    public class GTPayCardPaymentInfoModel : GTPayInfoModelBase
     {
         public string IconUrl { get; set; }
         public List<string> CardIconUrls { get; set; }
-        //public string DescriptionText { get; set; }
+
+        [SmartResourceDisplayName("Payment.SelectCard")]
+        [AllowHtml]
+        public string CardType { get; set; }
+        [SmartResourceDisplayName("Payment.SelectCard")]
+        public IList<SelectListItem> CardTypes { get; set; }
 
         private const string CARD_FOLDER = "~/Plugins/SmartStore.GTPay/Content/card";
 
-
-        //private readonly ICardIconManager _cardIconManager;
-
-        public GTPayATMCardPaymentInfoModel()
+        public GTPayCardPaymentInfoModel()
         {
+            CardTypes = new List<SelectListItem>();
+
             CardIconUrls = GetAllCardIconUrl();
         }
 
         public List<string> GetAllCardIconUrl()
         {
             List<string> cardIcons = null;
-            string folderPath = @"C:\Users\Dan\Documents\Visual Studio 2015\Projects\eStore\src\Plugins\SmartStore.GTPay\Content\card"; // HttpContext.Current.Server.MapPath(CARD_FOLDER);
+            string folderPath = @"C:\Users\Dan\Downloads\estore-master\src\Plugins\SmartStore.GTPay\Content\card"; // HttpContext.Current.Server.MapPath(CARD_FOLDER);
+            //string folderPath = @"C:\Users\Dan\Documents\Visual Studio 2015\Projects\eStore\src\Plugins\SmartStore.GTPay\Content\card"; // HttpContext.Current.Server.MapPath(CARD_FOLDER);
 
             if (!Directory.Exists(folderPath))
             {

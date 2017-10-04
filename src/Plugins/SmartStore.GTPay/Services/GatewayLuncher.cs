@@ -5,38 +5,39 @@ using System.Web;
 using System.Web.Mvc;
 
 using SmartStore.Services.Payments;
+using SmartStore.Core.Domain.Orders;
+using SmartStore.Core.Plugins;
 
 namespace SmartStore.GTPay.Services
 {
     public class GatewayLuncher : IGatewayLuncher
     {
+        private readonly IPaymentService _paymentService;
+
+        public GatewayLuncher(IPaymentService paymentService)
+        {
+            _paymentService = paymentService;
+        }
 
         public void Lunch(PostProcessPaymentRequest postProcessPaymentRequest, HttpContextBase httpContext)
         {
+
             string gtpay_mert_id = "8692";
-            string gtpay_tranx_id = "SRI1280095759511012";
+            string gtpay_tranx_id = "SRI0281935754411012";
             string gtpay_tranx_amt = "2350000";
             string gtpay_tranx_curr = "566";
             string gtpay_cust_id = "67";
             //string gtpay_tranx_noti_url = "http://localhost:5569/home/ReponseMessage";
 
-            string gtpay_tranx_noti_url = "http://www.nitware.com.ng";
+            //gtpay_tranx_noti_url = "http://localhost:5569" + gtpay_tranx_noti_url;
+            string gtpay_tranx_noti_url = UrlHelper.GenerateUrl("SmartStore.GTPay", "PayGatewayResponse", "GTPay", null, System.Web.Routing.RouteTable.Routes, httpContext.Request.RequestContext, false);
+            gtpay_tranx_noti_url = VirtualPathUtility.ToAbsolute(gtpay_tranx_noti_url);
+            
+            //string gtpay_tranx_noti_url = "http://www.nitware.com.ng";
             string hash = "D3D1D05AFE42AD50818167EAC73C109168A0F108F32645C8B59E897FA930DA44F9230910DAC9E20641823799A107A02068F7BC0F4CC41D2952E249552255710F";
             string parameters_to_hash = gtpay_mert_id + gtpay_tranx_id + gtpay_tranx_amt + gtpay_tranx_curr + gtpay_cust_id + gtpay_tranx_noti_url + hash;
             string gtpay_hash = GenerateSHA512String(parameters_to_hash);
             var url = "http://gtweb2.gtbank.com/orangelocker/gtpaym/tranx.aspx";
-
-            //HttpResponse res = new HttpResponse(); //  Response;
-
-            //System.Net.WebClient client = new System.Net.WebClient();
-            //client.UploadValues(url, new System.Collections.Specialized.NameValueCollection());
-
-            //Response.Clear();
-
-            //HttpResponse response = HttpContext; //.Response;
-
-
-            
 
             HttpResponseBase response = httpContext.Response;
             response.Clear();
@@ -45,7 +46,6 @@ namespace SmartStore.GTPay.Services
             sb.Append("<html>");
             sb.AppendFormat("<body onload='document.forms[0].submit()'>");
             sb.AppendFormat("<form action='{0}' method='post'>", url);
-
             sb.AppendFormat("<input type='hidden' name='gtpay_mert_id' value='{0}'>", gtpay_mert_id);
             sb.AppendFormat("<input type='hidden' name='gtpay_tranx_id' value='{0}'>", gtpay_tranx_id);
             sb.AppendFormat("<input type='hidden' name='gtpay_tranx_amt' value='{0}'>", gtpay_tranx_amt);
@@ -58,16 +58,29 @@ namespace SmartStore.GTPay.Services
             sb.AppendFormat("<input type='hidden' name='gtpay_gway_name' value='{0}'>", "");
             sb.AppendFormat("<input type='hidden' name='gtpay_hash' value='{0}'>", gtpay_hash);
             sb.AppendFormat("<input type='hidden' name='gtpay_tranx_noti_url' value='{0}'>", gtpay_tranx_noti_url);
-
             sb.Append("</form>");
             sb.Append("</body>");
             sb.Append("</html>");
 
             response.Write(sb.ToString());
             response.End();
+        }
 
-            //Response.Write(sb.ToString());
-            //Response.End();
+        private string GetRedirectUrl(int storeId)
+        {
+            string url = null;
+            Provider<IPaymentMethod> paymentMethod = _paymentService.LoadPaymentMethodBySystemName("Payments.GTPay", true, storeId);
+
+            if (paymentMethod != null)
+            {
+                RouteInfo routeInfo = paymentMethod.Value.GetPaymentInfoRoute();
+                if (routeInfo != null)
+                {
+                    //url = Url.Action(routeInfo.Action, routeInfo.Controller, routeInfo.RouteValues);
+                }
+            }
+
+            return url;
         }
 
         private static string GenerateSHA512String(string inputString)

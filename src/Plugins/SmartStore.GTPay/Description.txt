@@ -1,5 +1,5 @@
 ﻿FriendlyName: GTPay
-Description: Contains GTPay payment methods like Master Card, Visa Card, etc.
+Description: Contains GTPay payment methods like Master Card, Visa Card, and Verve Card.
 Group: Payment
 SystemName: SmartStore.GTPay
 Version: 3.0.3

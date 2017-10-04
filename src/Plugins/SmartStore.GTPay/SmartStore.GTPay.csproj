@@ -152,11 +152,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\card\1GTPayLogo.jpg" />
-    <Content Include="Content\card\2interswitchlogo.png" />
-    <Content Include="Content\card\3mastercardlogo.jpg" />
-    <Content Include="Content\card\4vervecardlogo.png" />
-    <Content Include="Content\card\5visacardlogo.png" />
+    <Content Include="Content\card\1interswitchlogo.png" />
+    <Content Include="Content\card\2mastercardlogo.jpg" />
+    <Content Include="Content\card\3vervecardlogo.png" />
+    <Content Include="Content\card\4visacardlogo.png" />
     <Content Include="Content\icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -170,10 +169,10 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Views\GTPay\ATMCardConfigure.cshtml">
+    <Content Include="Views\GTPay\CardConfigure.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\GTPay\ATMCardPaymentInfo.cshtml">
+    <Content Include="Views\GTPay\CardPaymentInfo.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -194,7 +193,7 @@
     <Compile Include="Models\PaymentInfoModel.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\ATMCardProvider.cs" />
+    <Compile Include="Providers\CardProvider.cs" />
     <Compile Include="Services\GatewayLuncher.cs" />
     <Compile Include="Providers\GTPayProviderBase.cs" />
     <Compile Include="RouteProvider.cs" />
@@ -202,7 +201,6 @@
     <Compile Include="Settings\GTPaySettings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\web-old.config" />
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
@@ -212,6 +210,7 @@
     <Content Include="Views\Web.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\GTPay\PayGatewayResponse.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
