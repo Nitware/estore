@@ -13,31 +13,44 @@ using SmartStore.GTPay.Services;
 namespace SmartStore.GTPay.Providers
 {
     [SystemName("Payments.GTPay")]
-    [FriendlyName("ATM Card")]
+    [FriendlyName("Card")]
     [DisplayOrder(1)]
-    public class ATMCardProvider : GTPayProviderBase<GTPayATMCardPaymentSettings>, IConfigurable
+    public class CardProvider : GTPayProviderBase<GTPayCardPaymentSettings>, IConfigurable
     {
         private readonly HttpContextBase _httpContext;
         private readonly IGatewayLuncher _gatewayLuncher;
 
-        public ATMCardProvider(HttpContextBase httpContext, IGatewayLuncher gatewayLuncher)
+        public CardProvider(HttpContextBase httpContext, IGatewayLuncher gatewayLuncher)
         {
             _httpContext = httpContext;
             _gatewayLuncher = gatewayLuncher;
         }
 
-        //public static List<SelectListItem> CardTypes
+        public static List<SelectListItem> CardTypes
+        {
+            get
+            {
+                var cardTypes = new List<SelectListItem>
+                {
+                    new SelectListItem { Text = "Naira Card", Value = "566" },
+                    new SelectListItem { Text = "Dollar Card", Value = "840" },
+                };
+                return cardTypes;
+            }
+        }
+        //public static List<SelectListItem> SupportedCards
         //{
         //    get
         //    {
         //        var cardTypes = new List<SelectListItem>
         //        {
-        //            new SelectListItem { Text = "Visa", Value = "Visa" },
-        //            new SelectListItem { Text = "Master Card", Value = "MasterCard" },
+        //            new SelectListItem { Text = "Naira", Value = "566" },
+        //            new SelectListItem { Text = "Dollar", Value = "840" },
         //        };
         //        return cardTypes;
         //    }
         //}
+
         public override bool RequiresInteraction
         {
             get
@@ -64,7 +77,7 @@ namespace SmartStore.GTPay.Providers
         public override ProcessPaymentResult ProcessPayment(ProcessPaymentRequest processPaymentRequest)
         {
             var result = new ProcessPaymentResult();
-            var settings = CommonServices.Settings.LoadSetting<GTPayATMCardPaymentSettings>(processPaymentRequest.StoreId);
+            var settings = CommonServices.Settings.LoadSetting<GTPayCardPaymentSettings>(processPaymentRequest.StoreId);
 
             result.AllowStoringCreditCardNumber = true;
 
@@ -88,20 +101,18 @@ namespace SmartStore.GTPay.Providers
         }
 
 
-       
+
 
 
         /// <summary>
-		/// Post process payment (used by payment gateways that require redirecting to a third-party URL)
-		/// </summary>
-		/// <param name="postProcessPaymentRequest">Payment info required for an order processing</param>
-		public override void PostProcessPayment(PostProcessPaymentRequest postProcessPaymentRequest)
+        /// Post process payment (used by payment gateways that require redirecting to a third-party URL)
+        /// </summary>
+        /// <param name="postProcessPaymentRequest">Payment info required for an order processing</param>
+        public override void PostProcessPayment(PostProcessPaymentRequest postProcessPaymentRequest)
         {
             if (postProcessPaymentRequest.Order.PaymentStatus == Core.Domain.Payments.PaymentStatus.Paid)
                 return;
 
-            //postProcessPaymentRequest.RedirectUrl = "https://sandbox.interswitchng.com/webpay/pay";
-            
 
             _gatewayLuncher.Lunch(postProcessPaymentRequest, _httpContext);
 
@@ -233,7 +244,7 @@ namespace SmartStore.GTPay.Providers
         public override ProcessPaymentResult ProcessRecurringPayment(ProcessPaymentRequest processPaymentRequest)
         {
             var result = new ProcessPaymentResult();
-            var settings = CommonServices.Settings.LoadSetting<GTPayATMCardPaymentSettings>(processPaymentRequest.StoreId);
+            var settings = CommonServices.Settings.LoadSetting<GTPayCardPaymentSettings>(processPaymentRequest.StoreId);
 
             result.AllowStoringCreditCardNumber = true;
             //switch (settings.TransactMode)
@@ -262,17 +273,15 @@ namespace SmartStore.GTPay.Providers
             return new CancelRecurringPaymentResult();
         }
 
-       
-
         protected override string GetActionPrefix()
         {
             //return "Manual";
-            return "ATMCard";
+            return "Card";
         }
 
 
 
-       
+
 
 
 

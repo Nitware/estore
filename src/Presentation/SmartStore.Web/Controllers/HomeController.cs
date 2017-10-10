@@ -83,7 +83,7 @@ namespace SmartStore.Web.Controllers
         [RequireHttpsByConfigAttribute(SslRequirement.No)]
         public ActionResult Index()
         {
-			return View();
+            return View();
         }
 
 		[ChildActionOnly]

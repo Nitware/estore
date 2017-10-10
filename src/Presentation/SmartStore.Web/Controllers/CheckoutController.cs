@@ -879,21 +879,20 @@ namespace SmartStore.Web.Controllers
 			{
 				NotifyError(exception);
 			}
-			finally
-			{
-				_httpContext.Session["OrderPaymentInfo"] = null;
-				_httpContext.RemoveCheckoutState();
-			}
+            finally
+            {
+                _httpContext.Session["OrderPaymentInfo"] = null;
+                _httpContext.RemoveCheckoutState();
+            }
 
-			if (postProcessPaymentRequest != null && postProcessPaymentRequest.RedirectUrl.HasValue())
+            if (postProcessPaymentRequest != null && postProcessPaymentRequest.RedirectUrl.HasValue())
 			{
 				return Redirect(postProcessPaymentRequest.RedirectUrl);
 			}
 
 			return RedirectToAction("Completed");
 		}
-
-
+        
         public ActionResult Completed()
         {
             //validation

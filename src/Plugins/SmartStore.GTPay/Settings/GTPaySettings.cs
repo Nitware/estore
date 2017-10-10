@@ -12,8 +12,8 @@ namespace SmartStore.GTPay.Settings
     //public class GTPayCashOnDeliveryPaymentSettings : GTPayPaymentSettingsBase, ISettings
     //{
     //}
-    
-    public class GTPayATMCardPaymentSettings : GTPayPaymentSettingsBase, ISettings
+
+    public class GTPayCardPaymentSettings : GTPayPaymentSettingsBase, ISettings
     {
         public TransactionStatus TransactionStatus { get; set; }
         public string ExcludedCards { get; set; }

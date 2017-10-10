@@ -5,7 +5,7 @@ using System.Web;
 
 using SmartStore.Core.Plugins;
 using SmartStore.Services;
-using SmartStore.GTPay.Data.Migrations;
+//using SmartStore.GTPay.Data.Migrations;
 using System.Data.Entity.Migrations;
 
 namespace SmartStore.GTPay
@@ -84,8 +84,9 @@ namespace SmartStore.GTPay
             //loc.DeleteLocaleStringResources("Plugins.Payments.Manual");
             //loc.DeleteLocaleStringResources("Plugins.Payments.DirectDebit");
 
-            var migrator = new DbMigrator(new Configuration());
-            migrator.Update(DbMigrator.InitialDatabase);
+
+            //var migrator = new DbMigrator(new Configuration());
+            //migrator.Update(DbMigrator.InitialDatabase);
 
             base.Uninstall();
         }

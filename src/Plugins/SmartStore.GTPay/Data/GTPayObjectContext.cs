@@ -1,6 +1,6 @@
 ﻿using SmartStore.Data;
 using SmartStore.Data.Setup;
-using SmartStore.GTPay.Data.Migrations;
+//using SmartStore.GTPay.Data.Migrations;
 using System.Data.Entity;
 
 namespace SmartStore.GTPay.Data
@@ -11,11 +11,11 @@ namespace SmartStore.GTPay.Data
 
         static GTPayObjectContext()
         {
-            var initializer = new MigrateDatabaseInitializer<GTPayObjectContext, Configuration>
-            {
-                TablesToCheck = new[] { "GTPay" }
-            };
-            Database.SetInitializer(initializer);
+            //var initializer = new MigrateDatabaseInitializer<GTPayObjectContext, Configuration>
+            //{
+            //    TablesToCheck = new[] { "GTPay" }
+            //};
+            //Database.SetInitializer(initializer);
         }
 
         /// <summary>

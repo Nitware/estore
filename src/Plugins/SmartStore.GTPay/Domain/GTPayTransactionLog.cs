@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using SmartStore.Core.Domain.Orders;
 
 namespace SmartStore.GTPay.Domain
 {
@@ -7,6 +8,7 @@ namespace SmartStore.GTPay.Domain
     {
         public string TransactionRefNo { get; set; }
         public int GTPayTransactionStatusId { get; set; }
+        public decimal ApprovedAmount { get; set; }
         public long AmountInUnit { get; set; }
         public string ResponseCode { get; set; }
         public string ResponseDescription { get; set; }
@@ -16,9 +18,14 @@ namespace SmartStore.GTPay.Domain
         public string WebPayRefNo { get; set; }
         public string PayRefNo { get; set; }
         public bool IsAmountMismatch { get; set; }
+        public int OrderId { get; set; }
+        public DateTime TransactionDate { get; set; }
+        public int CurrencyCode { get; set; }
+        public string Gateway { get; set; }
 
         //[DataMember]
         public virtual GTPayTransactionStatus GTPayTransactionStatus { get; set; }
+        public virtual Order Order { get; set; }
 
 
     }

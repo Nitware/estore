@@ -1,27 +1,35 @@
 ﻿
 using Autofac;
 using Autofac.Core;
+using Autofac.Integration.Mvc;
 using SmartStore.Core.Data;
 using SmartStore.Core.Fakes;
 using SmartStore.Core.Infrastructure;
 using SmartStore.Core.Infrastructure.DependencyManagement;
 using SmartStore.GTPay.Data;
+using SmartStore.GTPay.Filters;
 using SmartStore.GTPay.Models;
 using SmartStore.GTPay.Services;
+using SmartStore.Web.Controllers;
 using System.Web;
 
 namespace SmartStore.GTPay
 {
     public class DependencyRegistrar : IDependencyRegistrar
     {
+        //private IGatewayLuncher _gatewayLuncher;
+
+        //public DependencyRegistrar(IGatewayLuncher gatewayLuncher)
+        //{
+        //    _gatewayLuncher = gatewayLuncher;
+        //}
+
         public virtual void Register(ContainerBuilder builder, ITypeFinder typeFinder, bool isActiveModule)
         {
-            //builder.RegisterType<ShippingByWeightService>().As<IShippingByWeightService>().InstancePerRequest();
-            //builder.Register(HttpContextBaseFactory).As<HttpContextBase>();
-
             builder.RegisterType<GatewayLuncher>().As<IGatewayLuncher>().InstancePerRequest();
             //builder.RegisterType<CardIconManager>().As<ICardIconManager>().InstancePerRequest();
             
+
 
             // data layer
             // register named context
@@ -32,8 +40,22 @@ namespace SmartStore.GTPay
             builder.Register<GTPayObjectContext>(c => new GTPayObjectContext(DataSettings.Current.DataConnectionString))
                 .InstancePerRequest();
 
+            builder.RegisterType<CheckoutConfirmWidgetZoneFilter>()
+                    .AsActionFilterFor<CheckoutController>(x => x.Confirm())
+                    .InstancePerRequest();
+
+            builder.RegisterType<OrderDetailsWidgetZoneFilter>()
+                 .AsActionFilterFor<OrderController>(x => x.Details(GatewayLuncher.OrderId))
+                 .InstancePerRequest();
             
-           
+            builder.RegisterType<CheckoutCompletedWidgetZoneFilter>()
+                   .AsActionFilterFor<CheckoutController>(x => x.Completed())
+                   .InstancePerRequest();
+
+
+
+
+
 
             //// override required repository with our custom context
             //builder.RegisterType<EfRepository<ShippingByWeightRecord>>()
@@ -47,35 +69,7 @@ namespace SmartStore.GTPay
             get { return 1; }
         }
 
-        static HttpContextBase HttpContextBaseFactory(IComponentContext ctx)
-        {
-            if (IsRequestValid())
-            {
-                return new HttpContextWrapper(HttpContext.Current);
-            }
-
-            // TODO: determine store url
-
-            // register FakeHttpContext when HttpContext is not available
-            return new FakeHttpContext("~/");
-        }
-        static bool IsRequestValid()
-        {
-            if (HttpContext.Current == null)
-                return false;
-
-            try
-            {
-                // The "Request" property throws at application startup on IIS integrated pipeline mode
-                var req = HttpContext.Current.Request;
-            }
-            catch (System.Exception)
-            {
-                return false;
-            }
-
-            return true;
-        }
+       
 
 
 

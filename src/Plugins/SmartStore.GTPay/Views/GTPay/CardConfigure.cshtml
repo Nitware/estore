@@ -1,0 +1,213 @@
+﻿@using SmartStore.Web.Framework;
+@using SmartStore.GTPay.Models;
+@model SmartStore.GTPay.Models.GTPayCardConfigurationModel
+
+
+@{
+	Layout = "";
+}
+
+@{ Html.RenderAction("StoreScopeConfiguration", "Setting", new { area = "Admin" }); }
+
+@using (Html.BeginForm())
+{
+	<table class="adminContent">
+        <tr class="adminSeparator">
+            <td colspan="2">
+                <div class="admin-config-group">
+                    <div class="title">Transaction Status</div>
+                    @*<div class="title">@Model.ConfigGroups.SafeGet(1)</div>*@
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.TransactionStatus)
+            </td>
+            <td class="adminData">
+				@Html.SettingOverrideCheckbox(model => model.TransactionStatus)
+                @Html.DropDownListFor(model => model.TransactionStatus, Model.TransactionStatusValues)
+
+
+                @*@Html.DropDownListFor(model => model.TransactionStatus, Model.TransactionStatusValues, new { @class = "form-control noskin" })*@
+            </td>
+        </tr>
+
+        @*<tr>
+            <table class="adminContent">
+                <tr>
+                    <td>
+                        @(Html.Telerik().Grid<GTPayCardConfigurationModel>()
+                    .Name("Grid")
+                    .DataKeys(keys => keys.Add(x => x.Id).RouteKey("Id"))
+                    .Columns(columns =>
+                    {
+                        columns.Bound(x => x.StoreName).ReadOnly();
+                        columns.Bound(x => x.CountryName).ReadOnly();
+                        columns.Bound(x => x.Zip);
+                        columns.Bound(x => x.ShippingMethodName).ReadOnly();
+                        columns.Bound(x => x.From)
+                            .Format("{0:0.00}");
+                        columns.Bound(x => x.To)
+                            .Format("{0:0.00}");
+                        columns.Bound(x => x.UsePercentage)
+                            .Centered()
+                            .Template(item => @Html.SymbolForBool(item.UsePercentage))
+                            .ClientTemplate(@Html.SymbolForBool("UsePercentage"));
+                        columns.Bound(x => x.ShippingChargePercentage)
+                            .Format("{0:0.00}");
+                        columns.Bound(x => x.ShippingChargeAmount)
+                            .Format("{0:0.00}");
+                        columns.Bound(x => x.SmallQuantitySurcharge)
+                            .Format("{0:0.00}");
+                        columns.Bound(x => x.SmallQuantityThreshold)
+                            .Format("{0:0.00}");
+                        columns.Command(commands =>
+                        {
+                            commands.Edit();
+                            commands.Delete();
+                        }).Width(180);
+
+                    })
+                    .Editable(x =>
+                    {
+                        x.Mode(GridEditMode.InLine);
+                    })
+                    .DataBinding(dataBinding =>
+                    {
+                        dataBinding.Ajax()
+                            .Select("RatesList", "ShippingByWeight", new RouteValueDictionary() { { "area", "SmartStore.ShippingByWeight" } })
+                            .Update("RateUpdate", "ShippingByWeight", new RouteValueDictionary() { { "area", "SmartStore.ShippingByWeight" } })
+                            .Delete("RateDelete", "ShippingByWeight", new RouteValueDictionary() { { "area", "SmartStore.ShippingByWeight" } });
+                    })
+                    .Pageable(settings => settings.PageSize(Model.GridPageSize).Position(GridPagerPosition.Both))
+                    .PreserveGridState()
+                    .EnableCustomBinding(true))
+                    </td>
+                </tr>
+            </table>
+        </tr>*@
+
+
+        <tr class="adminSeparator">
+            <td colspan="2">
+                <div class="admin-config-group">
+                    <div class="title">Card Types</div>
+                    @*<div class="title">@Model.ConfigGroups.SafeGet(1)</div>*@
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.SupportedCard)
+            </td>
+            <td class="adminData">
+                @Html.SettingOverrideCheckbox(model => model.SupportedCard)
+                @Html.DropDownListFor(model => model.SupportedCard, Model.SupportedCardValues)
+
+                @*@Html.DropDownListFor(model => model.SupportedCard, Model.SupportedCardValues, new { @class = "form-control noskin" })*@
+            </td>
+        </tr>
+
+        
+        <tr class="adminSeparator">
+            <td colspan="2">
+                <div class="admin-config-group">
+                    <div class="title">Settings</div>
+                    @*<div class="title">@Model.ConfigGroups.SafeGet(1)</div>*@
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.TransactionStatus)
+            </td>
+            <td class="adminData">
+                @Html.SettingOverrideCheckbox(model => model.TransactionStatus)
+                @Html.DropDownListFor(model => model.TransactionStatus, Model.TransactionStatusValues)
+
+
+                @*@Html.DropDownListFor(model => model.TransactionStatus, Model.TransactionStatusValues, new { @class = "form-control noskin" })*@
+            </td>
+        </tr>
+		<tr>
+			<td class="adminTitle">
+				@*@Html.SmartLabelFor(model => model.ExcludedCreditCards)*@
+
+                @Html.SmartLabelFor(model => model.HashKey)
+			</td>
+			<td class="adminData">
+                @Html.SettingEditorFor(model => model.HashKey)
+                @Html.ValidationMessageFor(model => model.HashKey)
+
+				@*@Html.SettingOverrideCheckbox(model => model.ExcludedCreditCards)
+				@Html.ListBoxFor(x => x.ExcludedCreditCards, new MultiSelectList(Model.AvailableCreditCards, "Value", "Text"), new { multiple = "multiple" })
+				@Html.ValidationMessageFor(model => model.ExcludedCreditCards)*@
+			</td>
+		</tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.MerchantID)
+            </td>
+            <td class="adminData">
+                @Html.SettingEditorFor(model => model.MerchantID)
+                @Html.ValidationMessageFor(model => model.MerchantID)
+            </td>
+        </tr>
+        @*<tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.MerchantID)
+            </td>
+            <td class="adminData">
+                @Html.SettingOverrideCheckbox(model => model.SupportedCurrency)
+                @Html.DropDownListFor(model => model.SupportedCurrency, Model.SupportedCurrencyValues, new { @class = "form-control noskin" })
+            </td>
+        </tr>*@
+
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.GatewayUrl)
+            </td>
+            <td class="adminData">
+                @Html.SettingEditorFor(model => model.GatewayUrl)
+                @Html.ValidationMessageFor(model => model.GatewayUrl)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.AdditionalFee)
+            </td>
+            <td class="adminData">
+                @Html.SettingEditorFor(model => model.AdditionalFee)
+                @Html.ValidationMessageFor(model => model.AdditionalFee)
+            </td>
+        </tr>
+        @*<tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.AdditionalFee)
+            </td>
+            <td class="adminData">
+                @Html.SettingEditorFor(model => model.AdditionalFee)
+                @Html.ValidationMessageFor(model => model.AdditionalFee)
+            </td>
+        </tr>*@
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.AdditionalFeePercentage)
+            </td>
+            <td class="adminData">
+                @Html.SettingEditorFor(model => model.AdditionalFeePercentage)
+                @Html.ValidationMessageFor(model => model.AdditionalFeePercentage)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">&nbsp;</td>
+            <td class="adminData">
+                <button type="submit" id="save" name="save" class="btn btn-primary" value="save">
+                    <i class="fa fa-check"></i>&nbsp;@T("Admin.Common.Save")
+                </button>
+            </td>
+        </tr>
+    </table>
+}
