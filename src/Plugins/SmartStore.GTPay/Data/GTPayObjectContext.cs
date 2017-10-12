@@ -19,6 +19,7 @@ namespace SmartStore.GTPay.Data
             var initializer = new MigrateDatabaseInitializer<GTPayObjectContext, Configuration>
             {
                 TablesToCheck = new[] { "GTPaySupportedCurrency", "GTPayTransactionLog", "GTPayTransactionStatus" }
+                //TablesToCheck = new[] { "GTPay" }
             };
             Database.SetInitializer(initializer);
         }
@@ -39,8 +40,8 @@ namespace SmartStore.GTPay.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new GTPayTransactionLogRecordMap());
-            modelBuilder.Configurations.Add(new GTPaySupportedCurrencyRecordMap());
-            modelBuilder.Configurations.Add(new GTPayTransactionStatusRecordMap());
+            //modelBuilder.Configurations.Add(new GTPaySupportedCurrencyRecordMap());
+            //modelBuilder.Configurations.Add(new GTPayTransactionStatusRecordMap());
 
 
             //disable EdmMetadata generation

@@ -100,6 +100,7 @@
       <HintPath>..\..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -172,14 +173,6 @@
     <Compile Include="Data\GTPaySupportedCurrencyRecordMap.cs" />
     <Compile Include="Data\GTPayTransactionLogRecordMap.cs" />
     <Compile Include="Data\GTPayTransactionStatusRecordMap.cs" />
-    <Compile Include="Data\Migrations\201710121528478_GTPayInit.cs" />
-    <Compile Include="Data\Migrations\201710121528478_GTPayInit.Designer.cs">
-      <DependentUpon>201710121528478_GTPayInit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Migrations\201710121557249_GTPayInit_2.cs" />
-    <Compile Include="Data\Migrations\201710121557249_GTPayInit_2.Designer.cs">
-      <DependentUpon>201710121557249_GTPayInit_2.cs</DependentUpon>
-    </Compile>
     <Compile Include="Data\Migrations\Configuration.cs" />
     <Compile Include="DependencyRegistrar.cs" />
     <Compile Include="Domain\GTPaySupportedCurrency.cs" />
@@ -234,14 +227,6 @@
       <Project>{4f1f649c-1020-45be-a487-f416d9297ff3}</Project>
       <Name>SmartStore.Web</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Data\Migrations\201710121528478_GTPayInit.resx">
-      <DependentUpon>201710121528478_GTPayInit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Migrations\201710121557249_GTPayInit_2.resx">
-      <DependentUpon>201710121557249_GTPayInit_2.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
