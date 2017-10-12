@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 
+using SmartStore.GTPay.Interfaces;
 using SmartStore.Services.Payments;
 using System.Web.Mvc;
 using System.Text;
-using SmartStore.Core;
+using System.Security.Cryptography;
 using SmartStore.Core.Domain.Common;
 using SmartStore.Core.Domain.Orders;
-using System.Security.Cryptography;
 
 namespace SmartStore.GTPay.Services
 {
@@ -35,10 +37,17 @@ namespace SmartStore.GTPay.Services
         private string _gtpay_tranx_noti_url = "gtpay_tranx_noti_url";
         private string _gtpay_tranx_status_code = "gtpay_tranx_status_code";
         private string _gtpay_tranx_status_msg = "gtpay_tranx_status_msg";
+        private string _gtpay_tranx_amt_small_denom = "gtpay_tranx_amt_small_denom";
         private string _gatewayMessage = "gatewayMessage";
         private string _transactionRef = "transactionRef";
+        private string _isManInTheMiddleAttack = "isManInTheMiddleAttack";
+        private string _manInTheMiddleAttackMessage = "One or more transaction parameters have been modified in transit! The system has aborted this transaction to save you from malicious attack. Please click the 'Continue shopping' button below to initiate another transaction, or click <a href=\"{0}\"><i class=\"fa fa-home\"></i><span> here</span></a> to go to the home page. Sorry for the inconveniences this might have caused you.";
+        private string _errorOccurred = "errorOccurred";
+        private string _errorMessage = "errorMessage";
+        private string _gtpay_mert_id_value = "8692";
 
         public string GtpayMertId { get { return _gtpay_mert_id; } }
+        public string GtpayMertIdValue { get { return _gtpay_mert_id_value; } }
         public string GtpayTranxId { get { return _gtpay_tranx_id; } }
         public string GtpayTranxAmt { get { return _gtpay_tranx_amt; } }
         public string GtpayTranxCurr { get { return _gtpay_tranx_curr; } }
@@ -55,6 +64,11 @@ namespace SmartStore.GTPay.Services
         public string GtpayTranxStatusMsg { get { return _gtpay_tranx_status_msg; } }
         public string GatewayMessage { get { return _gatewayMessage; } }
         public string TransactionRef { get { return _transactionRef; } }
+        public string GtpayTranxAmtSmallDenom { get { return _gtpay_tranx_amt_small_denom; } }
+        public string ManInTheMiddleAttackMessage { get { return _manInTheMiddleAttackMessage; } }
+        public string IsManInTheMiddleAttack { get { return _isManInTheMiddleAttack; } }
+        public string ErrorOccurred { get { return _errorOccurred; } }
+        public string ErrorMessage { get { return _errorMessage; } }
 
         public void Lunch(PostProcessPaymentRequest postProcessPaymentRequest, HttpContextBase httpContext)
         {
@@ -64,7 +78,7 @@ namespace SmartStore.GTPay.Services
             decimal orderTotal = Math.Truncate(postProcessPaymentRequest.Order.OrderTotal * 100);
             string gtpay_tranx_memo = GetOrderSummary(nameAndEmail, postProcessPaymentRequest.Order);
             string gtpay_tranx_id = httpContext.Session[TransactionRef] as string; // httpContext.Session["transactionRef"] as string;
-            string gtpay_mert_id = "8692";
+            string gtpay_mert_id = GtpayMertIdValue;
             string gtpay_tranx_amt = orderTotal.ToString();
             string gtpay_tranx_curr = "566";
             //string gtpay_tranx_curr = "844";
@@ -87,7 +101,7 @@ namespace SmartStore.GTPay.Services
             form.Append("<html>");
             form.AppendFormat("<body onload='document.forms[0].submit()'>");
             form.AppendFormat("<form action='{0}' method='post'>", url);
-            form.AppendFormat("<input type='hidden' name='" + GtpayMertId + "' value='{0}'>", gtpay_mert_id);
+            form.AppendFormat("<input type='hidden' name='" + GtpayMertId + "' value='{0}'>", GtpayMertIdValue);
             form.AppendFormat("<input type='hidden' name='" + GtpayTranxId + "' value='{0}'>", gtpay_tranx_id);
             form.AppendFormat("<input type='hidden' name='" + GtpayTranxAmt + "' value='{0}'>", gtpay_tranx_amt);
             form.AppendFormat("<input type='hidden' name='" + GtpayTranxCurr + "' value='{0}'>", gtpay_tranx_curr);
@@ -166,14 +180,14 @@ namespace SmartStore.GTPay.Services
             return new Tuple<string, string>(name, email);
         }
 
-        public string GetRedirectUrl(HttpRequestBase request, string action, string controller, int id)
+        public string GetRedirectUrl(HttpRequestBase request, string action, string controller, int id = 0)
         {
             string url = null;
             if (request == null)
             {
                 return url;
             }
-                        
+
             UrlHelper urlHelper = new UrlHelper(request.RequestContext);
             if (id > 0)
             {

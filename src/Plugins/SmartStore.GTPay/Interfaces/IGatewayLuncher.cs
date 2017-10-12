@@ -1,18 +1,17 @@
-﻿using System;
+﻿using SmartStore.Services.Payments;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-using SmartStore.Services.Payments;
-
-namespace SmartStore.GTPay.Services
+namespace SmartStore.GTPay.Interfaces
 {
     public interface IGatewayLuncher
     {
-        //int OrderId { get; set; }
         bool IsSuccessful { get; set; }
 
         string GtpayMertId { get; }
+        string GtpayMertIdValue { get; }
         string GtpayTranxId { get; }
         string GtpayTranxAmt { get; }
         string GtpayTranxCurr { get; }
@@ -29,10 +28,16 @@ namespace SmartStore.GTPay.Services
         string GtpayTranxStatusMsg { get; }
         string GatewayMessage { get; }
         string TransactionRef { get; }
+        string GtpayTranxAmtSmallDenom { get; }
+        string ManInTheMiddleAttackMessage { get; }
+        string IsManInTheMiddleAttack { get; }
+        string ErrorOccurred { get; }
+        string ErrorMessage { get; }
 
         string CreateTransactionRef();
         string GenerateSHA512String(string inputString);
         void Lunch(PostProcessPaymentRequest postProcessPaymentRequest, HttpContextBase httpContext);
-        string GetRedirectUrl(HttpRequestBase request, string action, string controller, int id);
+        string GetRedirectUrl(HttpRequestBase request, string action, string controller, int id = 0);
+
     }
 }

@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 
 using SmartStore.Web.Framework.UI;
-using SmartStore.GTPay.Services;
+using SmartStore.GTPay.Interfaces;
 
 namespace SmartStore.GTPay.Filters
 {
@@ -40,10 +40,7 @@ namespace SmartStore.GTPay.Filters
 
             if (action.IsCaseInsensitiveEqual("Details") && controller.IsCaseInsensitiveEqual("Order"))
             {
-
                 _widgetProvider.Value.RegisterAction("orderdetails_page_overview", "PayGatewayResponse", "GTPay", new { area = "SmartStore.GTPay" });
-
-                //_widgetProvider.Value.RegisterAction("orderdetails_page_top", "PayGatewayResponse", "GTPay", new { area = "SmartStore.GTPay" });
             }
         }
 
@@ -62,46 +59,8 @@ namespace SmartStore.GTPay.Filters
                    );
 
                 filterContext.Result.ExecuteResult(filterContext.Controller.ControllerContext);
-
-
-                //filterContext.Result = new RedirectToRouteResult
-                //    (
-                //        new System.Web.Routing.RouteValueDictionary
-                //        {
-                //            { "Controller", "Checkout" },
-                //            { "Action", "Completed" },
-                //            { "Area", "" }
-                //        }
-                //    );
-
-                //var controller = filterContext.Controller;
-                //filterContext.Result = controller.RedirectToAction("index", "home");
-
-
             }
-            //else
-            //{
-            //    _httpContext.Session["gatewayMessage"] = null;
-            //}
-
-            
-
         }
-
-        //public override void OnActionExecuted(ActionExecutedContext filterContext)
-        //{
-        //    if(!_gatewayLuncher.IsSuccessful)
-        //    {
-        //        filterContext.Result = new RedirectToRouteResult
-        //            (
-        //                new System.Web.Routing.RouteValueDictionary {{ "Controller", "Checkout" },
-        //                                          { "Action", "Completed" }, { "Area", "" } }
-        //            );
-        //    }
-
-        //    base.OnActionExecuted(filterContext);
-
-        //}
 
 
 

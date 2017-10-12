@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
 using System.Web.Mvc;
+
 using SmartStore.Web.Framework.UI;
 
 namespace SmartStore.GTPay.Filters
 {
-    //public class CheckoutCompletedWidgetZoneFilter : IActionFilter, IResultFilter
-    public class CheckoutCompletedWidgetZoneFilter : ActionFilterAttribute //, IResultFilter
+    public class CheckoutCompletedWidgetZoneFilter : ActionFilterAttribute 
     {
         private readonly Lazy<HttpContextBase> _httpContext;
         private readonly Lazy<IWidgetProvider> _widgetProvider;

@@ -5,8 +5,6 @@ using System.Web;
 
 using SmartStore.Core.Plugins;
 using SmartStore.Services;
-//using SmartStore.GTPay.Data.Migrations;
-using System.Data.Entity.Migrations;
 
 namespace SmartStore.GTPay
 {

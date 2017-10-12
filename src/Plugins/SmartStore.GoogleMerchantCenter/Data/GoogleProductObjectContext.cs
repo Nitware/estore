@@ -10,7 +10,6 @@ using SmartStore.GoogleMerchantCenter.Data.Migrations;
 
 namespace SmartStore.GoogleMerchantCenter.Data
 {
-
 	public class GoogleProductObjectContext : ObjectContextBase
 	{
         public const string ALIASKEY = "sm_object_context_google_product";

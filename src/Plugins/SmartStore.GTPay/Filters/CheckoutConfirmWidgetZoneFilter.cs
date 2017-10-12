@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 using SmartStore.Web.Framework.UI;
-using System.Web.Mvc;
 
 namespace SmartStore.GTPay.Filters
 {
@@ -54,15 +54,14 @@ namespace SmartStore.GTPay.Filters
 
                 //if (instruct.HasValue())
                 //{
-                    _widgetProvider.Value.RegisterAction("checkout_confirm_before_summary", "ConfirmCheckout", "GTPay", new { area = "SmartStore.GTPay" });
+                _widgetProvider.Value.RegisterAction("checkout_confirm_before_summary", "ConfirmCheckout", "GTPay", new { area = "SmartStore.GTPay" });
 
 
-                    //_widgetProvider.Value.RegisterAction("checkout_completed_top", "CheckoutCompleted", "PayPalPlus", new { area = Plugin.SystemName });
+                //_widgetProvider.Value.RegisterAction("checkout_completed_top", "CheckoutCompleted", "PayPalPlus", new { area = Plugin.SystemName });
                 //}
             }
         }
 
-       
 
 
     }
