@@ -171,6 +171,7 @@
       <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
     <Compile Include="Controllers\ActivityLogController.cs" />
+    <Compile Include="Controllers\PromotionController.cs" />
     <Compile Include="Controllers\AffiliateController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\CampaignController.cs" />
@@ -236,6 +237,7 @@
     <Compile Include="MappingExtensions.cs" />
     <Compile Include="Infrastructure\AdminStartupTask.cs" />
     <Compile Include="Infrastructure\AutoMapperAdminProfile.cs" />
+    <Compile Include="Models\Promotions\PromotionModel.cs" />
     <Compile Include="Models\Catalog\CategoryTreeModel.cs" />
     <Compile Include="Models\Catalog\ProductAttributeOptionModel.cs" />
     <Compile Include="Models\Catalog\ProductAttributeOptionsSetModel.cs" />
@@ -381,6 +383,7 @@
     <Compile Include="Models\Messages\QueuedEmailModel.cs" />
     <Compile Include="Models\Settings\TaxSettingsModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validators\Promotions\PromotionValidator.cs" />
     <Compile Include="Validators\Catalog\CategoryValidator.cs" />
     <Compile Include="Validators\Catalog\ProductTagValidator.cs" />
     <Compile Include="Validators\Catalog\ManufacturerValidator.cs" />
@@ -834,6 +837,10 @@
     <Content Include="Views\ContentSlider\EditSlide.cshtml" />
     <Content Include="Views\ContentSlider\Index.cshtml" />
     <Content Include="Views\ContentSlider\_CreateOrUpdate.cshtml" />
+    <Content Include="Views\Promotion\_CreateOrUpdate.cshtml" />
+    <Content Include="Views\Promotion\Create.cshtml" />
+    <Content Include="Views\Promotion\Edit.cshtml" />
+    <Content Include="Views\Promotion\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\admin.less" />
@@ -1573,9 +1580,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>43797</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-
           <IISUrl>http://localhost:42798/</IISUrl>
-
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>http://localhost:33864/admin</CustomServerUrl>

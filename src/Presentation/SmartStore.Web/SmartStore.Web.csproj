@@ -269,6 +269,7 @@
       <DependentUpon>MvcLocalization.de.resx</DependentUpon>
     </Compile>
     <Compile Include="Controllers\BoardsController.cs" />
+    <Compile Include="Controllers\PromotionController.cs" />
     <Compile Include="Controllers\CatalogController.cs" />
     <Compile Include="Controllers\CatalogHelper.cs" />
     <Compile Include="Controllers\CatalogHelper.MapProduct.cs" />
@@ -369,6 +370,7 @@
     <Compile Include="Models\Checkout\UpdateSectionJsonModel.cs" />
     <Compile Include="Models\Common\EntityPickerModel.cs" />
     <Compile Include="Models\Common\CommentModel.cs" />
+    <Compile Include="Models\Promotions\PromotionModel.cs" />
     <Compile Include="Models\Search\ISearchResultModel.cs" />
     <Compile Include="Models\Search\SearchResultModel.cs" />
     <Compile Include="Models\ShoppingCart\ButtonPaymentMethodModel.cs" />
@@ -2057,6 +2059,7 @@
     <Content Include="Views\ContentSlider\Index.cshtml" />
     <Content Include="Views\ContentSlider\_CreateOrUpdate.cshtml" />
     <Content Include="Views\Home\ContentSlider.cshtml" />
+    <Content Include="Views\Promotion\Partials\HomepagePromotion.cshtml" />
     <None Include="Web.EFMigrations.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

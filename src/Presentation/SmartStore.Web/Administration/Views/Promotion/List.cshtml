@@ -1,0 +1,54 @@
+﻿@model Telerik.Web.Mvc.GridModel<PromotionModel>
+@using Telerik.Web.Mvc.UI
+@using SmartStore.Admin.Models.Promotions
+@{
+    var gridPageSize = EngineContext.Current.Resolve<SmartStore.Core.Domain.Common.AdminAreaSettings>().GridPageSize;
+    
+    //page title
+    ViewBag.Title = T("Admin.Promotions").Text;
+}
+<div class="section-header">
+    <div class="title">
+        @T("Admin.Promotions")
+    </div>
+    <div class="options">
+        <a href="@Url.Action("Create")" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;@T("Admin.Common.AddNew")</a>
+    </div>
+</div>
+
+<table class="adminContent">
+    <tr>
+        <td>
+            @(Html.Telerik().Grid<PromotionModel>()
+					.Name("Promotions-grid")
+					.Columns(columns =>
+					{
+						columns.Bound(x => x.ProductId)
+							.Width(200);
+						columns.Bound(x => x.Product.Name)
+							.Width(200);
+						columns.Bound(x => x.Title)
+							.Width(200);
+						columns.Bound(x => x.SubTitle)
+							.Width(200);
+						columns.Bound(x => x.DiscountText)
+							.Width(200);
+						columns.Bound(x => x.Active)
+							.Width(100)
+							.Template(item => @Html.SymbolForBool(item.Active))
+							.ClientTemplate(@Html.SymbolForBool("Active"))
+							.Centered();
+						columns.Bound(x => x.Id)
+							.Width(50)
+							.Centered()
+							.Template(x => Html.ActionLink(T("Admin.Common.Edit").Text, "Edit", new { id = x.Id }))
+							.ClientTemplate("<a href=\"Edit/<#= Id #>\">" + T("Admin.Common.Edit").Text + "</a>")
+							.Title(T("Admin.Common.Edit").Text);
+					})
+					.Pageable(settings => settings.PageSize(gridPageSize).Position(GridPagerPosition.Both))
+					.DataBinding(dataBinding => dataBinding.Ajax().Select("List", "Promotion"))
+					.PreserveGridState()
+					.EnableCustomBinding(true))
+        </td>
+    </tr>
+</table>

@@ -89,6 +89,7 @@ using SmartStore.Web.Framework.UI;
 using SmartStore.Web.Framework.WebApi;
 using SmartStore.Web.Framework.WebApi.Configuration;
 using Module = Autofac.Module;
+using SmartStore.Services.Promotions;
 
 namespace SmartStore.Web.Framework
 {
@@ -166,6 +167,7 @@ namespace SmartStore.Web.Framework
 				.WithNullCache()
 				.InstancePerRequest();
 
+			builder.RegisterType<PromotionService>().As<IPromotionService>().InstancePerRequest();
 			builder.RegisterType<ProductService>().As<IProductService>().InstancePerRequest();
 
 			builder.RegisterType<BackInStockSubscriptionService>().As<IBackInStockSubscriptionService>().InstancePerRequest();
