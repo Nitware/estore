@@ -551,6 +551,10 @@
     <Compile Include="Migrations\201710091247485_promo.Designer.cs">
       <DependentUpon>201710091247485_promo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710161003515_promotionDataTest.cs" />
+    <Compile Include="Migrations\201710161003515_promotionDataTest.Designer.cs">
+      <DependentUpon>201710161003515_promotionDataTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="ObjectContextBase.SaveChanges.cs" />
     <Compile Include="Setup\Builder\ActivityLogTypeMigrator.cs" />
     <Compile Include="Setup\Builder\PermissionMigrator.cs" />
@@ -998,6 +1002,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710091247485_promo.resx">
       <DependentUpon>201710091247485_promo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710161003515_promotionDataTest.resx">
+      <DependentUpon>201710161003515_promotionDataTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Sql\Indexes.sql" />
     <EmbeddedResource Include="Sql\StoredProcedures.sql" />
