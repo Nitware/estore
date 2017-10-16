@@ -40,8 +40,8 @@ namespace SmartStore.GTPay.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new GTPayTransactionLogRecordMap());
-            //modelBuilder.Configurations.Add(new GTPaySupportedCurrencyRecordMap());
-            //modelBuilder.Configurations.Add(new GTPayTransactionStatusRecordMap());
+            modelBuilder.Configurations.Add(new GTPayCurrencyRecordMap());
+            modelBuilder.Configurations.Add(new GTPayTransactionStatusRecordMap());
 
 
             //disable EdmMetadata generation

@@ -4,48 +4,35 @@ using System.Linq;
 using System.Web;
 
 using SmartStore.Core.Domain.Orders;
-using System.Runtime.Serialization;
+using SmartStore.Core;
 
 namespace SmartStore.GTPay.Domain
 {
-    public class GTPayTransactionLog
+    public class GTPayTransactionLog : BaseEntity
     {
-        [DataMember]
         public string TransactionRefNo { get; set; }
-        [DataMember]
-        public decimal ApprovedAmount { get; set; }
-        [DataMember]
-        public long AmountInUnit { get; set; }
-        [DataMember]
-        public string ResponseCode { get; set; }
-        [DataMember]
-        public string ResponseDescription { get; set; }
-        [DataMember]
-        public string StatusReason { get; set; }
-        [DataMember]
-        public DateTime DatePaid { get; set; }
-        [DataMember]
-        public string CardNo { get; set; }
-        [DataMember]
-        public string WebPayRefNo { get; set; }
-        [DataMember]
-        public string PayRefNo { get; set; }
-        [DataMember]
-        public bool IsAmountMismatch { get; set; }
-        [DataMember]
-        public DateTime TransactionDate { get; set; }
-        [DataMember]
-        public int CurrencyCode { get; set; }
-        [DataMember]
-        public string Gateway { get; set; }
-        [DataMember]
-        public int OrderId { get; set; }
-        [DataMember]
         public int GTPayTransactionStatusId { get; set; }
+        public decimal ApprovedAmount { get; set; }
+        public long AmountInUnit { get; set; }
+        public int OrderId { get; set; }
+        public string ResponseCode { get; set; }
+        public string ResponseDescription { get; set; }
+        //public string StatusReason { get; set; }
+        public DateTime? DatePaid { get; set; }
+        //public string CardNo { get; set; }
+        public string MerchantReference { get; set; }
+        //public string PayRefNo { get; set; }
+        public bool IsAmountMismatch { get; set; }
+        public DateTime TransactionDate { get; set; }
+        //public int CurrencyCode { get; set; }
+        //public string Gateway { get; set; }
+        public int GTPaySupportedCurrencyId {get; set;}
+        public string VerificationHash { get; set; }
+        public string FullVerificationHash { get; set; }
 
-        
         public virtual GTPayTransactionStatus GTPayTransactionStatus { get; set; }
-        
-        public virtual Order Order { get; set; }
+        public virtual GTPaySupportedCurrency GTPaySupportedCurrency { get; set; }
+
+        //public virtual Order Order { get; set; }
     }
 }

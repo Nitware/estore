@@ -4,6 +4,7 @@ Group: Payment
 SystemName: SmartStore.GTPay
 Version: 3.0.3
 MinAppVersion: 3.0.0
+Author: Nitware Solutions
 DisplayOrder: 0
 FileName: SmartStore.GTPay.dll
 ResourceRootKey: Plugins.SmartStore.GTPay

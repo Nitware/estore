@@ -1,0 +1,216 @@
+﻿@using SmartStore.GTPay.Models;
+@using SmartStore.Web.Framework;
+@using SmartStore.Web.Framework.UI;
+@using Telerik.Web.Mvc.UI;
+@model ConfigurationModel
+
+@{
+	Layout = "";
+}
+
+@{ Html.RenderAction("StoreScopeConfiguration", "Setting", new { area = "Admin" }); }
+
+@using (Html.BeginForm())
+{
+	<table class="adminContent">
+     
+        <tr class="adminSeparator">
+            <td colspan="2">
+                <div class="admin-config-group">
+                    <div class="title">Settings</div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.ShowGatewayInterface)
+            </td>
+            <td class="adminData">
+                @Html.SettingEditorFor(model => model.ShowGatewayInterface)
+                @Html.ValidationMessageFor(model => model.ShowGatewayInterface)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.ShowGatewayNameFirst)
+            </td>
+            <td class="adminData">
+                @Html.SettingEditorFor(model => model.ShowGatewayNameFirst)
+                @Html.ValidationMessageFor(model => model.ShowGatewayNameFirst)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.HashKey)
+            </td>
+            <td class="adminData">
+                @Html.SettingEditorFor(model => model.HashKey)
+                @Html.ValidationMessageFor(model => model.HashKey)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.MerchantId)
+            </td>
+            <td class="adminData">
+                @Html.SettingEditorFor(model => model.MerchantId)
+                @Html.ValidationMessageFor(model => model.MerchantId)
+            </td>
+        </tr>
+
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.GatewayPostUrl)
+            </td>
+            <td class="adminData">
+                @Html.SettingEditorFor(model => model.GatewayPostUrl)
+                @Html.ValidationMessageFor(model => model.GatewayPostUrl)
+            </td>
+        </tr>
+
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.GatewayRequeryUrl)
+            </td>
+            <td class="adminData">
+                @Html.SettingEditorFor(model => model.GatewayRequeryUrl)
+                @Html.ValidationMessageFor(model => model.GatewayRequeryUrl)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.AdditionalFee)
+            </td>
+            <td class="adminData">
+                @Html.SettingEditorFor(model => model.AdditionalFee)
+                @Html.ValidationMessageFor(model => model.AdditionalFee)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.AdditionalFee)
+            </td>
+            <td class="adminData">
+                @Html.SettingEditorFor(model => model.AdditionalFee)
+                @Html.ValidationMessageFor(model => model.AdditionalFee)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.AdditionalFeePercentage)
+            </td>
+            <td class="adminData">
+                @Html.SettingEditorFor(model => model.AdditionalFeePercentage)
+                @Html.ValidationMessageFor(model => model.AdditionalFeePercentage)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">&nbsp;</td>
+            <td class="adminData">
+                <button type="submit" id="save" name="save" class="btn btn-primary" value="save">
+                    <i class="fa fa-check"></i>&nbsp;@T("Admin.Common.Save")
+                </button>
+            </td>
+        </tr>
+
+        <tr class="adminSeparator">
+            <td colspan="2">
+                <div class="admin-config-group">
+                    <div class="title">Currencies</div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+               <table class="adminContent">
+                    <tr>
+                        <td>
+                            @(Html.Telerik().Grid<GTPayCurrencyModel>(Model.GTPayCurrencyGrid.Data)
+                    .Name("Grid")
+                    .DataKeys(keys => keys.Add(x => x.Id).RouteKey("Id"))
+                    .Columns(columns =>
+                    {
+                        columns.Bound(x => x.Code);
+                        columns.Bound(x => x.Alias);
+                        columns.Bound(x => x.Name);
+                        columns.Bound(x => x.Gateway);
+                        columns.Bound(x => x.IsSupported);
+
+                        columns.Command(commands =>
+                        {
+                            commands.Edit();
+                            //commands.Delete();
+                        }).Width(180);
+
+                    })
+                    .Editable(x =>
+                    {
+                        x.Mode(GridEditMode.InLine);
+                    })
+                    .DataBinding(dataBinding =>
+                    {
+                        dataBinding.Ajax()
+                            .Select("CurrencyList", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
+                            .Update("CurrencyUpdate", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
+                            //.Delete("CurrencyDelete", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
+                    })
+                    .Pageable(settings => settings.PageSize(Model.GridPageSize).Position(GridPagerPosition.Both))
+                    .PreserveGridState()
+                    .EnableCustomBinding(true))
+                        </td>
+                    </tr>
+                </table>
+                </td>
+</tr>
+
+        @*<tr class="adminSeparator">
+            <td colspan="2">
+                <div class="admin-config-group">
+                    <div class="title">Transaction Status</div>
+                </div>
+            </td>
+        </tr>*@
+        @*<tr>
+            <td colspan="2">
+                <table class="adminContent">
+                    <tr>
+                        <td>
+                            @(Html.Telerik().Grid<GTPayTransactionStatus>()
+                    .Name("Grid")
+                    .DataKeys(keys => keys.Add(x => x.Id).RouteKey("Id"))
+                    .Columns(columns =>
+                    {
+                        columns.Bound(x => x.StatusDescription);
+                       
+                        columns.Command(commands =>
+                        {
+                            commands.Edit();
+                            commands.Delete();
+                        }).Width(180);
+
+                    })
+                    .Editable(x =>
+                    {
+                        x.Mode(GridEditMode.InLine);
+                    })
+                    .DataBinding(dataBinding =>
+                    {
+                        dataBinding.Ajax()
+                            .Select("TransactionStatusList", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
+                            .Update("TransactionStatusUpdate", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
+                            .Delete("TransactionStatusDelete", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
+                    })
+                    //.Pageable(settings => settings.PageSize(Model.GridPageSize).Position(GridPagerPosition.Both))
+                    .Pageable(settings => settings.PageSize(10).Position(GridPagerPosition.Both))
+                    .PreserveGridState()
+                    .EnableCustomBinding(true))
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>*@
+
+      
+       
+    </table>
+}

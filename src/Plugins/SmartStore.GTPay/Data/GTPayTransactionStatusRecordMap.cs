@@ -10,7 +10,7 @@ namespace SmartStore.GTPay.Data
         {
             this.ToTable("GTPayTransactionStatus");
             this.HasKey(x => x.Id);
-            this.Property(x => x.StatusName).IsRequired().HasMaxLength(4000);
+            this.Property(x => x.StatusName).IsRequired().HasMaxLength(100);
 
         }
 

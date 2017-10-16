@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 
 using SmartStore.Core;
-using System.Runtime.Serialization;
 
 namespace SmartStore.GTPay.Domain
 {
@@ -12,7 +11,6 @@ namespace SmartStore.GTPay.Domain
     {
         //private ICollection<GTPayTransactionLog> _gTPayTransactionLogs;
 
-        [DataMember]
         public string StatusName { get; set; }
 
         //public virtual ICollection<GTPayTransactionLog> GTPayTransactionLogs

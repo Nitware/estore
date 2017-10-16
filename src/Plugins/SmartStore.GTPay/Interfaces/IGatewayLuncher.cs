@@ -1,4 +1,5 @@
-﻿using SmartStore.Services.Payments;
+﻿using SmartStore.GTPay.Domain;
+using SmartStore.Services.Payments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace SmartStore.GTPay.Interfaces
 {
     public interface IGatewayLuncher
     {
+        //int OrderId { get; set; }
         bool IsSuccessful { get; set; }
 
         string GtpayMertId { get; }
@@ -33,10 +35,11 @@ namespace SmartStore.GTPay.Interfaces
         string IsManInTheMiddleAttack { get; }
         string ErrorOccurred { get; }
         string ErrorMessage { get; }
+        string GtpayVerificationHash { get; }
 
         string CreateTransactionRef();
         string GenerateSHA512String(string inputString);
-        void Lunch(PostProcessPaymentRequest postProcessPaymentRequest, HttpContextBase httpContext);
+        void Lunch(PostProcessPaymentRequest postProcessPaymentRequest, GTPaySupportedCurrency supportedCurrency, HttpContextBase httpContext);
         string GetRedirectUrl(HttpRequestBase request, string action, string controller, int id = 0);
 
     }

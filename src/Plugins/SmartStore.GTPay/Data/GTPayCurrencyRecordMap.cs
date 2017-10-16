@@ -10,9 +10,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartStore.GTPay.Data
 {
-    public class GTPaySupportedCurrencyRecordMap : EntityTypeConfiguration<GTPaySupportedCurrency>
+    public class GTPayCurrencyRecordMap : EntityTypeConfiguration<GTPaySupportedCurrency>
     {
-        public GTPaySupportedCurrencyRecordMap()
+        public GTPayCurrencyRecordMap()
         {
             this.ToTable("GTPayCurrency");
             this.HasKey(x => x.Id);
@@ -20,6 +20,7 @@ namespace SmartStore.GTPay.Data
             this.Property(x => x.Name).IsRequired().HasMaxLength(20);
             this.Property(x => x.Gateway).IsRequired().HasMaxLength(10);
             this.Property(x => x.IsSupported).IsRequired();
+            this.Property(x => x.LeastValueUnitMultiplier).IsRequired();
 
         }
 

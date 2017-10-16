@@ -1,0 +1,110 @@
+﻿@using SmartStore.GTPay.Models;
+@model GTPayCardPaymentInfoModel
+
+@{
+    Layout = "";
+}
+
+@Html.Hidden("GTPayMethodType", "CardType")
+
+<div class="opt-form">
+    <div class="form-group row">
+        @if (Model.SupportedCurrencies != null && Model.SupportedCurrencies.Count > 0)
+        {
+            @Html.LabelFor(model => model.CardTypes, new { @class = "col-md-3 col-form-label required" })
+            <div class="col-md-9">
+                @Html.DropDownListFor(model => model.CardType, Model.CardTypes, new { @class = "form-control noskin" })
+            </div>
+        }
+        else
+        {
+            < span > @ViewBag.CurrencyLoadMessage </ span >
+        }
+
+
+
+        @*@if (Model.SupportedCurrencies != null)
+        {
+            if (Model.SupportedCurrencies.Count > 1)
+            {
+                @Html.LabelFor(model => model.CardTypes, new { @class = "col-md-3 col-form-label required" })
+                <div class="col-md-9">
+                    @Html.DropDownListFor(model => model.CardType, Model.CardTypes, new { @class = "form-control noskin" })
+                </div>
+            }
+            else if (Model.SupportedCurrencies.Count == 1)
+            {
+                @Html.HiddenFor(model => model.SupportedCurrency.Id)
+                @Html.HiddenFor(model => model.SupportedCurrency.Code)
+                @Html.HiddenFor(model => model.SupportedCurrency.Alias)
+                @Html.HiddenFor(model => model.SupportedCurrency.Name)
+                @Html.HiddenFor(model => model.SupportedCurrency.Gateway)
+                @Html.HiddenFor(model => model.SupportedCurrency.IsSupported)
+            }
+        }
+        else
+        {
+            <span>@ViewBag.CurrencyLoadMessage</span>
+        }*@
+    </div>
+
+    @*<div class="form-group row">
+        <div class="col-md-12">
+            <span>
+                @{
+                    if (Model != null && Model.CardIconUrls != null && Model.CardIconUrls.Count > 0)
+                    {
+                        foreach (string iconUrl in Model.CardIconUrls)
+                        {
+                            <img class="icon img-responsive" src="@Url.Content(iconUrl)" />
+                        }
+                    }
+                }
+            </span>
+        </div>
+    </div>*@
+
+
+@*<div>Bank ouiop gtb bank</div>*@
+
+    @*<div class="form-group row">
+        @Html.LabelFor(model => model.CardTypes, new { @class = "col-md-3 col-form-label required" })
+        <div class="col-md-9">
+            @Html.DropDownListFor(model => model.CardType, Model.CardTypes, new { @class = "form-control noskin" })
+
+            <span style="margin-top:10px">
+                    @{
+                        if (Model != null && Model.CardIconUrls != null && Model.CardIconUrls.Count > 0)
+                        {
+                            foreach (string iconUrl in Model.CardIconUrls)
+                            {
+                                <img class="icon img-responsive" src="@Url.Content(iconUrl)" />
+                            }
+                        }
+                    }
+                </span>
+
+        </div>
+    </div>*@
+    <div class="form-group row">
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-9">
+            <span>
+                @{
+                    if (Model != null && Model.CardIconUrls != null && Model.CardIconUrls.Count > 0)
+                    {
+                        foreach (string iconUrl in Model.CardIconUrls)
+                        {
+                            <img class="icon img-responsive" src="@Url.Content(iconUrl)" />
+                        }
+                    }
+                }
+            </span>
+        </div>
+
+    </div>
+
+
+
+</div>
