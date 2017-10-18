@@ -1,5 +1,5 @@
-﻿<Language Name="English" IsDefault="false" IsRightToLeft="false">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Language Name="English" IsDefault="false" IsRightToLeft="false">
   <LocaleResource Name="DescriptionText">
     <Value>Description</Value>
   </LocaleResource>
@@ -19,6 +19,19 @@
     <Value>Determines whether to apply a percentage additional fee to the order total. If not enabled, a fixed value is used.</Value>
   </LocaleResource>
 
+  <LocaleResource Name="CurrencyTab">
+    <Value>Supported currencies</Value>
+  </LocaleResource>
+  <LocaleResource Name="SettingTab">
+    <Value>Basic Setting</Value>
+  </LocaleResource>
+  <LocaleResource Name="TransactionSearchTab">
+    <Value>Transaction Search</Value>
+  </LocaleResource>
+  <LocaleResource Name="TransactionListTab">
+    <Value>Transaction List</Value>
+  </LocaleResource>
+
 
   <!-- ATM Card -->
   <LocaleResource Name="Plugins.FriendlyName.Payments.GTPay" AppendRootKey="false">
@@ -31,6 +44,10 @@
           <![CDATA[ ]]>
         </Value>
       </LocaleResource>
+
+
+
+
       <LocaleResource Name="Fields.TransactionStatus">
         <Value>Payment status after order completion</Value>
       </LocaleResource>
@@ -44,7 +61,7 @@
         <Value>Credit cards that customers may not pay with.</Value>
       </LocaleResource>
 
-      
+
       <LocaleResource Name="Fields.SupportedCard">
         <Value>Supported card</Value>
       </LocaleResource>
@@ -60,7 +77,7 @@
       <LocaleResource Name="Fields.GatewayUrl">
         <Value>Gateway post url</Value>
       </LocaleResource>
-       <LocaleResource Name="Fields.GatewayPostUrl">
+      <LocaleResource Name="Fields.GatewayPostUrl">
         <Value>Gateway post url</Value>
       </LocaleResource>
       <LocaleResource Name="Fields.GatewayRequeryUrl">
@@ -72,7 +89,7 @@
       <LocaleResource Name="Fields.ShowGatewayNameFirst">
         <Value>Show gateway name first</Value>
       </LocaleResource>
-       <LocaleResource Name="Fields.CurrencyCode">
+      <LocaleResource Name="Fields.CurrencyCode">
         <Value>Currency code</Value>
       </LocaleResource>
       <LocaleResource Name="Fields.CurrencyAlias">
@@ -88,12 +105,56 @@
         <Value>Is supported</Value>
       </LocaleResource>
 
-      
-
-
-
+      <LocaleResource Name="Fields.TransactionRefNo">
+        <Value>Transaction Ref</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.TransactionStatusId">
+        <Value>Transaction Status Id</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.TransactionStatus">
+        <Value>Status</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.ApprovedAmount">
+        <Value>Amount</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.AmountInUnit">
+        <Value>Amount In Unit</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.OrderId">
+        <Value>Order Id</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.ResponseCode">
+        <Value>Response Code</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.ResponseDescription">
+        <Value>Response Description</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.DatePaid">
+        <Value>Date Paid</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.MerchantReference">
+        <Value>Merchant Reference</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.IsAmountMismatch">
+        <Value>Is Amount Mismatch</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.TransactionDate">
+        <Value>Transaction Date</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.CurrencyAlias">
+        <Value>Currency Alias</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.Gateway">
+        <Value>Gateway</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.VerificationHash">
+        <Value>Verification Hash</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.FullVerificationHash">
+        <Value>Full Verification Hash</Value>
+      </LocaleResource>
     </Children>
   </LocaleResource>
 
- 
+
 </Language>

@@ -7,6 +7,7 @@ using SmartStore.Core.Configuration;
 using SmartStore.Web.Framework;
 using System.Web.Mvc;
 using Telerik.Web.Mvc;
+using SmartStore.GTPay.Domain;
 
 namespace SmartStore.GTPay.Models
 {
@@ -15,6 +16,7 @@ namespace SmartStore.GTPay.Models
         public ConfigurationModel()
         {
             GTPayCurrencyGrid = new GridModel<GTPayCurrencyModel>();
+            TransactionLogsForGrid = new GridModel<TransactionLog>();
         }
 
         [AllowHtml]
@@ -50,6 +52,8 @@ namespace SmartStore.GTPay.Models
 
         public int GridPageSize { get; set; }
         public GridModel<GTPayCurrencyModel> GTPayCurrencyGrid { get; set; }
+
+        public GridModel<TransactionLog> TransactionLogsForGrid { get; set; }
     }
 
 

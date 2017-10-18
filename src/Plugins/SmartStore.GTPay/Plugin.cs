@@ -42,13 +42,26 @@ namespace SmartStore.GTPay
 
         public override void Install()
         {
-            GTPaySupportedCurrency gTPaySupportedCurrency = new GTPaySupportedCurrency()
+            List<GTPaySupportedCurrency> currencies = new List<GTPaySupportedCurrency>()
             {
-                Alias = "NGN",
-                Name = "Naira",
-                Code = 566,
-                Gateway = "webpay",
-                IsSupported = true,
+                new GTPaySupportedCurrency()
+                {
+                    Alias = "NGN",
+                    Name = "Naira",
+                    Code = 566,
+                    Gateway = "webpay",
+                    LeastValueUnitMultiplier = 100,
+                    IsSupported = true,
+                },
+                 new GTPaySupportedCurrency()
+                {
+                    Alias = "USD",
+                    Name = "Dollar",
+                    Code = 840,
+                    Gateway = "Migs",
+                    LeastValueUnitMultiplier = 100,
+                    IsSupported = false,
+                }
             };
 
             List<GTPayTransactionStatus> tPayTransactionStatusList = new List<Domain.GTPayTransactionStatus>()
@@ -57,14 +70,21 @@ namespace SmartStore.GTPay
                 new GTPayTransactionStatus() { StatusName = "Successfull" },
                 new GTPayTransactionStatus() { StatusName = "Failed" },
             };
-            
+
             _transactionStatusService.AddRange(tPayTransactionStatusList);
-            _supportedCurrencyService.Add(gTPaySupportedCurrency);
+            _supportedCurrencyService.AddRange(currencies);
 
             //save settings
             _settingService.SaveSetting(new GTPaySettings()
             {
-                DescriptionText = "@Plugins.Payments.Manual.PaymentInfoDescription"
+                ShowGatewayInterface = true,
+                ShowGatewayNameFirst = true,
+                GatewayPostUrl = "http://gtweb2.gtbank.com/orangelocker/gtpaym/tranx.aspx",
+                GatewayRequeryUrl = "https://gtweb2.gtbank.com/GTPayService/gettransactionstatus.json",
+                HashKey = "D3D1D05AFE42AD50818167EAC73C109168A0F108F32645C8B59E897FA930DA44F9230910DAC9E20641823799A107A02068F7BC0F4CC41D2952E249552255710F",
+                MerchantId = "8692",
+
+                //DescriptionText = "@Plugins.Payments.Manual.PaymentInfoDescription"
             });
 
             // add resources
@@ -73,35 +93,10 @@ namespace SmartStore.GTPay
             base.Install();
 
             _logger.Info(string.Format("Plugin installed: SystemName: {0}, Version: {1}, Description: '{2}'", PluginDescriptor.SystemName, PluginDescriptor.Version, PluginDescriptor.FriendlyName));
-
         }
 
         public override void Uninstall()
         {
-            //_transactionStatusService.DeleteAllGTPayTransactionStatus();
-            //_supportedCurrencyService.DeleteAllGTPaySupportedCurrency();
-            
-            //var settings = _services.Settings;
-            //var loc = _services.Localization;
-
-            //// delete settings
-            //settings.DeleteSetting<CashOnDeliveryPaymentSettings>();
-            //settings.DeleteSetting<InvoicePaymentSettings>();
-            //settings.DeleteSetting<PayInStorePaymentSettings>();
-            //settings.DeleteSetting<PrepaymentPaymentSettings>();
-            //settings.DeleteSetting<ManualPaymentSettings>();
-            //settings.DeleteSetting<DirectDebitPaymentSettings>();
-
-            //// delete resources
-            //loc.DeleteLocaleStringResources(this.PluginDescriptor.ResourceRootKey);
-            //loc.DeleteLocaleStringResources("Plugins.Payment.CashOnDelivery");
-            //loc.DeleteLocaleStringResources("Plugins.Payment.Invoice");
-            //loc.DeleteLocaleStringResources("Plugins.Payment.PayInStore");
-            //loc.DeleteLocaleStringResources("Plugins.Payment.Prepayment");
-            //loc.DeleteLocaleStringResources("Plugins.Payments.Manual");
-            //loc.DeleteLocaleStringResources("Plugins.Payments.DirectDebit");
-
-
             _settingService.DeleteSetting<GTPaySettings>();
            
             var migrator = new DbMigrator(new Configuration());
@@ -112,7 +107,6 @@ namespace SmartStore.GTPay
             base.Uninstall();
 
             _logger.Info(string.Format("Plugin uninstalled: SystemName: {0}, Version: {1}, Description: '{2}'", PluginDescriptor.SystemName, PluginDescriptor.Version, PluginDescriptor.FriendlyName));
-
         }
 
 

@@ -42,6 +42,14 @@ namespace SmartStore.GTPay.Services
             _supportedCurrencyRepository.Insert(gTPaySupportedCurrency);
         }
 
+        public void AddRange(List<GTPaySupportedCurrency> gtpaySupportedCurrencies)
+        {
+            if (gtpaySupportedCurrencies == null || gtpaySupportedCurrencies.Count <= 0)
+                throw new ArgumentNullException("gtpaySupportedCurrencies");
+
+            _supportedCurrencyRepository.InsertRange(gtpaySupportedCurrencies);
+        }
+
         public virtual void UpdateSupportedCurrency(GTPaySupportedCurrency gTPaySupportedCurrency)
         {
             if (gTPaySupportedCurrency == null)

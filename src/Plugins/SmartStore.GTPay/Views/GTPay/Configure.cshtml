@@ -8,9 +8,104 @@
 	Layout = "";
 }
 
-@{ Html.RenderAction("StoreScopeConfiguration", "Setting", new { area = "Admin" }); }
+@*@{ Html.RenderAction("StoreScopeConfiguration", "Setting", new { area = "Admin" }); }*@
 
-@using (Html.BeginForm())
+@{
+    Html.AddCssFileParts(true, "~/Content/x-editable/bootstrap-editable.css");
+    Html.AppendScriptParts(true, "~/Content/x-editable/bootstrap-editable.js");
+}
+
+@Html.ValidationSummary(false)
+
+<script>
+	function productEditTab_onAjaxSuccess(tab, pane) {
+		applyCommonPlugins(pane);
+	}
+</script>
+
+@Html.SmartStore().TabStrip().Name("product-edit").OnAjaxSuccess("productEditTab_onAjaxSuccess").Style(TabsStyle.Tabs).Position(TabsPosition.Left).Items(x =>
+{
+    x.Add().Text(T("Plugins.SmartStore.GTPay.SettingTab").Text)
+
+    //x.Add().Text(T("Setting").Text)
+       .Icon("fa fa-sliders fa-lg fa-fw")
+        .LinkHtmlAttributes(new { data_tab_name = "Setting" })
+        .Content(Html.Partial("_Setting", Model).ToHtmlString())
+        .Selected(true);
+
+    x.Add().Text(T("Plugins.SmartStore.GTPay.CurrencyTab").Text)
+        .Name("tab-currency")
+        //.Visible(Model.ProductTypeId == (int)ProductType.SimpleProduct || (Model.ProductTypeId == (int)ProductType.BundledProduct && !Model.BundlePerItemShoppingCart))
+        .Icon("fa fa-money fa-lg fa-fw")
+        .LinkHtmlAttributes(new { data_tab_name = "Currency" })
+        .Content(Html.Partial("_Currency", Model).ToHtmlString())
+        //.Action("LoadEditTab", "Product", new { id = Model.Id, tabName = "Inventory" })
+        .Ajax();
+    
+    x.Add().Text(T("Plugins.SmartStore.GTPay.TransactionListTab").Text)
+     .Name("tab-transaction-list")
+     //.Visible(!(Model.ProductTypeId == (int)ProductType.BundledProduct && Model.BundlePerItemPricing))
+     .Icon("fa fa-bars fa-lg fa-flip-horizontal fa-fw")
+      //.LinkHtmlAttributes(new { data_tab_name = "TransactionList" })
+      //.Action("TransactionList", "GTPay")
+      .Content(Html.Partial("_TransactionList", Model).ToHtmlString())
+     .Ajax();
+
+    x.Add().Text(T("Plugins.SmartStore.GTPay.TransactionSearchTab").Text)
+        .Name("tab-transaction-search")
+        //.Visible(!(Model.ProductTypeId == (int)ProductType.BundledProduct && Model.BundlePerItemPricing))
+        .Icon("fa fa-search fa-lg fa-flip-horizontal fa-fw")
+        .LinkHtmlAttributes(new { data_tab_name = "TransactionSearch" })
+        //.Action("LoadEditTab", "Product", new { id = Model.Id, tabName = "Discounts" })
+        .Ajax();
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*@using (Html.BeginForm())
 {
 	<table class="adminContent">
      
@@ -134,6 +229,7 @@
                         columns.Bound(x => x.Alias);
                         columns.Bound(x => x.Name);
                         columns.Bound(x => x.Gateway);
+                        columns.Bound(x => x.LeastValueUnitMultiplier);
                         columns.Bound(x => x.IsSupported);
 
                         columns.Command(commands =>
@@ -152,7 +248,7 @@
                         dataBinding.Ajax()
                             .Select("CurrencyList", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
                             .Update("CurrencyUpdate", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
-                            //.Delete("CurrencyDelete", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
+                        //.Delete("CurrencyDelete", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
                     })
                     .Pageable(settings => settings.PageSize(Model.GridPageSize).Position(GridPagerPosition.Both))
                     .PreserveGridState()
@@ -163,54 +259,7 @@
                 </td>
 </tr>
 
-        @*<tr class="adminSeparator">
-            <td colspan="2">
-                <div class="admin-config-group">
-                    <div class="title">Transaction Status</div>
-                </div>
-            </td>
-        </tr>*@
-        @*<tr>
-            <td colspan="2">
-                <table class="adminContent">
-                    <tr>
-                        <td>
-                            @(Html.Telerik().Grid<GTPayTransactionStatus>()
-                    .Name("Grid")
-                    .DataKeys(keys => keys.Add(x => x.Id).RouteKey("Id"))
-                    .Columns(columns =>
-                    {
-                        columns.Bound(x => x.StatusDescription);
-                       
-                        columns.Command(commands =>
-                        {
-                            commands.Edit();
-                            commands.Delete();
-                        }).Width(180);
-
-                    })
-                    .Editable(x =>
-                    {
-                        x.Mode(GridEditMode.InLine);
-                    })
-                    .DataBinding(dataBinding =>
-                    {
-                        dataBinding.Ajax()
-                            .Select("TransactionStatusList", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
-                            .Update("TransactionStatusUpdate", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
-                            .Delete("TransactionStatusDelete", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
-                    })
-                    //.Pageable(settings => settings.PageSize(Model.GridPageSize).Position(GridPagerPosition.Both))
-                    .Pageable(settings => settings.PageSize(10).Position(GridPagerPosition.Both))
-                    .PreserveGridState()
-                    .EnableCustomBinding(true))
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>*@
-
-      
        
     </table>
-}
+
+}*@

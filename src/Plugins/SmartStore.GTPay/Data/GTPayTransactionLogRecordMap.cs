@@ -28,9 +28,9 @@ namespace SmartStore.GTPay.Data
             this.Property(x => x.IsAmountMismatch).IsOptional();
             this.Property(x => x.OrderId).IsOptional();
             this.Property(x => x.TransactionDate).IsOptional();
-            //this.Property(x => x.CurrencyCode).IsOptional();
-            //this.Property(x => x.Gateway).IsOptional().HasMaxLength(10);
-            this.Property(x => x.GTPaySupportedCurrencyId).IsRequired();
+            this.Property(x => x.CurrencyAlias).IsOptional().HasMaxLength(5);
+            this.Property(x => x.Gateway).IsOptional().HasMaxLength(10);
+            //this.Property(x => x.GTPaySupportedCurrencyId).IsRequired();
             this.Property(x => x.VerificationHash).IsOptional().HasMaxLength(400);
             this.Property(x => x.FullVerificationHash).IsOptional().HasMaxLength(400);
 
@@ -38,9 +38,9 @@ namespace SmartStore.GTPay.Data
                 .WithMany()
                 .HasForeignKey(nc => nc.GTPayTransactionStatusId);
 
-            this.HasRequired(nc => nc.GTPaySupportedCurrency)
-                 .WithMany()
-                 .HasForeignKey(nc => nc.GTPaySupportedCurrencyId);
+            //this.HasRequired(nc => nc.GTPaySupportedCurrency)
+            //     .WithMany()
+            //     .HasForeignKey(nc => nc.GTPaySupportedCurrencyId);
 
 
         }

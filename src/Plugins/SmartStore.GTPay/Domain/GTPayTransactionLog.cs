@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-using SmartStore.Core.Domain.Orders;
 using SmartStore.Core;
 
 namespace SmartStore.GTPay.Domain
@@ -24,14 +23,14 @@ namespace SmartStore.GTPay.Domain
         //public string PayRefNo { get; set; }
         public bool IsAmountMismatch { get; set; }
         public DateTime TransactionDate { get; set; }
-        //public int CurrencyCode { get; set; }
-        //public string Gateway { get; set; }
-        public int GTPaySupportedCurrencyId {get; set;}
+        public string CurrencyAlias { get; set; }
+        public string Gateway { get; set; }
+        //public int GTPaySupportedCurrencyId {get; set;}
         public string VerificationHash { get; set; }
         public string FullVerificationHash { get; set; }
 
         public virtual GTPayTransactionStatus GTPayTransactionStatus { get; set; }
-        public virtual GTPaySupportedCurrency GTPaySupportedCurrency { get; set; }
+        //public virtual GTPaySupportedCurrency GTPaySupportedCurrency { get; set; }
 
         //public virtual Order Order { get; set; }
     }

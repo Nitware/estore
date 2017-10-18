@@ -61,7 +61,7 @@
 
 		
 
-			-webkit-transition: background-position 1.5s ease-out;
+			-webkit-transition: background-position 1.5s  ease-out;
 			transition: background-position 1.5s ease-out;
 			-webkit-transform: translate3d(0, 0, 0);
 			transform: translate3d(0, 0, 0);
@@ -79,6 +79,7 @@
 		.carousel-item img{padding:15px;max-height:450px;}
 		.carousel-item div.image {
 			float: left;
+            /*width: 55%;*/
 			width: 45%;
 		}
 		.carousel-caption {
@@ -122,7 +123,7 @@
 	</style>
 	<div class="clearfix"></div>
 
-	<div id="myCarousel" class="carousel slide" data-ride="carousel" style=" @(GetSliderBgExpression())">
+	<div id="myCarousel" class="carousel slide" data-ride="carousel" style="@(GetSliderBgExpression())">
 		<!-- Indicators -->
 
 		<ol class="carousel-indicators">

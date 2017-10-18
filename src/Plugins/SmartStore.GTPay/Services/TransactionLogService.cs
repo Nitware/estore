@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
+using SmartStore.Core.Data;
+using System.Linq.Expressions;
 using SmartStore.GTPay.Interfaces;
 using SmartStore.GTPay.Domain;
-using SmartStore.Core.Data;
 
 namespace SmartStore.GTPay.Services
 {
@@ -17,7 +18,16 @@ namespace SmartStore.GTPay.Services
         {
             _gTPayTransactionLogRepository = gTPayTransactionLogRepository;
         }
-        
+
+        public virtual List<GTPayTransactionLog> GetLatest500Transactions()
+        {
+            const int FIVE_HUNDRED = 500;
+            Expression<Func<GTPayTransactionLog, bool>> selector = t => t.Id > 0;
+            Func<IQueryable<GTPayTransactionLog>, IOrderedQueryable<GTPayTransactionLog>> orderBy = t => t.OrderByDescending(x => x.Id);
+
+            return _gTPayTransactionLogRepository.Get(selector, orderBy).Take(FIVE_HUNDRED).ToList();
+        }
+
         public virtual GTPayTransactionLog GetByTransactionReference(string transactionReference)
         {
             if (!transactionReference.HasValue())
@@ -42,12 +52,12 @@ namespace SmartStore.GTPay.Services
             return isExist;
         }
 
-        public virtual void Save(GTPayTransactionLog gTPayTransactionLog)
+        public virtual void Save(GTPayTransactionLog gtpayTransactionLog)
         {
-            if (gTPayTransactionLog == null)
-                throw new ArgumentNullException("gTPayTransactionLog");
+            if (gtpayTransactionLog == null)
+                throw new ArgumentNullException("gtpayTransactionLog");
 
-            _gTPayTransactionLogRepository.Insert(gTPayTransactionLog);
+            _gTPayTransactionLogRepository.Insert(gtpayTransactionLog);
         }
 
         public virtual void Update(GTPayTransactionLog gTPayTransactionLog)

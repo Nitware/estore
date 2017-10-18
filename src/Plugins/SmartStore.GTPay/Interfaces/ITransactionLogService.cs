@@ -9,6 +9,7 @@ namespace SmartStore.GTPay.Interfaces
 {
     public interface ITransactionLogService
     {
+        List<GTPayTransactionLog> GetLatest500Transactions();
         GTPayTransactionLog GetByTransactionReference(string transactionReference);
         bool TransactionReferenceExist(string transactionReference);
         void Save(GTPayTransactionLog gTPayTransactionLog);

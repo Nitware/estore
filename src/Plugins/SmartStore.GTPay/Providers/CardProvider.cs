@@ -103,15 +103,20 @@ namespace SmartStore.GTPay.Providers
             if (postProcessPaymentRequest.Order.PaymentStatus == Core.Domain.Payments.PaymentStatus.Paid)
                 return;
 
-            string s = _httpContext.Session["SelectedCurrencyCode"].ToString();
-            int selectedCurrencyCode = Convert.ToInt32(_httpContext.Session["SelectedCurrencyCode"]);
-            GTPaySupportedCurrency supportedCurrency = _supportedCurrencyService.GetSupportedCurrencyByCode(selectedCurrencyCode);
+            int selectedCurrencyId = Convert.ToInt32(_httpContext.Session[_gatewayLuncher.SelectedCurrencyId]);
+            GTPaySupportedCurrency supportedCurrency = _supportedCurrencyService.GetSupportedCurrencyById(selectedCurrencyId);
             if (supportedCurrency == null || supportedCurrency.Id <= 0)
             {
                 throw new ArgumentNullException("supportedCurrency failed on retreival! Please try again");
             }
 
-            _gatewayLuncher.Lunch(postProcessPaymentRequest, supportedCurrency, _httpContext);
+            GTPaySettings gtpaysettings = _httpContext.Session[_gatewayLuncher.GTPaySettings] as GTPaySettings;
+            if (gtpaysettings == null)
+            {
+                throw new ArgumentNullException("GTPaySettings could not be retreived! Please try againut contact you system administrator after three unsuccessful trials");
+            }
+
+            _gatewayLuncher.Lunch(postProcessPaymentRequest, supportedCurrency, gtpaysettings, _httpContext);
         }
 
 
@@ -150,7 +155,8 @@ namespace SmartStore.GTPay.Providers
         protected override string GetActionPrefix()
         {
             //return "Manual";
-            return "Card";
+            //return "Card";
+            return "";
         }
 
 

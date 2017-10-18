@@ -1,4 +1,5 @@
 ﻿using SmartStore.GTPay.Domain;
+using SmartStore.GTPay.Settings;
 using SmartStore.Services.Payments;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace SmartStore.GTPay.Interfaces
         bool IsSuccessful { get; set; }
 
         string GtpayMertId { get; }
-        string GtpayMertIdValue { get; }
+        //string GtpayMertIdValue { get; }
         string GtpayTranxId { get; }
         string GtpayTranxAmt { get; }
         string GtpayTranxCurr { get; }
@@ -36,10 +37,13 @@ namespace SmartStore.GTPay.Interfaces
         string ErrorOccurred { get; }
         string ErrorMessage { get; }
         string GtpayVerificationHash { get; }
+        string SelectedCurrencyId { get; }
+        string GTPaySettings { get; }
+        string GtpayFullVerificationHash { get; }
 
         string CreateTransactionRef();
         string GenerateSHA512String(string inputString);
-        void Lunch(PostProcessPaymentRequest postProcessPaymentRequest, GTPaySupportedCurrency supportedCurrency, HttpContextBase httpContext);
+        void Lunch(PostProcessPaymentRequest postProcessPaymentRequest, GTPaySupportedCurrency supportedCurrency, GTPaySettings gtpaysettings, HttpContextBase httpContext);
         string GetRedirectUrl(HttpRequestBase request, string action, string controller, int id = 0);
 
     }

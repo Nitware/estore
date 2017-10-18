@@ -27,8 +27,8 @@ namespace SmartStore.GTPay.Models
         [SmartResourceDisplayName("Plugins.Payments.GTPay.Fields.IsSupported")]
         public bool IsSupported { get; set; }
 
-        [SmartResourceDisplayName("Plugins.Payments.GTPay.Fields.Multiplicity")]
-        public int Multiplicity { get; set; }
+        [SmartResourceDisplayName("Plugins.Payments.GTPay.Fields.LeastValueUnitMultiplier")]
+        public int LeastValueUnitMultiplier { get; set; }
 
 
     }
