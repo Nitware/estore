@@ -8,29 +8,43 @@
 @Html.SmartStore().TabStrip().Name("promotion-edit").Items(x =>
 {
 	x.Add().Text(T("Admin.Common.General").Text).Content(TabGeneral()).Selected(true);
-
+	x.Add().Text(T("Admin.Common.Promotions.Products").Text).Content(TabProducts());
 	//generate an event
 	EngineContext.Current.Resolve<IEventPublisher>().Publish(new TabStripCreated(x, "promotion-edit", this.Html, this.Model));
 })
 
 <script type="text/javascript">
-
+	$(document).ready(function () {
+		// add new product
+		$(document).on('click', '#AddNewProductButton', function () {
+			$({}).entityPicker('loadDialog', {
+				url: '@Url.Action("EntityPicker", "Common", new { area = "" })',
+				caption: '@T("Admin.Common.Promotions.Products.AddNew")',
+				onLoadDialogBefore: function () {
+					$('#AddNewProductButton').button('loading').prop('disabled', true);
+				},
+				onLoadDialogComplete: function () {
+					$('#AddNewProductButton').prop('disabled', false).button('reset');
+				},
+				onOkClicked: function (ids) {
+					$({}).doAjax({
+						type: 'POST',
+						url: '@Url.Action("ProductAdd")',
+						data: { "promoId": @Model.Id, "selectedProductIds": ids },
+						callbackSuccess: function () {
+							$('#promotionproducts-grid').data('tGrid').ajaxRequest();
+						}
+					});
+					return true;
+				}
+			});
+		});
+	});
 </script>
 
 @helper TabGeneral()
 {
 	<table class="adminContent">
-
-		<tr>
-			<td class="adminTitle">
-				@Html.SmartLabelFor(model => model.ProductId)
-			</td>
-			<td class="adminData">
-				@Html.DropDownListFor(model => model.ProductId, new SelectList(ViewBag.AllProducts, "Value", "Text"))
-				@Html.ValidationMessageFor(model => model.ProductId)
-			</td>
-		</tr>
-
 		<tr>
 			<td class="adminTitle">
 				@Html.SmartLabelFor(model => model.Title)
@@ -258,14 +272,14 @@
 		</tr>
 
 		@*<tr>
-			<td class="adminTitle">
-				@Html.SmartLabelFor(model => model.LanguageCulture)
-			</td>
-			<td class="adminData">
-				@Html.DropDownListFor(model => model.LanguageCulture, new SelectList(ViewBag.AllLanguages, "", "Name"))
-				@Html.ValidationMessageFor(model => model.LanguageCulture)
-			</td>
-		</tr>*@
+				<td class="adminTitle">
+					@Html.SmartLabelFor(model => model.LanguageCulture)
+				</td>
+				<td class="adminData">
+					@Html.DropDownListFor(model => model.LanguageCulture, new SelectList(ViewBag.AllLanguages, "", "Name"))
+					@Html.ValidationMessageFor(model => model.LanguageCulture)
+				</td>
+			</tr>*@
 
 
 		<tr>
@@ -276,4 +290,56 @@
 
 
 	</table>
+}
+
+@helper TabProducts()
+{
+if (Model.Id > 0)
+{
+		<table class="adminContent">
+			<tr>
+				<td>
+					@(Html.Telerik().Grid<PromotionProductsModel>()
+						.Name("promotionproducts-grid")
+						.DataKeys(keys =>
+						{
+							keys.Add(x => x.Id);
+						})
+						.DataBinding(dataBinding =>
+						{
+							dataBinding.Ajax()
+								.Select("ProductList", "Promotion", new { promoId = Model.Id })
+								.Update("ProductUpdate", "Promotion")
+								.Delete("ProductDelete", "Promotion");
+						})
+						.Columns(columns =>
+						{
+							columns.Bound(x => x.ProductName)								
+								.Width(520);
+							columns.Command(commands =>
+							{
+								commands.Delete().Localize(T);
+							})
+							.Width(220);
+						})
+						.Pageable(settings => settings.PageSize(Model.GridPageSize).Position(GridPagerPosition.Both))
+						.PreserveGridState()
+						.EnableCustomBinding(true))
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<button type="button" id="AddNewProductButton" class="btn btn-warning btn-below" data-loading-text="@(T("Common.Loading"))&hellip;">
+						<i class="fa fa-plus"></i>
+						@T("Admin.Catalog.Manufacturers.Products.AddNew")
+					</button>					
+				</td>
+			</tr>
+		</table>
+}
+else
+{
+		@T("Admin.Common.Promotions.Products.SaveBeforeEdit")
+}
 }

@@ -38,20 +38,24 @@ namespace SmartStore.Web.Controllers
     {
 		private readonly ICommonServices _services;
 		private readonly IPromotionService _promotionService;
+		private readonly IPromotionProductsService _promotionProductsService;
 		private readonly MediaSettings _mediaSettings;
 		private readonly IPictureService _pictureService;
 		private readonly ICategoryService _categoryService;
 
 		public PromotionController(ICommonServices commonServices,
 			IPromotionService promotionService, MediaSettings mediaSettings,
-			IPictureService pictureService, ICategoryService categoryService)
+			IPictureService pictureService, ICategoryService categoryService,
+			IPromotionProductsService promotionProductsService)
         {
 			this._services = commonServices;
 			this._promotionService = promotionService;
 			this._mediaSettings=mediaSettings;
 			this._pictureService = pictureService;
 			this._categoryService = categoryService;
-        }
+			this._promotionProductsService = promotionProductsService;
+
+		}
 
 
 		[ChildActionOnly]
@@ -64,7 +68,14 @@ namespace SmartStore.Web.Controllers
 				.Select(x =>
 				{
 					var catModel =new PromotionModel().ToModel(x);
-					catModel.Categories = this._categoryService.GetProductCategoriesByProductId(x.ProductId).Select(d => d.Category.ToModel()).ToList();
+					catModel.Categories = new List<CategoryModel>();
+					var promotionsList = this._promotionProductsService.GetProductsByPromoId(x.Id);
+					foreach (var item in promotionsList)
+					{
+						List<CategoryModel> d1 = this._categoryService.GetProductCategoriesByProductId(item.ProductId).Select(d => d.Category.ToModel()).ToList();
+						catModel.Categories= catModel.Categories.Concat(d1).ToList();
+					}
+					//catModel.Categories = this._categoryService.GetProductCategoriesByProductId(x.ProductId).Select(d => d.Category.ToModel()).ToList();
 					// Prepare picture model
 					int pictureSize = _mediaSettings.CategoryThumbPictureSize;
 					var categoryPictureCacheKey = string.Format(ModelCacheEventConsumer.CATEGORY_PICTURE_MODEL_KEY, x.Id, pictureSize, true,

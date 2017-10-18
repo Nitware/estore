@@ -17,8 +17,7 @@ namespace SmartStore.Admin.Models.Promotions
 	{
 		public PromotionModel()
 		{
-			Product = new ProductModel();
-			Category = new CategoryModel();
+			PromotionProducts = new List<PromotionProductsModel>();
 		}
 
 		[SmartResourceDisplayName("Admin.Promotions.Promotion.ID")]
@@ -27,11 +26,7 @@ namespace SmartStore.Admin.Models.Promotions
 		[SmartResourceDisplayName("Admin.Promotions.Promotion.Active")]
 		public bool Active { get; set; }
 
-		[SmartResourceDisplayName("Admin.Promotions.Promotion.ProductId")]
-		public int ProductId { get; set; }
-		[SmartResourceDisplayName("Admin.Promotions.Promotion.CategoryId")]
-		public int? CategoryId { get; set; }
-
+		
 		//title
 		[SmartResourceDisplayName("Admin.Promotions.Promotion.Title")]
 		public string Title { get; set; }
@@ -78,7 +73,8 @@ namespace SmartStore.Admin.Models.Promotions
 		public int TextFrameWidth { get; set; }
 
 		[SmartResourceDisplayName("Admin.Promotions.Promotion.ExpiryDate")]
-		public DateTime ExpiryDate { get; set; }
+		public DateTime? ExpiryDate { get; set; }
+
 		[SmartResourceDisplayName("Admin.Promotions.Promotion.NoOfColumn")]
 		public int NoOfColumn { get; set; }
 
@@ -96,13 +92,11 @@ namespace SmartStore.Admin.Models.Promotions
 		public bool Published { get; set; }
 
 		public int DisplayOrder { get; set; }
-
 		public List<SelectListItem> AvailableCategories { get; set; }
 		public List<SelectListItem> AvailableProducts { get; set; }
 
-
-		public ProductModel Product { get; set; }
-		public CategoryModel Category { get; set; }
+		public IList<PromotionProductsModel> PromotionProducts { get; set; }
+		
 
 		public bool Deleted { get; set; }
 
@@ -114,9 +108,7 @@ namespace SmartStore.Admin.Models.Promotions
 			return new PromotionModel
 			{
 				Active = model.Active,
-				ProductId = model.ProductId,
-				CategoryId = model.CategoryId,
-
+				
 				//title
 				Title = model.Title,
 				TitleFontType = model.TitleFontType,
@@ -156,9 +148,7 @@ namespace SmartStore.Admin.Models.Promotions
 				Published = model.Published,
 				DisplayOrder = model.DisplayOrder,
 				Id = model.Id,
-				Deleted = model.Deleted,
-				Product = model.Product.ToModel(),
-				Category = model.CategoryId > 0 ? model.Category.ToModel() : new CategoryModel()
+				Deleted = model.Deleted				
 
 			};
 		}
@@ -168,9 +158,7 @@ namespace SmartStore.Admin.Models.Promotions
 			return new Promotion
 			{
 				Active = this.Active,
-				ProductId = this.ProductId,
-				CategoryId = this.CategoryId,
-
+				
 				//title
 				Title = this.Title,
 				TitleFontType = this.TitleFontType,

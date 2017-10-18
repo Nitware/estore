@@ -142,6 +142,7 @@
     <Compile Include="Mapping\Media\MediaStorageMap.cs" />
     <Compile Include="Mapping\Messages\QueuedEmailAttachmentMap.cs" />
     <Compile Include="Mapping\Payments\PaymentMethodMap.cs" />
+    <Compile Include="Mapping\Promotions\PromotionProductsMap.cs" />
     <Compile Include="Mapping\Promotions\PromotionMap.cs" />
     <Compile Include="Migrations\201403112331027_Initial.cs" />
     <Compile Include="Migrations\201403112331027_Initial.Designer.cs">
@@ -550,6 +551,10 @@
     <Compile Include="Migrations\201710091247485_promo.cs" />
     <Compile Include="Migrations\201710091247485_promo.Designer.cs">
       <DependentUpon>201710091247485_promo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710171034348_promoTabl.cs" />
+    <Compile Include="Migrations\201710171034348_promoTabl.Designer.cs">
+      <DependentUpon>201710171034348_promoTabl.cs</DependentUpon>
     </Compile>
     <Compile Include="ObjectContextBase.SaveChanges.cs" />
     <Compile Include="Setup\Builder\ActivityLogTypeMigrator.cs" />
@@ -998,6 +1003,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710091247485_promo.resx">
       <DependentUpon>201710091247485_promo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710171034348_promoTabl.resx">
+      <DependentUpon>201710171034348_promoTabl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Sql\Indexes.sql" />
     <EmbeddedResource Include="Sql\StoredProcedures.sql" />

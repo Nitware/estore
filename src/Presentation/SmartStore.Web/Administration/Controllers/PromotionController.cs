@@ -45,6 +45,7 @@ namespace SmartStore.Admin.Controllers
 		private readonly ICategoryService _categoryService;
 		private readonly IProductService _productService;
 		private readonly IPromotionService _promotionService;
+		private readonly IPromotionProductsService _promotionProductsService;
 		private readonly AdminAreaSettings _adminAreaSettings;
 		private readonly CustomerSettings _customerSettings;
 		#endregion
@@ -64,7 +65,8 @@ namespace SmartStore.Admin.Controllers
 		IProductService productService,
 		AdminAreaSettings adminAreaSettings,
 		CustomerSettings customerSettings,
-		IPromotionService promotionService)
+		IPromotionService promotionService,
+		IPromotionProductsService promotionProductService)
 		{
 			this._settingService = settingService;
 			this._localizationService = localizationService;
@@ -80,6 +82,7 @@ namespace SmartStore.Admin.Controllers
 			this._categoryService = categoryService;
 			this._productService = productService;
 			this._promotionService = promotionService;
+			this._promotionProductsService = promotionProductService;
 		}
 
 		#endregion
@@ -132,9 +135,9 @@ namespace SmartStore.Admin.Controllers
 			fontColors.Add(new SelectListItem { Value = "3", Text = "Info" });
 			fontColors.Add(new SelectListItem { Value = "4", Text = "Warning" });
 			fontColors.Add(new SelectListItem { Value = "5", Text = "Danger" });
-			
 
-			IList<SelectListItem> fontTypes = new List<SelectListItem>();			
+
+			IList<SelectListItem> fontTypes = new List<SelectListItem>();
 			fontTypes.Add(new SelectListItem { Value = "'AvenirHeavy', arial, sans-serif", Text = "'AvenirHeavy', arial, sans-serif" });
 			fontTypes.Add(new SelectListItem { Value = "Arial", Text = "Arial" });
 			fontTypes.Add(new SelectListItem { Value = "Times New Roman", Text = "Times New Roman" });
@@ -293,8 +296,6 @@ namespace SmartStore.Admin.Controllers
 				//promotion.PictureUrl = model.PictureUrl;
 
 				promotion.Active = model.Published;
-				promotion.ProductId = model.ProductId;
-				promotion.CategoryId = model.CategoryId;
 
 				//title
 				promotion.Title = model.Title;
@@ -362,6 +363,111 @@ namespace SmartStore.Admin.Controllers
 		}
 
 
+
+		#endregion
+
+		#region Products
+
+		[HttpPost, GridAction(EnableCustomBinding = true)]
+		public ActionResult ProductList(GridCommand command, int promoId)
+		{
+			var model = new GridModel<PromotionProductsModel>();
+
+			if (_permissionService.Authorize(StandardPermissionProvider.ManageCatalog))
+			{
+				var promoProducts = _promotionProductsService.GetProductsByPromoId(promoId);
+
+				var productIds = promoProducts.Select(x => x.ProductId).ToArray();
+				var products = _productService.GetProductsByIds(productIds);
+
+				model.Data = promoProducts
+					.Select(x =>
+					{
+						var product = products.FirstOrDefault(y => y.Id == x.ProductId);
+
+						return new PromotionProductsModel
+						{
+							Id = x.Id,
+							ProductId = x.ProductId,
+							ProductName = product.Name
+						};
+					});
+
+				model.Total = promoProducts.Count();
+			}
+			else
+			{
+				model.Data = Enumerable.Empty<PromotionProductsModel>();
+
+				NotifyAccessDenied();
+			}
+
+			return new JsonResult
+			{
+				Data = model
+			};
+		}
+
+		[GridAction(EnableCustomBinding = true)]
+		public ActionResult ProductUpdate(GridCommand command, PromotionProductsModel model)
+		{
+			var product = _promotionProductsService.GetPromotionById(model.Id);
+
+			if (_permissionService.Authorize(StandardPermissionProvider.ManageCatalog))
+			{
+				product.ProductId = model.ProductId;
+				_promotionProductsService.UpdatePromotion(product);
+			}
+
+			return ProductList(command, model.ProductId);
+		}
+
+		[GridAction(EnableCustomBinding = true)]
+		public ActionResult ProductDelete(int id, GridCommand command)
+		{
+			var product = _promotionProductsService.GetPromotionById(id);
+			var productId = product.ProductId;
+
+			if (_permissionService.Authorize(StandardPermissionProvider.ManageCatalog))
+			{
+				_promotionProductsService.DeletePromotion(product);
+			}
+
+			return ProductList(command, product.PromotionId);
+		}
+
+		[HttpPost]
+		public ActionResult ProductAdd(int promoId, string selectedProductIds)
+		{
+			if (_permissionService.Authorize(StandardPermissionProvider.ManageCatalog))
+			{
+				var productIds = selectedProductIds.SplitSafe(",").Select(x => x.ToInt()).ToArray();
+				var products = _productService.GetProductsByIds(productIds);
+				PromotionProducts productManu = null;
+				var maxDisplayOrder = -1;
+
+				foreach (var product in products)
+				{
+					var existingProductManus = _promotionProductsService.GetProductsByPromoId(promoId);
+
+					if (!existingProductManus.Any(x => x.ProductId == product.Id && x.PromotionId == promoId))
+					{
+						_promotionProductsService.InsertPromotion(new PromotionProducts
+						{
+							Deleted = false,
+							PromotionId = promoId,
+							ProductId = product.Id
+						});
+					}
+				}
+			}
+			else
+			{
+				NotifyAccessDenied();
+			}
+
+			return new EmptyResult();
+		}
 
 		#endregion
 	}

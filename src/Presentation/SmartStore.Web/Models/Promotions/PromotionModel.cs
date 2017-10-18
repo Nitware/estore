@@ -76,7 +76,7 @@ namespace SmartStore.Web.Models.Promotions
 		public int TextFrameWidth { get; set; }
 
 		[SmartResourceDisplayName("Admin.Promotions.Promotion.ExpiryDate")]
-		public DateTime ExpiryDate { get; set; }
+		public DateTime? ExpiryDate { get; set; }
 		[SmartResourceDisplayName("Admin.Promotions.Promotion.NoOfColumn")]
 		public int NoOfColumn { get; set; }
 
@@ -115,9 +115,7 @@ namespace SmartStore.Web.Models.Promotions
 			return new PromotionModel
 			{
 				Active = model.Active,
-				ProductId = model.ProductId,
-				CategoryId = model.CategoryId,
-
+				
 				//title
 				Title = model.Title,
 				TitleFontType = model.TitleFontType,

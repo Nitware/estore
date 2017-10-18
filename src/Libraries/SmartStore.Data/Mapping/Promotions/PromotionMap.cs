@@ -10,7 +10,7 @@ namespace SmartStore.Data.Mapping.Promotions
             this.ToTable("Promotion");
             this.HasKey(a => a.Id);
 
-            this.HasRequired(a => a.Product).WithMany().HasForeignKey(x => x.ProductId).WillCascadeOnDelete(false);
+            //this.HasRequired(a => a.Product).WithMany().HasForeignKey(x => x.ProductId).WillCascadeOnDelete(false);
 			this.HasRequired(a => a.Picture).WithMany().HasForeignKey(x => x.PictureId).WillCascadeOnDelete(false);
 
 		}
