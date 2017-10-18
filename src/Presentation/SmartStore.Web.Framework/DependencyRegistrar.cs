@@ -168,6 +168,7 @@ namespace SmartStore.Web.Framework
 				.InstancePerRequest();
 
 			builder.RegisterType<PromotionService>().As<IPromotionService>().InstancePerRequest();
+			builder.RegisterType<PromotionProductsService>().As<IPromotionProductsService>().InstancePerRequest();
 			builder.RegisterType<ProductService>().As<IProductService>().InstancePerRequest();
 
 			builder.RegisterType<BackInStockSubscriptionService>().As<IBackInStockSubscriptionService>().InstancePerRequest();

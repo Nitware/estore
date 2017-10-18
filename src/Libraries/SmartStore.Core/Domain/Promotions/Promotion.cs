@@ -15,13 +15,6 @@ namespace SmartStore.Core.Domain.Promotions
 	[DataContract]
 	public partial class Promotion : BaseEntity, ISoftDeletable
 	{
-
-		[DataMember]
-		public int ProductId { get; set; }
-
-		[DataMember]
-		public int? CategoryId { get; set; }
-
 		//title
 		[DataMember]
 		public string Title { get; set; }
@@ -69,7 +62,7 @@ namespace SmartStore.Core.Domain.Promotions
 		[DataMember]
 		public string CreatedBy { get; set; }
 		[DataMember]
-		public DateTime ExpiryDate { get; set; }
+		public Nullable<DateTime> ExpiryDate { get; set; }
 		[DataMember]
 		public int NoOfColumn { get; set; }
 
@@ -103,8 +96,7 @@ namespace SmartStore.Core.Domain.Promotions
 		[DataMember]
 		public bool Active { get; set; }
 
-		public virtual Product Product { get; set; }
-		public virtual Category Category { get; set; }
 		public virtual Picture Picture { get; set; }
+		public virtual IList<PromotionProducts> PromotionProducts { get; set; }
 	}
 }

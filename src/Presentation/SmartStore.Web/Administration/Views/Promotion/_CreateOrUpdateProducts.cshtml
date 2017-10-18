@@ -1,0 +1,52 @@
+﻿@model PromotionProductsModel
+@using Telerik.Web.Mvc.UI;
+@using SmartStore.Admin.Models.Promotions;
+@{
+	var cultures = System.Globalization.CultureInfo.GetCultures(System.Globalization.CultureTypes.SpecificCultures).ToList();
+}
+@Html.HiddenFor(model => model.Id)
+@Html.SmartStore().TabStrip().Name("promotionproducts-edit").Items(x =>
+{
+	x.Add().Text(T("Admin.Common.Produts").Text).Content(TabProduts()).Selected(true);
+
+	//generate an event
+	EngineContext.Current.Resolve<IEventPublisher>().Publish(new TabStripCreated(x, "promotionProducts-edit", this.Html, this.Model));
+})
+
+<script type="text/javascript">
+
+</script>
+
+@helper TabProduts()
+{
+	<table class="adminContent">
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.ProductId)
+			</td>
+			<td class="adminData">
+				@Html.DropDownListFor(model => model.ProductId, new SelectList(ViewBag.AllProducts, "Value", "Text"))
+				@Html.ValidationMessageFor(model => model.ProductId)
+			</td>
+		</tr>
+
+		@*<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.LanguageCulture)
+			</td>
+			<td class="adminData">
+				@Html.DropDownListFor(model => model.LanguageCulture, new SelectList(ViewBag.AllLanguages, "", "Name"))
+				@Html.ValidationMessageFor(model => model.LanguageCulture)
+			</td>
+		</tr>*@
+
+
+		<tr>
+			<td colspan="2">
+				<hr />
+			</td>
+		</tr>
+
+
+	</table>
+}

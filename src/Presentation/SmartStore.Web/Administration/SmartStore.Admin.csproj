@@ -237,6 +237,7 @@
     <Compile Include="MappingExtensions.cs" />
     <Compile Include="Infrastructure\AdminStartupTask.cs" />
     <Compile Include="Infrastructure\AutoMapperAdminProfile.cs" />
+    <Compile Include="Models\Promotions\PromotionProductsModel.cs" />
     <Compile Include="Models\Promotions\PromotionModel.cs" />
     <Compile Include="Models\Catalog\CategoryTreeModel.cs" />
     <Compile Include="Models\Catalog\ProductAttributeOptionModel.cs" />
@@ -383,6 +384,7 @@
     <Compile Include="Models\Messages\QueuedEmailModel.cs" />
     <Compile Include="Models\Settings\TaxSettingsModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validators\Promotions\PromotionProductsValidator.cs" />
     <Compile Include="Validators\Promotions\PromotionValidator.cs" />
     <Compile Include="Validators\Catalog\CategoryValidator.cs" />
     <Compile Include="Validators\Catalog\ProductTagValidator.cs" />
@@ -841,6 +843,7 @@
     <Content Include="Views\Promotion\Create.cshtml" />
     <Content Include="Views\Promotion\Edit.cshtml" />
     <Content Include="Views\Promotion\List.cshtml" />
+    <Content Include="Views\Promotion\_CreateOrUpdateProducts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\admin.less" />
