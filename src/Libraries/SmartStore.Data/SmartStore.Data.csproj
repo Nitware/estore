@@ -142,8 +142,8 @@
     <Compile Include="Mapping\Media\MediaStorageMap.cs" />
     <Compile Include="Mapping\Messages\QueuedEmailAttachmentMap.cs" />
     <Compile Include="Mapping\Payments\PaymentMethodMap.cs" />
-    <Compile Include="Mapping\Promotions\PromotionProductsMap.cs" />
     <Compile Include="Mapping\Promotions\PromotionMap.cs" />
+    <Compile Include="Mapping\Promotions\PromotionProductsMap.cs" />
     <Compile Include="Migrations\201403112331027_Initial.cs" />
     <Compile Include="Migrations\201403112331027_Initial.Designer.cs">
       <DependentUpon>201403112331027_Initial.cs</DependentUpon>
@@ -520,41 +520,9 @@
     <Compile Include="Migrations\201709141000226_V303Resources.Designer.cs">
       <DependentUpon>201709141000226_V303Resources.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201710050746373_Promotion.cs" />
-    <Compile Include="Migrations\201710050746373_Promotion.Designer.cs">
-      <DependentUpon>201710050746373_Promotion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710060317370_[promotion-changes].cs" />
-    <Compile Include="Migrations\201710060317370_[promotion-changes].Designer.cs">
-      <DependentUpon>201710060317370_[promotion-changes].cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710060656273_[promotion-changes-productid].cs" />
-    <Compile Include="Migrations\201710060656273_[promotion-changes-productid].Designer.cs">
-      <DependentUpon>201710060656273_[promotion-changes-productid].cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710060710364_[promotion-changes-productid1].cs" />
-    <Compile Include="Migrations\201710060710364_[promotion-changes-productid1].Designer.cs">
-      <DependentUpon>201710060710364_[promotion-changes-productid1].cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710070347356_promotion.cs" />
-    <Compile Include="Migrations\201710070347356_promotion.Designer.cs">
-      <DependentUpon>201710070347356_promotion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710070351475_promotion5.cs" />
-    <Compile Include="Migrations\201710070351475_promotion5.Designer.cs">
-      <DependentUpon>201710070351475_promotion5.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710090741253_promotion-set.cs" />
-    <Compile Include="Migrations\201710090741253_promotion-set.Designer.cs">
-      <DependentUpon>201710090741253_promotion-set.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710091247485_promo.cs" />
-    <Compile Include="Migrations\201710091247485_promo.Designer.cs">
-      <DependentUpon>201710091247485_promo.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710171034348_promoTabl.cs" />
-    <Compile Include="Migrations\201710171034348_promoTabl.Designer.cs">
-      <DependentUpon>201710171034348_promoTabl.cs</DependentUpon>
+    <Compile Include="Migrations\201710181508418_promoAdvert.cs" />
+    <Compile Include="Migrations\201710181508418_promoAdvert.Designer.cs">
+      <DependentUpon>201710181508418_promoAdvert.cs</DependentUpon>
     </Compile>
     <Compile Include="ObjectContextBase.SaveChanges.cs" />
     <Compile Include="Setup\Builder\ActivityLogTypeMigrator.cs" />
@@ -980,32 +948,8 @@
     <EmbeddedResource Include="Migrations\201709141000226_V303Resources.resx">
       <DependentUpon>201709141000226_V303Resources.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710050746373_Promotion.resx">
-      <DependentUpon>201710050746373_Promotion.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710060317370_[promotion-changes].resx">
-      <DependentUpon>201710060317370_[promotion-changes].cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710060656273_[promotion-changes-productid].resx">
-      <DependentUpon>201710060656273_[promotion-changes-productid].cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710060710364_[promotion-changes-productid1].resx">
-      <DependentUpon>201710060710364_[promotion-changes-productid1].cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710070347356_promotion.resx">
-      <DependentUpon>201710070347356_promotion.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710070351475_promotion5.resx">
-      <DependentUpon>201710070351475_promotion5.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710090741253_promotion-set.resx">
-      <DependentUpon>201710090741253_promotion-set.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710091247485_promo.resx">
-      <DependentUpon>201710091247485_promo.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710171034348_promoTabl.resx">
-      <DependentUpon>201710171034348_promoTabl.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201710181508418_promoAdvert.resx">
+      <DependentUpon>201710181508418_promoAdvert.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Sql\Indexes.sql" />
     <EmbeddedResource Include="Sql\StoredProcedures.sql" />
