@@ -15,6 +15,7 @@ namespace SmartStore.Services.Promotions
 		/// <returns>Affiliate</returns>
 		PromotionProducts GetPromotionById(int PromotionId);
 
+		PromotionProducts FindProductsByPromoId(int promotionId, int productId);
 		IList<PromotionProducts> GetProductsByPromoId(int promotionId);
 
 		/// <summary>

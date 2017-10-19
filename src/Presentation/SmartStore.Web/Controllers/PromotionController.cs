@@ -75,6 +75,7 @@ namespace SmartStore.Web.Controllers
 						List<CategoryModel> d1 = this._categoryService.GetProductCategoriesByProductId(item.ProductId).Select(d => d.Category.ToModel()).ToList();
 						catModel.Categories= catModel.Categories.Concat(d1).ToList();
 					}
+					catModel.Categories = catModel.Categories.Distinct().ToList();
 					//catModel.Categories = this._categoryService.GetProductCategoriesByProductId(x.ProductId).Select(d => d.Category.ToModel()).ToList();
 					// Prepare picture model
 					int pictureSize = _mediaSettings.CategoryThumbPictureSize;
