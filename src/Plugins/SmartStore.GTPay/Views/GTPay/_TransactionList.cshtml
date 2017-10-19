@@ -1,65 +1,69 @@
-﻿@using Telerik.Web.Mvc;
-@using Telerik.Web.Mvc.UI;
+﻿@using Telerik.Web.Mvc.UI;
+@using SmartStore.Web.Framework;
+@using SmartStore.Web.Framework.UI;
 @using SmartStore.GTPay.Models;
 @model ConfigurationModel
 
-@{
-    Layout = null;
-}
-@*TransactionList(string tranxId, decimal amount)*@
-@(Html.Telerik().Grid<TransactionLog>(Model.TransactionLogsForGrid.Data)
-    .Name("Grid")
-    .DataKeys(keys => keys.Add(x => x.TransactionRefNo).RouteKey("TransactionRefNo"))
-    .Columns(columns =>
-    {
-        //columns.Command(commands =>
-        //{
-        //    commands.Delete();
-        //}).Width(180);
-
-        columns.Command(commands =>
+@*@using (Html.BeginForm())
+{*@
+    <div>
+        <div>Transaction Logs</div>
+        @(Html.Telerik().Grid<TransactionLog>(Model.TransactionLogsForGrid.Data)
+        .Name("Grid")
+        .DataKeys(keys => keys.Add(x => x.TransactionRefNo).RouteKey("TransactionRefNo"))
+        .Columns(columns =>
         {
-            // Declare a custom command named "showDetails"
-            commands.Custom("Update")
-                     .Text("Update")
-            .Action("UpdateTransaction", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
-            .DataRouteValues(route =>
+            columns.Command(commands =>
             {
-                route.Add(o => o.TransactionRefNo).RouteKey("tranxId");
-                route.Add(o => o.AmountInUnit).RouteKey("amount");
-            });
-        });
-
-        columns.Bound(x => x.TransactionStatus);
-        columns.Bound(x => x.TransactionRefNo);
-        columns.Bound(x => x.TransactionDate).Format("{0:yyyy-MM-dd H:mm:ss}");
-        columns.Bound(x => x.ApprovedAmount).Format("{0:0,0.00}");
-        columns.Bound(x => x.ResponseCode);
-        columns.Bound(x => x.ResponseDescription);
-        columns.Bound(x => x.MerchantReference);
-        columns.Bound(x => x.Gateway);
-        columns.Bound(x => x.DatePaid).Format("{0:yyyy-MM-dd H:mm:ss}");
-    })
-    //.Editable(x =>
-    //{
-    //    x.Mode(GridEditMode.InLine);
-    //})
-    .DataBinding(dataBinding =>
-    {
-        dataBinding.Ajax()
-            .Select("TransactionList", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
-        //.Custom("UpdateTransaction", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
-        //.DataRouteValues(route =>
-        //{
-        //    route.Add(o => o.TransactionRefNo).RouteKey("tranxId");
-        //    route.Add(o => o.AmountInUnit).RouteKey("amount");
-        //});
-        //.Delete("TransactionUpdate", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
-    })
-    .Pageable(settings => settings.PageSize(Model.GridPageSize).Position(GridPagerPosition.Both))
-    .PreserveGridState()
-    .EnableCustomBinding(true)
-)
+                commands.Edit();
+            }).Width(180);
 
 
+            //columns.Command(commands =>
+            //{
+            //    // Declare a custom command named "showDetails"
+            //    commands.Custom("Update")
+            //    .Text("Update")
+            //    .Action("UpdateTransaction", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
+            //    .DataRouteValues(route =>
+            //    {
+            //        route.Add(o => o.TransactionRefNo).RouteKey("tranxId");
+            //        route.Add(o => o.AmountInUnit).RouteKey("amount");
+            //    });
+            //});
 
+
+            columns.Bound(x => x.TransactionStatus);
+            columns.Bound(x => x.TransactionRefNo);
+            columns.Bound(x => x.TransactionDate).Format("{0:yyyy-MM-dd HH:mm:ss}");
+            columns.Bound(x => x.ApprovedAmount).Format("{0:0,0.00}");
+            columns.Bound(x => x.ResponseCode);
+            columns.Bound(x => x.ResponseDescription);
+            columns.Bound(x => x.MerchantReference);
+            //columns.Bound(x => x.Gateway);
+            columns.Bound(x => x.DatePaid).Format("{0:yyyy-MM-dd HH:mm:ss}");
+
+        })
+        .Editable(x =>
+        {
+            x.Mode(GridEditMode.PopUp);
+        })
+        .DataBinding(dataBinding =>
+        {
+            dataBinding.Ajax()
+                .Select("TransactionList", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
+                .Update("TransactionUpdate", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
+
+            //.DataRouteValues(route =>
+            //{
+            //    route.Add(o => o.TransactionRefNo).RouteKey("tranxId");
+            //    route.Add(o => o.AmountInUnit).RouteKey("amount");
+            //});
+            //.Delete("TransactionUpdate", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
+        })
+        .Pageable(settings => settings.PageSize(Model.GridPageSize).Position(GridPagerPosition.Both))
+        .PreserveGridState()
+        .EnableCustomBinding(true)
+        )
+    </div>
+@*}*@

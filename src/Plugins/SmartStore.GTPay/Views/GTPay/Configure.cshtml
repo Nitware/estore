@@ -26,12 +26,12 @@
 @Html.SmartStore().TabStrip().Name("product-edit").OnAjaxSuccess("productEditTab_onAjaxSuccess").Style(TabsStyle.Tabs).Position(TabsPosition.Left).Items(x =>
 {
     x.Add().Text(T("Plugins.SmartStore.GTPay.SettingTab").Text)
-
-    //x.Add().Text(T("Setting").Text)
        .Icon("fa fa-sliders fa-lg fa-fw")
         .LinkHtmlAttributes(new { data_tab_name = "Setting" })
         .Content(Html.Partial("_Setting", Model).ToHtmlString())
         .Selected(true);
+
+
 
     x.Add().Text(T("Plugins.SmartStore.GTPay.CurrencyTab").Text)
         .Name("tab-currency")
@@ -41,15 +41,15 @@
         .Content(Html.Partial("_Currency", Model).ToHtmlString())
         //.Action("LoadEditTab", "Product", new { id = Model.Id, tabName = "Inventory" })
         .Ajax();
-    
+
     x.Add().Text(T("Plugins.SmartStore.GTPay.TransactionListTab").Text)
-     .Name("tab-transaction-list")
-     //.Visible(!(Model.ProductTypeId == (int)ProductType.BundledProduct && Model.BundlePerItemPricing))
-     .Icon("fa fa-bars fa-lg fa-flip-horizontal fa-fw")
-      //.LinkHtmlAttributes(new { data_tab_name = "TransactionList" })
-      //.Action("TransactionList", "GTPay")
-      .Content(Html.Partial("_TransactionList", Model).ToHtmlString())
-     .Ajax();
+ .Name("tab-transaction-list")
+ //.Visible(!(Model.ProductTypeId == (int)ProductType.BundledProduct && Model.BundlePerItemPricing))
+ .Icon("fa fa-bars fa-lg fa-flip-horizontal fa-fw")
+  .LinkHtmlAttributes(new { data_tab_name = "TransactionList" })
+  //.Action("TransactionLog", "GTPay", new { area = "SmartStore.GTPay" })
+  .Content(Html.Partial("_TransactionList", Model).ToHtmlString())
+ .Ajax();
 
     x.Add().Text(T("Plugins.SmartStore.GTPay.TransactionSearchTab").Text)
         .Name("tab-transaction-search")
