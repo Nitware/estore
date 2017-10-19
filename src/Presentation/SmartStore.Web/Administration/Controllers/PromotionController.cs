@@ -242,7 +242,7 @@ namespace SmartStore.Admin.Controllers
 				promo.CreatedBy = User.Identity.Name;
 				_promotionService.InsertPromotion(promo);
 
-				NotifySuccess(_localizationService.GetResource("Admin.Promotions.Added"));
+				NotifySuccess("Promotion created successfully");
 				return continueEditing ? RedirectToAction("Edit", new { id = promo.Id }) : RedirectToAction("List");
 			}
 			this.InitCreateEdit();
@@ -336,7 +336,7 @@ namespace SmartStore.Admin.Controllers
 
 				_promotionService.UpdatePromotion(promotion);
 
-				NotifySuccess(_localizationService.GetResource("Admin.Promotions.Updated"));
+				NotifySuccess("Promotion updated successfully");
 				return continueEditing ? RedirectToAction("Edit", promotion.Id) : RedirectToAction("List");
 			}
 			this.InitCreateEdit();
@@ -358,7 +358,7 @@ namespace SmartStore.Admin.Controllers
 				return RedirectToAction("List");
 
 			_promotionService.DeletePromotion(Promotion);
-			NotifySuccess(_localizationService.GetResource("Admin.Promotions.Deleted"));
+			NotifySuccess("Promotion deleted successfully");
 			return RedirectToAction("List");
 		}
 
