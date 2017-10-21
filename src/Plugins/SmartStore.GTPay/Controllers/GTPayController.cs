@@ -88,8 +88,8 @@ namespace SmartStore.GTPay.Controllers
             _ctx = ctx;
         }
 
-        [GridAction(EnableCustomBinding = true)]
-        public ActionResult TransactionUpdate(ConfigurationModel model, GridCommand command)
+        [HttpPost, GridAction(EnableCustomBinding = true)]
+        public ActionResult UpdateTransactionLog(TransactionLog model, GridCommand command)
         {
             GTPaySettings gtpaySettings = GetGTPaySettings();
 

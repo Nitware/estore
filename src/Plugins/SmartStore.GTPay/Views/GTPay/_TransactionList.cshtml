@@ -4,10 +4,21 @@
 @using SmartStore.GTPay.Models;
 @model ConfigurationModel
 
-@*@using (Html.BeginForm())
-{*@
+@*<script>
+			function onEdit(e) {
+			    //$(e.form).find('#Category').select2('val', e.dataItem['CategoryId']);
+                alert("editing ...")
+			}
+
+			function onProductCategoryDataBound(e) {
+				$('#Category').selectWrapper({ resetDataUrl: '@Url.Action("AllCategories", "Category")' });
+			}
+</script>*@
+
+@using (Html.BeginForm("TransactionUpdate", "GTPay", FormMethod.Post, new { id = "manufacturer-form" }))
+{
     <div>
-        <div>Transaction Logs</div>
+        
         @(Html.Telerik().Grid<TransactionLog>(Model.TransactionLogsForGrid.Data)
         .Name("Grid")
         .DataKeys(keys => keys.Add(x => x.TransactionRefNo).RouteKey("TransactionRefNo"))
@@ -18,21 +29,8 @@
                 commands.Edit();
             }).Width(180);
 
-
-            //columns.Command(commands =>
-            //{
-            //    // Declare a custom command named "showDetails"
-            //    commands.Custom("Update")
-            //    .Text("Update")
-            //    .Action("UpdateTransaction", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
-            //    .DataRouteValues(route =>
-            //    {
-            //        route.Add(o => o.TransactionRefNo).RouteKey("tranxId");
-            //        route.Add(o => o.AmountInUnit).RouteKey("amount");
-            //    });
-            //});
-
-
+            //columns.Bound(x => x.TransactionRefNo)
+            //       .ClientTemplate("<a href=\"Edit/<#= Id #>\"><#= TransactionRefNo #></a>");
             columns.Bound(x => x.TransactionStatus);
             columns.Bound(x => x.TransactionRefNo);
             columns.Bound(x => x.TransactionDate).Format("{0:yyyy-MM-dd HH:mm:ss}");
@@ -44,26 +42,25 @@
             columns.Bound(x => x.DatePaid).Format("{0:yyyy-MM-dd HH:mm:ss}");
 
         })
+         .DataBinding(dataBinding =>
+         {
+             dataBinding.Ajax()
+                 .Select("TransactionList", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
+                 .Update("UpdateTransactionLog", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
+         })
         .Editable(x =>
         {
-            x.Mode(GridEditMode.PopUp);
+            x.Mode(GridEditMode.InLine);
         })
-        .DataBinding(dataBinding =>
-        {
-            dataBinding.Ajax()
-                .Select("TransactionList", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
-                .Update("TransactionUpdate", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
+        //.ToolBar(commands => commands.Edit())
+        //.ClientEvents(events => {
+        //    events.OnEdit("onEdit");
+        //    //events.OnDataBound("onProductCategoryDataBound");
+        //})
 
-            //.DataRouteValues(route =>
-            //{
-            //    route.Add(o => o.TransactionRefNo).RouteKey("tranxId");
-            //    route.Add(o => o.AmountInUnit).RouteKey("amount");
-            //});
-            //.Delete("TransactionUpdate", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
-        })
         .Pageable(settings => settings.PageSize(Model.GridPageSize).Position(GridPagerPosition.Both))
         .PreserveGridState()
         .EnableCustomBinding(true)
         )
     </div>
-@*}*@
+}
