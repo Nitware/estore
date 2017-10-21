@@ -242,7 +242,7 @@ namespace SmartStore.Admin.Controllers
 				promo.CreatedBy = User.Identity.Name;
 				_promotionService.InsertPromotion(promo);
 
-				NotifySuccess(_localizationService.GetResource("Admin.Promotions.Added"));
+				NotifySuccess("Promotion created successfully");
 				return continueEditing ? RedirectToAction("Edit", new { id = promo.Id }) : RedirectToAction("List");
 			}
 			this.InitCreateEdit();
@@ -336,7 +336,7 @@ namespace SmartStore.Admin.Controllers
 
 				_promotionService.UpdatePromotion(promotion);
 
-				NotifySuccess(_localizationService.GetResource("Admin.Promotions.Updated"));
+				NotifySuccess("Promotion updated successfully");
 				return continueEditing ? RedirectToAction("Edit", promotion.Id) : RedirectToAction("List");
 			}
 			this.InitCreateEdit();
@@ -358,7 +358,7 @@ namespace SmartStore.Admin.Controllers
 				return RedirectToAction("List");
 
 			_promotionService.DeletePromotion(Promotion);
-			NotifySuccess(_localizationService.GetResource("Admin.Promotions.Deleted"));
+			NotifySuccess("Promotion deleted successfully");
 			return RedirectToAction("List");
 		}
 
@@ -416,7 +416,14 @@ namespace SmartStore.Admin.Controllers
 			if (_permissionService.Authorize(StandardPermissionProvider.ManageCatalog))
 			{
 				product.ProductId = model.ProductId;
-				_promotionProductsService.UpdatePromotion(product);
+				if (this.IsProductAllowed(product.Id, product.PromotionId, product.Id))
+				{
+					_promotionProductsService.UpdatePromotion(product);
+				}
+				else
+				{
+					NotifyError("Product already added into the promotion");
+				}
 			}
 
 			return ProductList(command, model.ProductId);
@@ -443,22 +450,28 @@ namespace SmartStore.Admin.Controllers
 			{
 				var productIds = selectedProductIds.SplitSafe(",").Select(x => x.ToInt()).ToArray();
 				var products = _productService.GetProductsByIds(productIds);
-				PromotionProducts productManu = null;
-				var maxDisplayOrder = -1;
 
 				foreach (var product in products)
 				{
-					var existingProductManus = _promotionProductsService.GetProductsByPromoId(promoId);
-
-					if (!existingProductManus.Any(x => x.ProductId == product.Id && x.PromotionId == promoId))
+					if (this.IsProductAllowed(product.Id, promoId, 0))
 					{
-						_promotionProductsService.InsertPromotion(new PromotionProducts
+						var existingProductManus = _promotionProductsService.GetProductsByPromoId(promoId);
+
+						if (!existingProductManus.Any(x => x.ProductId == product.Id && x.PromotionId == promoId))
 						{
-							Deleted = false,
-							PromotionId = promoId,
-							ProductId = product.Id
-						});
+							_promotionProductsService.InsertPromotion(new PromotionProducts
+							{
+								Deleted = false,
+								PromotionId = promoId,
+								ProductId = product.Id
+							});
+						}
 					}
+					else
+					{
+						//NotifyError("Product already added into the promotion");
+					}
+
 				}
 			}
 			else
@@ -469,6 +482,26 @@ namespace SmartStore.Admin.Controllers
 			return new EmptyResult();
 		}
 
+		private bool IsProductAllowed(int productId, int promoId, int id = 0)
+		{
+			bool available = true;
+
+			PromotionProducts products = _promotionProductsService.FindProductsByPromoId(promoId, productId);
+			if (products != null)
+			{
+				int previousName = 0;
+				if (id > 0 && id == products.Id)
+				{
+					previousName = products.ProductId;
+					available = products.ProductId == previousName ? true : false;
+				}
+				else
+					available = false;
+			}
+
+			return available;
+
+		}
 		#endregion
 	}
 }

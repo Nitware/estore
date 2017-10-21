@@ -50,6 +50,19 @@ namespace SmartStore.Services.Promotions
             return _PromotionRepository.GetById(PromotionId);
         }
 
+		public virtual PromotionProducts FindProductsByPromoId(int promotionId,int productId)
+		{
+			if (promotionId == 0 || productId==0)
+				return null;
+
+			var query = _PromotionRepository.Table;
+			query = query.Where(a => !a.Deleted);
+			query = query.Where(a => a.PromotionId == promotionId && a.ProductId==productId);
+			query = query.OrderByDescending(d => d.Id);
+			var Promotions = query.FirstOrDefault();
+			return Promotions;
+		}
+
 		public virtual IList<PromotionProducts> GetProductsByPromoId(int promotionId)
 		{
 			if (promotionId == 0)

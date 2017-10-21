@@ -17486,4 +17486,62 @@
 	<LocaleResource Name="Wishlist.YourWishlistURL">
 		<Value>Your wishlist URL for sharing</Value>
 	</LocaleResource>
+	
+	
+	<LocaleResource Name="Admin.Promotions.Promotion">
+		<Value>Promotions</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.Added">
+		<Value>The new promotion has been added successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.AddNew">
+		<Value>Add a new promotion</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.BackToList">
+		<Value>back to promotion list</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.Deleted">
+		<Value>The promotion has been deleted successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.Updated">
+		<Value>The promotion has been updated successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.EditPromotionDetails">
+		<Value>Edit promotion details</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.Fields">
+		<Value>Allow customers to select page size</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.Fields.AllowCustomersToSelectPageSize">
+		<Value>Allow customers to select page size</Value>
+	</LocaleResource>
+	
+	
+	<LocaleResource Name="Admin.Configuration.ContentSlider">
+		<Value>Content Slider</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Added">
+		<Value>The new slider has been added successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.AddNew">
+		<Value>Add a new slider</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.BackToList">
+		<Value>back to slider list</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Deleted">
+		<Value>The slider has been deleted successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Updated">
+		<Value>The slider has been updated successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.EditSliderDetails">
+		<Value>Edit slider details</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Fields">
+		<Value>Allow customers to select page size</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Fields.AllowCustomersToSelectPageSize">
+		<Value>Allow customers to select page size</Value>
+	</LocaleResource>
 </Language>

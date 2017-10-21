@@ -5,11 +5,11 @@
     var gridPageSize = EngineContext.Current.Resolve<SmartStore.Core.Domain.Common.AdminAreaSettings>().GridPageSize;
     
     //page title
-    ViewBag.Title = T("Admin.Promotions").Text;
+    ViewBag.Title = "Promotions List";
 }
 <div class="section-header">
     <div class="title">
-        @T("Admin.Promotions")
+        Promotions List
     </div>
     <div class="options">
         <a href="@Url.Action("Create")" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;@T("Admin.Common.AddNew")</a>
