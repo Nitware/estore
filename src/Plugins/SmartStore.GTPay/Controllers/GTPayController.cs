@@ -88,41 +88,59 @@ namespace SmartStore.GTPay.Controllers
             _ctx = ctx;
         }
 
+        public ActionResult TransactionLog()
+        {
+            List<GTPayTransactionLog> transactionLogs = _transactionLogService.GetLatest500Transactions();
+            List<TransactionLog> transactionLogModels = PrepareTransactionLogModel(transactionLogs);
+
+            ConfigurationModel model = new ConfigurationModel();
+            var gridModel = new GridModel<TransactionLog>
+            {
+                Data = transactionLogModels,
+                Total = transactionLogModels.Count
+            };
+
+            model.GridPageSize = _adminAreaSettings.GridPageSize;
+            model.TransactionLogsForGrid = gridModel;
+
+            return View(model);
+        }
+
         [HttpPost, GridAction(EnableCustomBinding = true)]
-        public ActionResult UpdateTransactionLog(TransactionLog model, GridCommand command)
+        public ActionResult TransactionLog(TransactionLog model, GridCommand command)
         {
             GTPaySettings gtpaySettings = GetGTPaySettings();
 
             if (gtpaySettings == null)
                 throw new Exception("GTPay settings failed on retrieval!");
 
-            ////re-query transaction
-            //string hash = CreateTransactionRequeryHashKey(gtpaySettings.MerchantId, model.TransactionRefNo, gtpaySettings.HashKey);
-            //GTPayGatewayResponse gtpayResponse = GetTransactionDetailBy(gtpaySettings.MerchantId, model.AmountInUnit.ToString(), model.TransactionRefNo, hash);
+            //re-query transaction
+            string hash = CreateTransactionRequeryHashKey(gtpaySettings.MerchantId, model.TransactionRefNo, gtpaySettings.HashKey);
+            GTPayGatewayResponse gtpayResponse = GetTransactionDetailBy(gtpaySettings.MerchantId, model.AmountInUnit.ToString(), model.TransactionRefNo, hash);
 
-            ////update local transaction log
-            //UpdateTransactionLog(gtpayResponse, model.TransactionRefNo);
+            //update local transaction log
+            UpdateTransactionLog(gtpayResponse, model.TransactionRefNo);
 
-            ////re-load transaction log to get the update
-            //List<GTPayTransactionLog> transactionLogs = _transactionLogService.GetLatest500Transactions();
-            //List<TransactionLog> transactionLogModels = PrepareTransactionLogModel(transactionLogs);
+            //re-load transaction log to get the update
+            List<GTPayTransactionLog> transactionLogs = _transactionLogService.GetLatest500Transactions();
+            List<TransactionLog> transactionLogModels = PrepareTransactionLogModel(transactionLogs);
 
-            //var tmp2 = transactionLogModels.ForCommand(command);
-            //var gridModel = new GridModel<TransactionLog>
-            //{
-            //    Data = tmp2,
-            //    Total = tmp2.Count()
-            //};
+            var tmp2 = transactionLogModels.ForCommand(command);
+            var gridModel = new GridModel<TransactionLog>
+            {
+                Data = tmp2,
+                Total = tmp2.Count()
+            };
 
             //model.tra
 
-            return View(model);
+            //return View(model);
 
-            //return new JsonResult
-            //{
-            //    Data = gridModel,
-            //    //JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            //};
+            return new JsonResult
+            {
+                Data = gridModel,
+                //JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
         }
 
         //[GridAction(EnableCustomBinding = true)]
@@ -176,23 +194,7 @@ namespace SmartStore.GTPay.Controllers
             _transactionLogService.Update(transactionLog);
         }
         
-        public ActionResult TransactionLog()
-        {
-            List<GTPayTransactionLog> transactionLogs = _transactionLogService.GetLatest500Transactions();
-            List<TransactionLog> transactionLogModels = PrepareTransactionLogModel(transactionLogs);
-                       
-            ConfigurationModel model = new ConfigurationModel();
-            var gridModel = new GridModel<TransactionLog>
-            {
-                Data = transactionLogModels,
-                Total = transactionLogModels.Count
-            };
-
-            model.GridPageSize = _adminAreaSettings.GridPageSize;
-            model.TransactionLogsForGrid = gridModel;
-            
-            return View(model);
-        }
+       
         [GridAction(EnableCustomBinding = true)]
         public ActionResult CurrencyUpdate(GTPayCurrencyModel model, GridCommand command)
         {

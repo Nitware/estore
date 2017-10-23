@@ -9,8 +9,8 @@
 @using SmartStore.GTPay.Models;
 @model ConfigurationModel
 
-@using (Html.BeginForm())
-{
+@*@using (Html.BeginForm())
+{*@
     <div>
         @(Html.Telerik().Grid<TransactionLog>(Model.TransactionLogsForGrid.Data)
         .Name("Grid")
@@ -56,7 +56,7 @@
         {
             dataBinding.Ajax()
                 .Select("TransactionList", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
-                .Update("TransactionUpdate", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
+                .Update("TransactionLog", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
 
             //.DataRouteValues(route =>
             //{
@@ -70,4 +70,4 @@
         .EnableCustomBinding(true)
         )
     </div>
-}
+@*}*@
