@@ -348,7 +348,7 @@
 							<a href="javascript:void(0);">SHOP NOW <span class="state-change">+</span></a>
 							@foreach (var cat in item.Categories)
 							{
-								var caturl = Url.RouteUrl("Category", new { SeName = cat.SeName });
+								var caturl = Url.RouteUrl("Category", new { SeName = cat.SeName,promoId=item.Id.ToString() });
 								<ul class="submenu">
 									<li>
 										<a href="@caturl" title="@cat.Name">
