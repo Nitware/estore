@@ -186,7 +186,7 @@
 {
 	private string GetDiscountAmtPercFontSize(int fontsize)
 	{
-		fontsize = fontsize > 0 ? fontsize : 50;
+		fontsize = fontsize > 0 ? fontsize : 45;
 		return ("font-size:" + (fontsize + 20) + "px;");
 	}
 	private string GetStyle(string fonttype, int fontsize, string type)
@@ -194,13 +194,13 @@
 		switch (type)
 		{
 			case "title":
-				fontsize = fontsize > 0 ? fontsize : 35;
-				break;
-			case "subTitle":
 				fontsize = fontsize > 0 ? fontsize : 25;
 				break;
+			case "subTitle":
+				fontsize = fontsize > 0 ? fontsize : 20;
+				break;
 			case "discountText":
-				fontsize = fontsize > 0 ? fontsize : 50;
+				fontsize = fontsize > 0 ? fontsize : 45;
 				break;
 			default:
 				break;
@@ -283,6 +283,21 @@
 
 		return result;
 	}
+
+	private string GetCriclePadding(string frame_type,int fontsize)
+	{ string style = "";
+		if (frame_type == "circle")
+		{if (fontsize <= 25)
+			{
+				style = "padding-left:28px;padding-right:28px;";
+			}
+			else if(fontsize<=30)
+			{
+				style = "padding-left:30px;padding-right:30px;";
+			}
+		}
+		return style;
+	}
 	bool useDefaultClass = false;
 	string className = "art-style";
 	int virtualCount = 1;
@@ -325,7 +340,7 @@
 		<article class="art @className" data-id="@item.Id"
 				 style="background: url('@picture.ImageUrl') no-repeat center center;background-size: cover;">
 			<div class="text-frame" style="@GeteTextFrameStyle(item.TextFrameType,item.TextFrameBackground, item.TextFrameHeight,item.TextFrameWidth)">
-				<div class="art-genericname" style="padding-top:25px;padding-bottom:5px;">
+				<div class="art-genericname" style="@GetCriclePadding(item.TextFrameType,item.TitleFontSize)padding-top:25px;padding-bottom:5px;">
 					<h2 class="@GetClassName(item.TitleFontColor)" style="@GetStyle(item.TitleFontType,item.TitleFontSize,"title")">@item.Title</h2>
 					<h1 class="@GetClassName(item.DiscountTextFontColor)" style="font-weight:bold;@GetStyle(item.DiscountTextFontType, item.DiscountTextFontSize,"discountText")">
 						<p style="margin:0px;padding:0px;">@item.DiscountText</p>
