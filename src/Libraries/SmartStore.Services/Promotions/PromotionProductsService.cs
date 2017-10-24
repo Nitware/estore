@@ -4,6 +4,7 @@ using System.Linq;
 using SmartStore.Core.Data;
 using SmartStore.Core.Domain.Promotions;
 using SmartStore.Core.Events;
+using SmartStore.Core.Domain.Catalog;
 
 namespace SmartStore.Services.Promotions
 {
@@ -33,16 +34,33 @@ namespace SmartStore.Services.Promotions
             _eventPublisher = eventPublisher;
         }
 
-        #endregion
+		#endregion
 
-        #region Methods
-        
-        /// <summary>
-        /// Gets an Promotion by Promotion identifier
-        /// </summary>
-        /// <param name="PromotionId">Promotion identifier</param>
-        /// <returns>Promotion</returns>
-        public virtual PromotionProducts GetPromotionById(int PromotionId)
+		#region Methods
+
+
+		public virtual IList<Product> GetProductsPromotionById(int PromotionId)
+		{
+			if (PromotionId == 0)
+				return null;
+
+			var query = _PromotionRepository.Table;
+			query = query.Where(a => !a.Deleted);
+			query = query.Where(a => a.PromotionId==PromotionId);
+			query = query.OrderBy(a => a.Id);
+		
+			var Promotions = query.ToList();
+
+			return Promotions.Select(d=>d.Product).ToList();
+		}
+
+
+		/// <summary>
+		/// Gets an Promotion by Promotion identifier
+		/// </summary>
+		/// <param name="PromotionId">Promotion identifier</param>
+		/// <returns>Promotion</returns>
+		public virtual PromotionProducts GetPromotionById(int PromotionId)
         {
             if (PromotionId == 0)
                 return null;

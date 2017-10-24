@@ -4,6 +4,7 @@ using System.Linq;
 using SmartStore.Core.Data;
 using SmartStore.Core.Domain.Promotions;
 using SmartStore.Core.Events;
+using SmartStore.Core.Domain.Catalog;
 
 namespace SmartStore.Services.Promotions
 {
@@ -37,6 +38,7 @@ namespace SmartStore.Services.Promotions
 
 		#region Methods
 
+		
 		/// <summary>
 		/// Gets an Promotion by Promotion identifier
 		/// </summary>

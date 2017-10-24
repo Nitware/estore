@@ -58,7 +58,6 @@
 		display: none;
 		padding: 0;
 		margin: 0;
-       
 	}
 
 		.slide-menu .submenu li {
@@ -66,7 +65,6 @@
 			border-top: 1px solid #ccc;
 			list-style-type: none;
 			text-align: left;
-             
 		}
 
 			.slide-menu .submenu li a {
@@ -350,9 +348,9 @@
 							<a href="javascript:void(0);">SHOP NOW <span class="state-change">+</span></a>
 							@foreach (var cat in item.Categories)
 							{
-								var caturl = Url.RouteUrl("Category", new { SeName = cat.SeName });
-								<ul class="submenu" >
-									<li >
+								var caturl = Url.RouteUrl("Category", new { SeName = cat.SeName,promoId=item.Id.ToString() });
+								<ul class="submenu">
+									<li>
 										<a href="@caturl" title="@cat.Name">
 											<span>@cat.Name</span>
 										</a>

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using SmartStore.Core.Domain.Promotions;
+using SmartStore.Core.Domain.Catalog;
 
 namespace SmartStore.Services.Promotions
 {
@@ -8,6 +9,8 @@ namespace SmartStore.Services.Promotions
 	/// </summary>
 	public partial interface IPromotionProductsService
 	{
+
+		IList<Product> GetProductsPromotionById(int PromotionId);
 		/// <summary>
 		/// Gets an promotion by promotion identifier
 		/// </summary>

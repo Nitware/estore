@@ -28,101 +28,109 @@ using SmartStore.Web.Models.Catalog;
 using SmartStore.Web.Models.Media;
 using SmartStore.Web.Models.Common;
 using SmartStore.Web.Framework.UI;
+using SmartStore.Services.Promotions;
 
 namespace SmartStore.Web.Controllers
 {
 	public partial class CatalogController : PublicControllerBase
-    {
+	{
 		private readonly ICommonServices _services;
-        private readonly ICategoryService _categoryService;
-        private readonly IManufacturerService _manufacturerService;
-        private readonly IProductService _productService;
-        private readonly ICategoryTemplateService _categoryTemplateService;
-        private readonly IManufacturerTemplateService _manufacturerTemplateService;
-        private readonly ICurrencyService _currencyService;
-        private readonly IPictureService _pictureService;
-        private readonly IPriceFormatter _priceFormatter;
+		private readonly ICategoryService _categoryService;
+		private readonly IManufacturerService _manufacturerService;
+		private readonly IProductService _productService;
+		private readonly ICategoryTemplateService _categoryTemplateService;
+		private readonly IManufacturerTemplateService _manufacturerTemplateService;
+		private readonly ICurrencyService _currencyService;
+		private readonly IPictureService _pictureService;
+		private readonly IPriceFormatter _priceFormatter;
 		private readonly IOrderReportService _orderReportService;
 		private readonly IProductTagService _productTagService;
 		private readonly IRecentlyViewedProductsService _recentlyViewedProductsService;
-        private readonly ISpecificationAttributeService _specificationAttributeService;
-        private readonly IGenericAttributeService _genericAttributeService;
-        private readonly IAclService _aclService;
+		private readonly ISpecificationAttributeService _specificationAttributeService;
+		private readonly IGenericAttributeService _genericAttributeService;
+		private readonly IAclService _aclService;
 		private readonly IStoreMappingService _storeMappingService;
 		private readonly ICatalogSearchService _catalogSearchService;
 		private readonly MediaSettings _mediaSettings;
-        private readonly CatalogSettings _catalogSettings;
+		private readonly CatalogSettings _catalogSettings;
 		private readonly ICompareProductsService _compareProductsService;
-        private readonly Lazy<ILanguageService> _languageService;
-        private readonly CatalogHelper _helper;
+		private readonly Lazy<ILanguageService> _languageService;
+		private readonly CatalogHelper _helper;
 		private readonly IBreadcrumb _breadcrumb;
+		private readonly IPromotionProductsService _promotionService;
 
 		public CatalogController(
 			ICommonServices services,
 			ICategoryService categoryService,
-            IManufacturerService manufacturerService, 
+			IManufacturerService manufacturerService,
 			IProductService productService,
-            ICategoryTemplateService categoryTemplateService,
-            IManufacturerTemplateService manufacturerTemplateService,
+			ICategoryTemplateService categoryTemplateService,
+			IManufacturerTemplateService manufacturerTemplateService,
 			ICurrencyService currencyService,
 			IOrderReportService orderReportService,
 			IProductTagService productTagService,
 			IRecentlyViewedProductsService recentlyViewedProductsService,
-            IPictureService pictureService,
-            IPriceFormatter priceFormatter,
-            ISpecificationAttributeService specificationAttributeService,
+			IPictureService pictureService,
+			IPriceFormatter priceFormatter,
+			ISpecificationAttributeService specificationAttributeService,
 			ICompareProductsService compareProductsService,
 			IGenericAttributeService genericAttributeService,
 			IAclService aclService,
 			IStoreMappingService storeMappingService,
 			ICatalogSearchService catalogSearchService,
-			MediaSettings mediaSettings, 
+			MediaSettings mediaSettings,
 			CatalogSettings catalogSettings,
-            Lazy<ILanguageService> languageService,
-            CatalogHelper helper,
-			IBreadcrumb breadcrumb)
-        {
+			Lazy<ILanguageService> languageService,
+			CatalogHelper helper,
+			IBreadcrumb breadcrumb,
+			IPromotionProductsService promotionService)
+		{
 			_services = services;
 			_categoryService = categoryService;
-            _manufacturerService = manufacturerService;
-            _productService = productService;
-            _categoryTemplateService = categoryTemplateService;
-            _manufacturerTemplateService = manufacturerTemplateService;
-            _currencyService = currencyService;
+			_manufacturerService = manufacturerService;
+			_productService = productService;
+			_categoryTemplateService = categoryTemplateService;
+			_manufacturerTemplateService = manufacturerTemplateService;
+			_currencyService = currencyService;
 			_orderReportService = orderReportService;
 			_productTagService = productTagService;
 			_recentlyViewedProductsService = recentlyViewedProductsService;
 			_compareProductsService = compareProductsService;
-            _pictureService = pictureService;
-            _priceFormatter = priceFormatter;
-            _specificationAttributeService = specificationAttributeService;
-            _genericAttributeService = genericAttributeService;
-            _aclService = aclService;
+			_pictureService = pictureService;
+			_priceFormatter = priceFormatter;
+			_specificationAttributeService = specificationAttributeService;
+			_genericAttributeService = genericAttributeService;
+			_aclService = aclService;
 			_storeMappingService = storeMappingService;
 			_catalogSearchService = catalogSearchService;
-            _mediaSettings = mediaSettings;
-            _catalogSettings = catalogSettings;
-            _languageService = languageService;
-            _helper = helper;
+			_mediaSettings = mediaSettings;
+			_catalogSettings = catalogSettings;
+			_languageService = languageService;
+			_helper = helper;
 			_breadcrumb = breadcrumb;
-        }
+			this._promotionService = promotionService;
+		}
 
-        #region Categories
+		#region Categories
 
-        [RequireHttpsByConfigAttribute(SslRequirement.No)]
-        public ActionResult Category(int categoryId, CatalogSearchQuery query)
-        {
+		[RequireHttpsByConfigAttribute(SslRequirement.No)]
+		public ActionResult Category(int categoryId, CatalogSearchQuery query)
+		{
+			int promoId = 0;
+			int.TryParse(Request.QueryString["promoId"], out promoId);
+			query.PromoId = promoId;
+
 			var category = _categoryService.GetCategoryById(categoryId);
-            if (category == null || category.Deleted)
+			if (category == null || category.Deleted)
 				return HttpNotFound();
 
-            // Check whether the current user has a "Manage catalog" permission
-            // It allows him to preview a category before publishing
-            if (!category.Published && !_services.Permissions.Authorize(StandardPermissionProvider.ManageCatalog))
+			// Check whether the current user has a "Manage catalog" permission
+			// It allows him to preview a category before publishing
+			if (!category.Published && !_services.Permissions.Authorize(StandardPermissionProvider.ManageCatalog))
 				return HttpNotFound();
 
-            // ACL (access control list)
-            if (!_aclService.Authorize(category))
+			// ACL (access control list)
+			if (!_aclService.Authorize(category))
 				return HttpNotFound();
 
 			// Store mapping
@@ -138,11 +146,11 @@ namespace SmartStore.Web.Controllers
 					_services.StoreContext.CurrentStore.Id);
 			}
 
-            var model = category.ToModel();
+			var model = category.ToModel();
 
 			_services.DisplayControl.Announce(category);
 
-            // Category breadcrumb
+			// Category breadcrumb
 			if (_catalogSettings.CategoryBreadcrumbEnabled)
 			{
 				_helper.GetCategoryBreadCrumb(category.Id, 0).Select(x => x.Value).Each(x => _breadcrumb.Track(x));
@@ -152,45 +160,45 @@ namespace SmartStore.Web.Controllers
 
 			var customerRolesIds = _services.WorkContext.CurrentCustomer.CustomerRoles.Where(x => x.Active).Select(x => x.Id).ToList();
 
-            // subcategories
-            model.SubCategories = _categoryService
-                .GetAllCategoriesByParentCategoryId(categoryId)
-                .Select(x =>
-                {
-                    var subCatName = x.GetLocalized(y => y.Name);
-                    var subCatModel = new CategoryModel.SubCategoryModel
-                    {
-                        Id = x.Id,
-                        Name = subCatName,
-                        SeName = x.GetSeName(),
-                    };
+			// subcategories
+			model.SubCategories = _categoryService
+				.GetAllCategoriesByParentCategoryId(categoryId)
+				.Select(x =>
+				{
+					var subCatName = x.GetLocalized(y => y.Name);
+					var subCatModel = new CategoryModel.SubCategoryModel
+					{
+						Id = x.Id,
+						Name = subCatName,
+						SeName = x.GetSeName(),
+					};
 
 					_services.DisplayControl.Announce(x);
 
-                    // prepare picture model
-                    int pictureSize = _mediaSettings.CategoryThumbPictureSize;
+					// prepare picture model
+					int pictureSize = _mediaSettings.CategoryThumbPictureSize;
 					var categoryPictureCacheKey = string.Format(ModelCacheEventConsumer.CATEGORY_PICTURE_MODEL_KEY, x.Id, pictureSize, true, _services.WorkContext.WorkingLanguage.Id, _services.StoreContext.CurrentStore.Id);
-                    subCatModel.PictureModel = _services.Cache.Get(categoryPictureCacheKey, () =>
-                    {
+					subCatModel.PictureModel = _services.Cache.Get(categoryPictureCacheKey, () =>
+					{
 						var picture = _pictureService.GetPictureById(x.PictureId.GetValueOrDefault());
 						var pictureModel = new PictureModel
-                        {
+						{
 							PictureId = x.PictureId.GetValueOrDefault(),
 							Size = pictureSize,
 							FullSizeImageUrl = _pictureService.GetPictureUrl(picture),
 							FullSizeImageWidth = picture?.Width,
 							FullSizeImageHeight = picture?.Height,
 							ImageUrl = _pictureService.GetPictureUrl(picture, pictureSize, !_catalogSettings.HideCategoryDefaultPictures),
-                            Title = string.Format(T("Media.Category.ImageLinkTitleFormat"), subCatName),
-                            AlternateText = string.Format(T("Media.Category.ImageAlternateTextFormat"), subCatName)
-                        };
+							Title = string.Format(T("Media.Category.ImageLinkTitleFormat"), subCatName),
+							AlternateText = string.Format(T("Media.Category.ImageAlternateTextFormat"), subCatName)
+						};
 
-                        return pictureModel;
-                    }, TimeSpan.FromHours(6));
+						return pictureModel;
+					}, TimeSpan.FromHours(6));
 
-                    return subCatModel;
-                })
-                .ToList();
+					return subCatModel;
+				})
+				.ToList();
 
 			// Featured Products
 			if (!_catalogSettings.IgnoreFeaturedProducts)
@@ -241,7 +249,24 @@ namespace SmartStore.Web.Controllers
 			model.SearchResult = searchResult;
 
 			var mappingSettings = _helper.GetBestFitProductSummaryMappingSettings(query.GetViewMode());
-			model.Products = _helper.MapProductSummaryModel(searchResult.Hits, mappingSettings);
+			
+			//if (promoId > 0)
+			//{
+			//	IList<Product> products = this._promotionService.GetProductsPromotionById(promoId);
+			//	//model.SearchResult.Hits = new Pager { Model = products };
+			//	model.SearchResult= new CatalogSearchResult(
+			//	null,
+			//	null,
+			//	products.Count(),
+			//	products,
+			//	null,
+			//	null);
+			//	model.Products = _helper.MapProductSummaryModel(searchResult.Hits, mappingSettings);
+			//}
+			//else
+			//{
+				model.Products = _helper.MapProductSummaryModel(searchResult.Hits, mappingSettings);
+			//}
 
 			// Prepare paging/sorting/mode stuff
 			_helper.MapListActions(model.Products, category, _catalogSettings.DefaultPageSizeOptions);
@@ -262,78 +287,78 @@ namespace SmartStore.Web.Controllers
 			return View(templateViewPath, model);
 		}
 
-        [ChildActionOnly]
-        public ActionResult CategoryMenu(int currentCategoryId, int currentProductId = 0)
-        {
+		[ChildActionOnly]
+		public ActionResult CategoryMenu(int currentCategoryId, int currentProductId = 0)
+		{
 			var model = _helper.PrepareCategoryNavigationModel(currentCategoryId, currentProductId);
-            return PartialView(model);
-        }
+			return PartialView(model);
+		}
 
-        //[ChildActionOnly]
-        public ActionResult CatalogMenu(int currentCategoryId, int currentProductId = 0)
-        {
+		//[ChildActionOnly]
+		public ActionResult CatalogMenu(int currentCategoryId, int currentProductId = 0)
+		{
 			var model = _helper.PrepareCategoryNavigationModel(currentCategoryId, currentProductId);
-            return PartialView(model);
-        }
+			return PartialView(model);
+		}
 
-        [ChildActionOnly]
-        public ActionResult HomepageCategories()
-        {
+		[ChildActionOnly]
+		public ActionResult HomepageCategories()
+		{
 			var categories = _categoryService.GetAllCategoriesDisplayedOnHomePage()
 				.Where(c => _aclService.Authorize(c) && _storeMappingService.Authorize(c))
 				.ToList();
 
-            var listModel = categories
-                .Select(x =>
-                {
-                    var catModel = x.ToModel();
+			var listModel = categories
+				.Select(x =>
+				{
+					var catModel = x.ToModel();
 
-                    // Prepare picture model
-                    int pictureSize = _mediaSettings.CategoryThumbPictureSize;
-					var categoryPictureCacheKey = string.Format(ModelCacheEventConsumer.CATEGORY_PICTURE_MODEL_KEY, x.Id, pictureSize, true, 
-						_services.WorkContext.WorkingLanguage.Id, 
+					// Prepare picture model
+					int pictureSize = _mediaSettings.CategoryThumbPictureSize;
+					var categoryPictureCacheKey = string.Format(ModelCacheEventConsumer.CATEGORY_PICTURE_MODEL_KEY, x.Id, pictureSize, true,
+						_services.WorkContext.WorkingLanguage.Id,
 						_services.StoreContext.CurrentStore.Id);
 
-                    catModel.PictureModel = _services.Cache.Get(categoryPictureCacheKey, () =>
-                    {
-                        var pictureModel = new PictureModel
-                        {
+					catModel.PictureModel = _services.Cache.Get(categoryPictureCacheKey, () =>
+					{
+						var pictureModel = new PictureModel
+						{
 							PictureId = x.PictureId.GetValueOrDefault(),
 							Size = pictureSize,
 							FullSizeImageUrl = _pictureService.GetPictureUrl(x.PictureId.GetValueOrDefault()),
 							ImageUrl = _pictureService.GetPictureUrl(x.PictureId.GetValueOrDefault(), pictureSize, !_catalogSettings.HideCategoryDefaultPictures),
-                            Title = string.Format(T("Media.Category.ImageLinkTitleFormat"), catModel.Name),
+							Title = string.Format(T("Media.Category.ImageLinkTitleFormat"), catModel.Name),
 							AlternateText = string.Format(T("Media.Category.ImageAlternateTextFormat"), catModel.Name)
-                        };
-                        return pictureModel;
-                    }, TimeSpan.FromHours(6));
+						};
+						return pictureModel;
+					}, TimeSpan.FromHours(6));
 
-                    return catModel;
-                })
-                .ToList();
+					return catModel;
+				})
+				.ToList();
 
 			if (listModel.Count == 0)
 				return Content("");
 
 			_services.DisplayControl.AnnounceRange(categories);
 
-            return PartialView(listModel);
-        }
+			return PartialView(listModel);
+		}
 
-        #endregion
+		#endregion
 
-        #region Manufacturers
+		#region Manufacturers
 
-        [RequireHttpsByConfigAttribute(SslRequirement.No)]
-        public ActionResult Manufacturer(int manufacturerId, CatalogSearchQuery query)
-        {
-            var manufacturer = _manufacturerService.GetManufacturerById(manufacturerId);
-            if (manufacturer == null || manufacturer.Deleted)
+		[RequireHttpsByConfigAttribute(SslRequirement.No)]
+		public ActionResult Manufacturer(int manufacturerId, CatalogSearchQuery query)
+		{
+			var manufacturer = _manufacturerService.GetManufacturerById(manufacturerId);
+			if (manufacturer == null || manufacturer.Deleted)
 				return HttpNotFound();
 
-            // Check whether the current user has a "Manage catalog" permission
-            // It allows him to preview a manufacturer before publishing
-            if (!manufacturer.Published && !_services.Permissions.Authorize(StandardPermissionProvider.ManageCatalog))
+			// Check whether the current user has a "Manage catalog" permission
+			// It allows him to preview a manufacturer before publishing
+			if (!manufacturer.Published && !_services.Permissions.Authorize(StandardPermissionProvider.ManageCatalog))
 				return HttpNotFound();
 
 			//Store mapping
@@ -349,10 +374,10 @@ namespace SmartStore.Web.Controllers
 					_services.StoreContext.CurrentStore.Id);
 			}
 
-            var model = manufacturer.ToModel();
+			var model = manufacturer.ToModel();
 
-            // prepare picture model
-            model.PictureModel = _helper.PrepareManufacturerPictureModel(manufacturer, model.Name);
+			// prepare picture model
+			model.PictureModel = _helper.PrepareManufacturerPictureModel(manufacturer, model.Name);
 
 			var customerRolesIds = _services.WorkContext.CurrentCustomer.CustomerRoles.Where(x => x.Active).Select(x => x.Id).ToList();
 
@@ -407,58 +432,58 @@ namespace SmartStore.Web.Controllers
 
 			// Template
 			var templateCacheKey = string.Format(ModelCacheEventConsumer.MANUFACTURER_TEMPLATE_MODEL_KEY, manufacturer.ManufacturerTemplateId);
-            var templateViewPath = _services.Cache.Get(templateCacheKey, () =>
-            {
-                var template = _manufacturerTemplateService.GetManufacturerTemplateById(manufacturer.ManufacturerTemplateId);
-                if (template == null)
-                    template = _manufacturerTemplateService.GetAllManufacturerTemplates().FirstOrDefault();
-                return template.ViewPath;
-            });
+			var templateViewPath = _services.Cache.Get(templateCacheKey, () =>
+			{
+				var template = _manufacturerTemplateService.GetManufacturerTemplateById(manufacturer.ManufacturerTemplateId);
+				if (template == null)
+					template = _manufacturerTemplateService.GetAllManufacturerTemplates().FirstOrDefault();
+				return template.ViewPath;
+			});
 
-            //activity log
+			//activity log
 			_services.CustomerActivity.InsertActivity("PublicStore.ViewManufacturer", T("ActivityLog.PublicStore.ViewManufacturer"), manufacturer.Name);
 
 			_services.DisplayControl.Announce(manufacturer);
 
-            return View(templateViewPath, model);
-        }
+			return View(templateViewPath, model);
+		}
 
-        [RequireHttpsByConfigAttribute(SslRequirement.No)]
-        public ActionResult ManufacturerAll()
-        {
-            var model = new List<ManufacturerModel>();
+		[RequireHttpsByConfigAttribute(SslRequirement.No)]
+		public ActionResult ManufacturerAll()
+		{
+			var model = new List<ManufacturerModel>();
 
-            // TODO: result isn't cached, DO IT!
-            var manufacturers = _manufacturerService.GetAllManufacturers(null, _services.StoreContext.CurrentStore.Id);
-            foreach (var manufacturer in manufacturers)
-            {
-                var modelMan = manufacturer.ToModel();
+			// TODO: result isn't cached, DO IT!
+			var manufacturers = _manufacturerService.GetAllManufacturers(null, _services.StoreContext.CurrentStore.Id);
+			foreach (var manufacturer in manufacturers)
+			{
+				var modelMan = manufacturer.ToModel();
 
-                // prepare picture model
-                modelMan.PictureModel = _helper.PrepareManufacturerPictureModel(manufacturer, modelMan.Name);
-                model.Add(modelMan);
-            }
+				// prepare picture model
+				modelMan.PictureModel = _helper.PrepareManufacturerPictureModel(manufacturer, modelMan.Name);
+				model.Add(modelMan);
+			}
 
 			_services.DisplayControl.AnnounceRange(manufacturers);
 
-            return View(model);
-        }
+			return View(model);
+		}
 
-        [ChildActionOnly]
-        public ActionResult HomepageManufacturers()
-        {
-            if (_catalogSettings.ManufacturerItemsToDisplayOnHomepage == 0 || _catalogSettings.ShowManufacturersOnHomepage == false)
-                return Content("");
+		[ChildActionOnly]
+		public ActionResult HomepageManufacturers()
+		{
+			if (_catalogSettings.ManufacturerItemsToDisplayOnHomepage == 0 || _catalogSettings.ShowManufacturersOnHomepage == false)
+				return Content("");
 
-            var model = _helper.PrepareManufacturerNavigationModel(_catalogSettings.ManufacturerItemsToDisplayOnHomepage - 1);
+			var model = _helper.PrepareManufacturerNavigationModel(_catalogSettings.ManufacturerItemsToDisplayOnHomepage - 1);
 
-            if (model.Manufacturers.Count == 0)
-                return Content("");
+			if (model.Manufacturers.Count == 0)
+				return Content("");
 
-            return PartialView(model);
-        }
+			return PartialView(model);
+		}
 
-        #endregion
+		#endregion
 
 		#region HomePage
 
@@ -471,7 +496,7 @@ namespace SmartStore.Web.Controllers
 			}
 
 			// Load report from cache
-			var report = _services.Cache.Get(string.Format(ModelCacheEventConsumer.HOMEPAGE_BESTSELLERS_IDS_KEY, _services.StoreContext.CurrentStore.Id), () => 
+			var report = _services.Cache.Get(string.Format(ModelCacheEventConsumer.HOMEPAGE_BESTSELLERS_IDS_KEY, _services.StoreContext.CurrentStore.Id), () =>
 			{
 				return _orderReportService.BestSellersReport(_services.StoreContext.CurrentStore.Id, null, null, null, null, null, 0, _catalogSettings.NumberOfBestsellersOnHomepage);
 			});
@@ -485,7 +510,7 @@ namespace SmartStore.Web.Controllers
 
 			var viewMode = _catalogSettings.UseSmallProductBoxOnHomePage ? ProductSummaryViewMode.Mini : ProductSummaryViewMode.Grid;
 
-			var settings = _helper.GetBestFitProductSummaryMappingSettings(viewMode, x => 
+			var settings = _helper.GetBestFitProductSummaryMappingSettings(viewMode, x =>
 			{
 				x.ThumbnailSize = productThumbPictureSize;
 			});
@@ -506,10 +531,10 @@ namespace SmartStore.Web.Controllers
 
 			var viewMode = _catalogSettings.UseSmallProductBoxOnHomePage ? ProductSummaryViewMode.Mini : ProductSummaryViewMode.Grid;
 
-			var settings = _helper.GetBestFitProductSummaryMappingSettings(viewMode, x => 
+			var settings = _helper.GetBestFitProductSummaryMappingSettings(viewMode, x =>
 			{
 				x.ThumbnailSize = productThumbPictureSize;
-			});			
+			});
 
 			var model = _helper.MapProductSummaryModel(products, settings);
 			model.GridColumnSpan = GridColumnSpan.Max6Cols;
@@ -524,10 +549,10 @@ namespace SmartStore.Web.Controllers
 		[ChildActionOnly]
 		public ActionResult PopularProductTags()
 		{
-            if (!_catalogSettings.ShowPopularProductTagsOnHomepage)
-                return new EmptyResult();
+			if (!_catalogSettings.ShowPopularProductTagsOnHomepage)
+				return new EmptyResult();
 
-            var cacheKey = string.Format(ModelCacheEventConsumer.PRODUCTTAG_POPULAR_MODEL_KEY, _services.WorkContext.WorkingLanguage.Id, _services.StoreContext.CurrentStore.Id);
+			var cacheKey = string.Format(ModelCacheEventConsumer.PRODUCTTAG_POPULAR_MODEL_KEY, _services.WorkContext.WorkingLanguage.Id, _services.StoreContext.CurrentStore.Id);
 			var cacheModel = _services.Cache.Get(cacheKey, () =>
 			{
 				var model = new PopularProductTagsModel();
@@ -649,7 +674,7 @@ namespace SmartStore.Web.Controllers
 				return Content("");
 			}
 
-			var settings = _helper.GetBestFitProductSummaryMappingSettings(ProductSummaryViewMode.Mini, x => 
+			var settings = _helper.GetBestFitProductSummaryMappingSettings(ProductSummaryViewMode.Mini, x =>
 			{
 				x.MapManufacturers = true;
 			});
@@ -701,7 +726,7 @@ namespace SmartStore.Web.Controllers
 			{
 				return new RssActionResult { Feed = feed };
 			}
-				
+
 			var items = new List<SyndicationItem>();
 
 			query.Sorting.Clear();
@@ -837,7 +862,7 @@ namespace SmartStore.Web.Controllers
 			});
 		}
 
-        [RequireHttpsByConfigAttribute(SslRequirement.No)]
+		[RequireHttpsByConfigAttribute(SslRequirement.No)]
 		public ActionResult CompareProducts()
 		{
 			if (!_catalogSettings.CompareProductsEnabled)
@@ -860,7 +885,7 @@ namespace SmartStore.Web.Controllers
 			}
 
 			var products = _compareProductsService.GetComparedProducts();
-			var settings = _helper.GetBestFitProductSummaryMappingSettings(ProductSummaryViewMode.Grid, x => 
+			var settings = _helper.GetBestFitProductSummaryMappingSettings(ProductSummaryViewMode.Grid, x =>
 			{
 				x.MapAttributes = false;
 				x.MapColorAttributes = false;
@@ -881,62 +906,62 @@ namespace SmartStore.Web.Controllers
 			return RedirectToRoute("CompareProducts");
 		}
 
-        // ajax
-        [HttpPost]
-        [ActionName("ClearCompareList")]
-        public ActionResult ClearCompareListAjax()
-        {
-            _compareProductsService.ClearCompareProducts();
+		// ajax
+		[HttpPost]
+		[ActionName("ClearCompareList")]
+		public ActionResult ClearCompareListAjax()
+		{
+			_compareProductsService.ClearCompareProducts();
 
-            return Json(new
-            {
-                success = true,
-                message = T("CompareList.ListWasCleared")
-            });
-        }
+			return Json(new
+			{
+				success = true,
+				message = T("CompareList.ListWasCleared")
+			});
+		}
 
-        #endregion
+		#endregion
 
-        #region OffCanvasMenu 
+		#region OffCanvasMenu 
 
-        /// <summary>
-        /// Called by ajax, to get a partial catalog menu to display in OffCanvasMenu
-        /// </summary>
-        /// <param name="categoryId">EntityId of the category to which should be navigated in the OffCanvasMenu</param>
-        /// <param name="currentCategoryId">EntityId of the category that is currently displayed in the shop (WebViewPage.CurrentCategoryId)</param >
-        /// <param name="currentProductId">EntityId of the product that is currently displayed in the shop (WebViewPage.CurrentProductId)</param>
-        /// <returns>PartialView with NavigationModel</returns>
-        [HttpPost]
-        public ActionResult OffCanvasMenuCategories(int categoryId, int currentCategoryId, int currentProductId)
-        {
-            var model = _helper.PrepareCategoryNavigationModel(currentCategoryId, currentProductId);
-            ViewBag.SelectedNode = categoryId == 0 ? model.Root : ViewBag.SelectedNode = model.Root.SelectNode(x => x.Value.EntityId == categoryId);
+		/// <summary>
+		/// Called by ajax, to get a partial catalog menu to display in OffCanvasMenu
+		/// </summary>
+		/// <param name="categoryId">EntityId of the category to which should be navigated in the OffCanvasMenu</param>
+		/// <param name="currentCategoryId">EntityId of the category that is currently displayed in the shop (WebViewPage.CurrentCategoryId)</param >
+		/// <param name="currentProductId">EntityId of the product that is currently displayed in the shop (WebViewPage.CurrentProductId)</param>
+		/// <returns>PartialView with NavigationModel</returns>
+		[HttpPost]
+		public ActionResult OffCanvasMenuCategories(int categoryId, int currentCategoryId, int currentProductId)
+		{
+			var model = _helper.PrepareCategoryNavigationModel(currentCategoryId, currentProductId);
+			ViewBag.SelectedNode = categoryId == 0 ? model.Root : ViewBag.SelectedNode = model.Root.SelectNode(x => x.Value.EntityId == categoryId);
 
-            return PartialView(model);
-        }
+			return PartialView(model);
+		}
 
-        // ajax
-        [HttpPost]
-        public ActionResult OffCanvasMenuManufacturers()
-        {
-            var model = _helper.PrepareManufacturerNavigationModel(_catalogSettings.ManufacturerItemsToDisplayInOffcanvasMenu);
+		// ajax
+		[HttpPost]
+		public ActionResult OffCanvasMenuManufacturers()
+		{
+			var model = _helper.PrepareManufacturerNavigationModel(_catalogSettings.ManufacturerItemsToDisplayInOffcanvasMenu);
 
-            return PartialView("OffCanvasMenuManufacturers", model);
-        }
+			return PartialView("OffCanvasMenuManufacturers", model);
+		}
 
-        [HttpPost]
-        public ActionResult OffCanvasMenu()
-        {
-            ViewBag.ShowManufacturers = false;
+		[HttpPost]
+		public ActionResult OffCanvasMenu()
+		{
+			ViewBag.ShowManufacturers = false;
 
-            if(_catalogSettings.ShowManufacturersInOffCanvas == true && _catalogSettings.ManufacturerItemsToDisplayInOffcanvasMenu > 0)
-            {
-                ViewBag.ShowManufacturers = true;
-            }
-            
-            return PartialView();
-        }
-        
-        #endregion
-    }
+			if (_catalogSettings.ShowManufacturersInOffCanvas == true && _catalogSettings.ManufacturerItemsToDisplayInOffcanvasMenu > 0)
+			{
+				ViewBag.ShowManufacturers = true;
+			}
+
+			return PartialView();
+		}
+
+		#endregion
+	}
 }

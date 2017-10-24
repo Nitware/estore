@@ -9,9 +9,10 @@ namespace SmartStore.Services.Search
 {
 	public partial class CatalogSearchQuery : SearchQuery<CatalogSearchQuery>, ICloneable<CatalogSearchQuery>
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CatalogSearchQuery"/> class without a search term being set
-		/// </summary>
+		public int PromoId { get; set; }
+										   /// <summary>
+										   /// Initializes a new instance of the <see cref="CatalogSearchQuery"/> class without a search term being set
+										   /// </summary>
 		public CatalogSearchQuery()
 			: base((string[])null, null)
 		{
