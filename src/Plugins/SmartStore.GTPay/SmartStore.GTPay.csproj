@@ -194,7 +194,7 @@
     </Reference>
     <Reference Include="Telerik.Web.Mvc">
       <HintPath>..\..\Presentation\SmartStore.Web\bin\Telerik.Web.Mvc.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -313,6 +313,10 @@
     <Compile Include="Data\Migrations\201710162218265_GTPayTransactionLogFieldEdit.Designer.cs">
       <DependentUpon>201710162218265_GTPayTransactionLogFieldEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Data\Migrations\201710231145157_GTPayAdditionOfCustomerId.cs" />
+    <Compile Include="Data\Migrations\201710231145157_GTPayAdditionOfCustomerId.Designer.cs">
+      <DependentUpon>201710231145157_GTPayAdditionOfCustomerId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\Migrations\Configuration.cs" />
     <Compile Include="DependencyRegistrar.cs" />
     <Compile Include="Domain\GTPaySupportedCurrency.cs" />
@@ -397,6 +401,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Migrations\201710162218265_GTPayTransactionLogFieldEdit.resx">
       <DependentUpon>201710162218265_GTPayTransactionLogFieldEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Migrations\201710231145157_GTPayAdditionOfCustomerId.resx">
+      <DependentUpon>201710231145157_GTPayAdditionOfCustomerId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

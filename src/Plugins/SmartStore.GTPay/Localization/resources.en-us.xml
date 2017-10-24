@@ -120,9 +120,13 @@
       <LocaleResource Name="Fields.AmountInUnit">
         <Value>Amount In Unit</Value>
       </LocaleResource>
-      <LocaleResource Name="Fields.OrderId">
+      <LocaleResource Name="Fields.CustomerId">
         <Value>Order Id</Value>
       </LocaleResource>
+       <LocaleResource Name="Fields.OrderId">
+        <Value>CustomerId</Value>
+      </LocaleResource>
+      
       <LocaleResource Name="Fields.ResponseCode">
         <Value>Response Code</Value>
       </LocaleResource>

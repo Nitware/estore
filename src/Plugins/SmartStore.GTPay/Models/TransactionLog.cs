@@ -1,4 +1,5 @@
-﻿using SmartStore.Web.Framework;
+﻿using SmartStore.Core.Domain.Customers;
+using SmartStore.Web.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,10 @@ namespace SmartStore.GTPay.Models
 
         [SmartResourceDisplayName("Plugins.Payments.GTPay.Fields.OrderId")]
         public int OrderId { get; set; }
+
+        [SmartResourceDisplayName("Plugins.Payments.GTPay.Fields.CustomerId")]
+        public int? CustomerId { get; set; }
+        public Customer Custmomer { get; set; }
 
         [SmartResourceDisplayName("Plugins.Payments.GTPay.Fields.ResponseCode")]
         public string ResponseCode { get; set; }

@@ -33,14 +33,15 @@ namespace SmartStore.GTPay.Data
             //this.Property(x => x.GTPaySupportedCurrencyId).IsRequired();
             this.Property(x => x.VerificationHash).IsOptional().HasMaxLength(400);
             this.Property(x => x.FullVerificationHash).IsOptional().HasMaxLength(400);
+            this.Property(x => x.CustomerId).IsOptional();
 
             this.HasRequired(nc => nc.GTPayTransactionStatus)
                 .WithMany()
                 .HasForeignKey(nc => nc.GTPayTransactionStatusId);
 
-            //this.HasRequired(nc => nc.GTPaySupportedCurrency)
+            //this.HasRequired(nc => nc.Customer)
             //     .WithMany()
-            //     .HasForeignKey(nc => nc.GTPaySupportedCurrencyId);
+            //     .HasForeignKey(nc => nc.CustomerId);
 
 
         }

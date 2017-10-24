@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 
 using SmartStore.Core;
+using SmartStore.Core.Domain.Customers;
 
 namespace SmartStore.GTPay.Domain
 {
@@ -14,6 +15,7 @@ namespace SmartStore.GTPay.Domain
         public decimal ApprovedAmount { get; set; }
         public long AmountInUnit { get; set; }
         public int OrderId { get; set; }
+        public int? CustomerId { get; set; }
         public string ResponseCode { get; set; }
         public string ResponseDescription { get; set; }
         //public string StatusReason { get; set; }
@@ -30,8 +32,8 @@ namespace SmartStore.GTPay.Domain
         public string FullVerificationHash { get; set; }
 
         public virtual GTPayTransactionStatus GTPayTransactionStatus { get; set; }
-        //public virtual GTPaySupportedCurrency GTPaySupportedCurrency { get; set; }
 
+        //public virtual GTPaySupportedCurrency GTPaySupportedCurrency { get; set; }
         //public virtual Order Order { get; set; }
     }
 }

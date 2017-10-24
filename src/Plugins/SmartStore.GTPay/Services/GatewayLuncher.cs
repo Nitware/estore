@@ -97,10 +97,12 @@ namespace SmartStore.GTPay.Services
             string gtpay_tranx_memo = GetOrderSummary(nameAndEmail, postProcessPaymentRequest.Order);
             string gtpay_tranx_id = httpContext.Session[TransactionRef] as string;
             
-            //string gtpay_mert_id = GtpayMertIdValue;
+            //string gtpay_mert_id = "0908";
             string gtpay_mert_id = gtpaySetting.MerchantId;
             string gtpay_tranx_amt = orderTotal.ToString();
+            //string gtpay_tranx_amt = "0";
             string gtpay_tranx_curr = currency.Code.ToString();
+            //string gtpay_tranx_curr = null;
             string gtpay_cust_id = postProcessPaymentRequest.Order.Customer.Id.ToString();
             string gtpay_cust_name = nameAndEmail.Item1;
             string gtpay_tranx_noti_url = GetRedirectUrl(httpContext.Request, "Details", "Order", OrderId);
@@ -108,14 +110,14 @@ namespace SmartStore.GTPay.Services
             //string hash = HashKey;
             string hash = gtpaySetting.HashKey;
             string parameters_to_hash = gtpay_mert_id + gtpay_tranx_id + gtpay_tranx_amt + gtpay_tranx_curr + gtpay_cust_id + gtpay_tranx_noti_url + hash;
-            string gtpay_echo_data = gtpay_mert_id + ";" + hash + ";" + nameAndEmail.Item1 + ";" + nameAndEmail.Item2 + ";" + gtpay_mert_id;
+            string gtpay_echo_data = gtpay_mert_id + ";" + hash + ";" + nameAndEmail.Item1 + ";" + nameAndEmail.Item2 + ";" + gtpay_cust_id + ";" + postProcessPaymentRequest.Order.Id;
             string gtpay_hash = GenerateSHA512String(parameters_to_hash);
             
             //string url = "http://gtweb2.gtbank.com/orangelocker/gtpaym/tranx.aspx";
             string url = gtpaySetting.GatewayPostUrl;
             string gtpay_gway_name = currency.Gateway;
 
-
+            
             HttpResponseBase response = httpContext.Response;
             response.Clear();
 
