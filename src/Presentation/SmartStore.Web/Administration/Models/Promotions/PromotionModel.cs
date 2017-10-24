@@ -9,6 +9,7 @@ using SmartStore.Admin.Models.Stores;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using SmartStore.Core.Domain.Promotions;
+using SmartStore.Web.Framework.Localization;
 
 namespace SmartStore.Admin.Models.Promotions
 {
@@ -19,6 +20,7 @@ namespace SmartStore.Admin.Models.Promotions
 		{
 			PromotionProducts = new List<PromotionProductsModel>();
 		}
+		public int LanguageId { get; set; }
 
 		[SmartResourceDisplayName("Admin.Promotions.Promotion.ID")]
 		public override int Id { get; set; }
@@ -28,7 +30,8 @@ namespace SmartStore.Admin.Models.Promotions
 
 		
 		//title
-		[SmartResourceDisplayName("Admin.Promotions.Promotion.Title")]
+		//[SmartResourceDisplayName("Admin.Promotions.Promotion.Title")]
+		[SmartResourceDisplayName("Admin.ContentManagement.Topics.Fields.Title")]
 		public string Title { get; set; }
 		[SmartResourceDisplayName("Admin.Promotions.Promotion.TitleFontType")]
 		public string TitleFontType { get; set; }
