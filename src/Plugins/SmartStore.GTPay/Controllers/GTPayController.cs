@@ -88,6 +88,27 @@ namespace SmartStore.GTPay.Controllers
             _ctx = ctx;
         }
 
+        public ActionResult FindTransactionBy(string transactionRef)
+        {
+            List<GTPayTransactionLog> transactionLogs = _transactionLogService.GetLatest500Transactions();
+            List<TransactionLog> transactionLogModels = PrepareTransactionLogModel(transactionLogs);
+
+            transactionLogModels = transactionLogModels.Take(7).ToList();
+
+            ConfigurationModel model = new ConfigurationModel();
+            var gridModel = new GridModel<TransactionLog>
+            {
+                Data = transactionLogModels,
+                Total = transactionLogModels.Count
+            };
+
+            model.GridPageSize = _adminAreaSettings.GridPageSize;
+            model.TransactionLogsForGrid = gridModel;
+
+
+            return PartialView("_TransactionList", model);
+        }
+
         public ActionResult TransactionLog()
         {
             List<GTPayTransactionLog> transactionLogs = _transactionLogService.GetLatest500Transactions();
