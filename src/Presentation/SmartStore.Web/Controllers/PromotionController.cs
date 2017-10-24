@@ -61,7 +61,7 @@ namespace SmartStore.Web.Controllers
 		[ChildActionOnly]
 		public ActionResult HomepagePromotion()
 		{
-			var promotions = _promotionService.GetAllDisplayPromotions()				
+			var promotions = _promotionService.GetAllDisplayPromotions().OrderBy(d=>d.DisplayOrder)			
 				.ToList();
 
 			var listModel = promotions
