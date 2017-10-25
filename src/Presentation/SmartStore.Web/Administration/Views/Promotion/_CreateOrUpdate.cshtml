@@ -1,0 +1,345 @@
+﻿@model PromotionModel
+@using Telerik.Web.Mvc.UI;
+@using SmartStore.Admin.Models.Promotions;
+@{
+	var cultures = System.Globalization.CultureInfo.GetCultures(System.Globalization.CultureTypes.SpecificCultures).ToList();
+}
+@Html.HiddenFor(model => model.Id)
+@Html.SmartStore().TabStrip().Name("promotion-edit").Items(x =>
+{
+	x.Add().Text(T("Admin.Common.General").Text).Content(TabGeneral()).Selected(true);
+	x.Add().Text(T("Admin.Catalog.Manufacturers.Products").Text).Content(TabProducts());
+	//generate an event
+	EngineContext.Current.Resolve<IEventPublisher>().Publish(new TabStripCreated(x, "promotion-edit", this.Html, this.Model));
+})
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		// add new product
+		$(document).on('click', '#AddNewProductButton', function () {
+			$({}).entityPicker('loadDialog', {
+				url: '@Url.Action("EntityPicker", "Common", new { area = "" })',
+				caption: '@T("Admin.Catalog.Manufacturers.Products.AddNew")',
+				onLoadDialogBefore: function () {
+					$('#AddNewProductButton').button('loading').prop('disabled', true);
+				},
+				onLoadDialogComplete: function () {
+					$('#AddNewProductButton').prop('disabled', false).button('reset');
+				},
+				onOkClicked: function (ids) {
+					$({}).doAjax({
+						type: 'POST',
+						url: '@Url.Action("ProductAdd")',
+						data: { "promoId": @Model.Id, "selectedProductIds": ids },
+						callbackSuccess: function () {
+							$('#promotionproducts-grid').data('tGrid').ajaxRequest();
+						}
+					});
+					return true;
+				}
+			});
+		});
+	});
+</script>
+
+@helper TabGeneral()
+{
+	<table class="adminContent">
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.Title)
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.Title)
+				@Html.ValidationMessageFor(model => model.Title)
+			</td>
+		</tr>
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.TitleFontType)
+			</td>
+			<td class="adminData">
+				@Html.DropDownListFor(model => model.TitleFontType, new SelectList(ViewBag.fontTypes, "Value", "Text"))
+				@Html.ValidationMessageFor(model => model.TitleFontType)
+			</td>
+		</tr>
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.TitleFontSize)
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.TitleFontSize)<span class="muted">(In PX)</span>
+				@Html.ValidationMessageFor(model => model.TitleFontSize)
+			</td>
+		</tr>
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.TitleFontColor)
+			</td>
+			<td class="adminData">
+				@Html.DropDownListFor(model => model.TitleFontColor, new SelectList(ViewBag.fontColors, "Value", "Text"))
+				@Html.ValidationMessageFor(model => model.TitleFontColor)
+			</td>
+		</tr>
+
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.SubTitle)
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.SubTitle)
+				@Html.ValidationMessageFor(model => model.SubTitle)
+			</td>
+		</tr>
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.SubTitleFontType)
+			</td>
+			<td class="adminData">
+				@Html.DropDownListFor(model => model.SubTitleFontType, new SelectList(ViewBag.fontTypes, "Value", "Text"))
+				@Html.ValidationMessageFor(model => model.SubTitleFontType)
+			</td>
+		</tr>
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.SubTitleFontSize)
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.SubTitleFontSize)<span class="muted">(In PX)</span>
+				@Html.ValidationMessageFor(model => model.SubTitleFontSize)
+			</td>
+		</tr>
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.SubTitleFontColor)
+			</td>
+			<td class="adminData">
+				@Html.DropDownListFor(model => model.SubTitleFontColor, new SelectList(ViewBag.fontColors, "Value", "Text"))
+				@Html.ValidationMessageFor(model => model.TitleFontColor)
+			</td>
+		</tr>
+
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.DiscountText)
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.DiscountText)
+				@Html.ValidationMessageFor(model => model.DiscountText)
+			</td>
+		</tr>
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.DiscountTextFontType)
+			</td>
+			<td class="adminData">
+				@Html.DropDownListFor(model => model.DiscountTextFontType, new SelectList(ViewBag.fontTypes, "Value", "Text"))
+				@Html.ValidationMessageFor(model => model.DiscountTextFontType)
+			</td>
+		</tr>
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.DiscountTextFontSize)
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.DiscountTextFontSize)<span class="muted">(In PX)</span>
+				@Html.ValidationMessageFor(model => model.DiscountTextFontSize)
+			</td>
+		</tr>
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.DiscountTextFontColor)
+			</td>
+			<td class="adminData">
+				@Html.DropDownListFor(model => model.DiscountTextFontColor, new SelectList(ViewBag.fontColors, "Value", "Text"))
+				@Html.ValidationMessageFor(model => model.DiscountTextFontColor)
+			</td>
+		</tr>
+
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.Description)
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.Description)
+				@Html.ValidationMessageFor(model => model.Description)
+			</td>
+		</tr>
+
+
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.TextFrameType)
+			</td>
+			<td class="adminData">
+				@Html.DropDownListFor(model => model.TextFrameType, new SelectList(ViewBag.frameTypes, "Value", "Text"))
+				@Html.ValidationMessageFor(model => model.TextFrameType)
+			</td>
+		</tr>
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.TextFrameBackground)
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.TextFrameBackground)<span class="muted">(HEX Code)</span>
+				@Html.ValidationMessageFor(model => model.TextFrameBackground)
+			</td>
+		</tr>
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.TextFrameHeight)
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.TextFrameHeight) <span class="muted">(In PX)</span>
+				@Html.ValidationMessageFor(model => model.TextFrameHeight)
+			</td>
+		</tr>
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.TextFrameWidth)
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.TextFrameWidth) <span class="muted">(In PX)</span>
+				@Html.ValidationMessageFor(model => model.TextFrameWidth)
+			</td>
+		</tr>
+
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.PictureId)
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.PictureId, "Picture", new { transientUpload = true })
+				@Html.ValidationMessageFor(model => model.PictureId)
+			</td>
+		</tr>
+
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.DiscountPercentage)
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.DiscountPercentage)
+				@Html.ValidationMessageFor(model => model.DiscountPercentage)
+			</td>
+		</tr>
+
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.DiscountAmount)
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.DiscountAmount)
+				@Html.ValidationMessageFor(model => model.DiscountAmount)
+			</td>
+		</tr>
+
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.ExpiryDate)
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.ExpiryDate, new { pickTime = true })
+				@Html.ValidationMessageFor(model => model.ExpiryDate)
+			</td>
+		</tr>
+		@*<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.NoOfColumn)
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.NoOfColumn)
+				@Html.ValidationMessageFor(model => model.NoOfColumn)
+			</td>
+		</tr>*@
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.Published)
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.Published)
+				@Html.ValidationMessageFor(model => model.Published)
+			</td>
+		</tr>
+		<tr>
+			<td class="adminTitle">
+				@Html.SmartLabelFor(model => model.DisplayOrder)
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.DisplayOrder)
+				@Html.ValidationMessageFor(model => model.DisplayOrder)
+			</td>
+		</tr>
+
+		@*<tr>
+				<td class="adminTitle">
+					@Html.SmartLabelFor(model => model.LanguageCulture)
+				</td>
+				<td class="adminData">
+					@Html.DropDownListFor(model => model.LanguageCulture, new SelectList(ViewBag.AllLanguages, "", "Name"))
+					@Html.ValidationMessageFor(model => model.LanguageCulture)
+				</td>
+			</tr>*@
+
+
+		<tr>
+			<td colspan="2">
+				<hr />
+			</td>
+		</tr>
+
+
+	</table>
+}
+
+@helper TabProducts()
+{
+if (Model.Id > 0)
+{
+		<table class="adminContent">
+			<tr>
+				<td>
+					@(Html.Telerik().Grid<PromotionProductsModel>()
+						.Name("promotionproducts-grid")
+						.DataKeys(keys =>
+						{
+							keys.Add(x => x.Id);
+						})
+						.DataBinding(dataBinding =>
+						{
+							dataBinding.Ajax()
+								.Select("ProductList", "Promotion", new { promoId = Model.Id })
+								.Update("ProductUpdate", "Promotion")
+								.Delete("ProductDelete", "Promotion");
+						})
+						.Columns(columns =>
+						{
+							columns.Bound(x => x.ProductName)								
+								.Width(520);
+							columns.Command(commands =>
+							{
+								commands.Delete().Localize(T);
+							})
+							.Width(220);
+						})
+						.Pageable(settings => settings.PageSize(Model.GridPageSize).Position(GridPagerPosition.Both))
+						.PreserveGridState()
+						.EnableCustomBinding(true))
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<button type="button" id="AddNewProductButton" class="btn btn-warning btn-below" data-loading-text="@(T("Common.Loading"))&hellip;">
+						<i class="fa fa-plus"></i>
+						@T("Admin.Catalog.Manufacturers.Products.AddNew")
+					</button>					
+				</td>
+			</tr>
+		</table>
+}
+else
+{
+		<text>Save the Promotion Before edit</text>
+}
+}

@@ -184,6 +184,7 @@
     <Compile Include="Controllers\CustomerRoleController.cs" />
     <Compile Include="Controllers\ExportController.cs" />
     <Compile Include="Controllers\ImportController.cs" />
+    <Compile Include="Controllers\PromotionController.cs" />
     <Compile Include="Controllers\QuantityUnitController.cs" />
     <Compile Include="Controllers\DeliveryTimeController.cs" />
     <Compile Include="Controllers\DiscountController.cs" />
@@ -277,6 +278,8 @@
     <Compile Include="Models\Plugins\LicensePluginModel.cs" />
     <Compile Include="Models\Plugins\LocalPluginsModel.cs" />
     <Compile Include="Models\Plugins\ProviderModelList.cs" />
+    <Compile Include="Models\Promotions\PromotionModel.cs" />
+    <Compile Include="Models\Promotions\PromotionProductsModel.cs" />
     <Compile Include="Models\Settings\ContentSliderSettingsModel.cs" />
     <Compile Include="Models\Settings\SearchSettingsModel.cs" />
     <Compile Include="Models\Settings\DataExchangeSettingsModel.cs" />
@@ -402,6 +405,8 @@
     <Compile Include="Validators\Plugins\PluginValidator.cs" />
     <Compile Include="Validators\Polls\PollAnswerValidator.cs" />
     <Compile Include="Validators\Polls\PollValidator.cs" />
+    <Compile Include="Validators\Promotions\PromotionProductsValidator.cs" />
+    <Compile Include="Validators\Promotions\PromotionValidator.cs" />
     <Compile Include="Validators\Settings\GeneralCommonSettingsValidator.cs" />
     <Compile Include="Validators\Settings\CatalogSettingsValidator.cs" />
     <Compile Include="Validators\Settings\OrderSettingsValidator.cs" />
@@ -836,6 +841,11 @@
     <Content Include="Views\ContentSlider\EditSlide.cshtml" />
     <Content Include="Views\ContentSlider\Index.cshtml" />
     <Content Include="Views\ContentSlider\_CreateOrUpdate.cshtml" />
+    <Content Include="Views\Promotion\_CreateOrUpdate.cshtml" />
+    <Content Include="Views\Promotion\Create.cshtml" />
+    <Content Include="Views\Promotion\Edit.cshtml" />
+    <Content Include="Views\Promotion\List.cshtml" />
+    <Content Include="Views\Promotion\_CreateOrUpdateProducts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\admin.less" />

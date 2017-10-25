@@ -15,6 +15,8 @@ using SmartStore.Core.Search;
 using SmartStore.Services.Catalog;
 using SmartStore.Services.Directory;
 using SmartStore.Services.Search;
+using SmartStore.Services.Promotions;
+using SmartStore.Core.Domain.Promotions;
 
 namespace SmartStore.Services.Tests.Search
 {
@@ -22,6 +24,7 @@ namespace SmartStore.Services.Tests.Search
 	public class LinqCatalogSearchServiceTests
 	{
 		private LinqCatalogSearchService _linqCatalogSearchService;
+		private IRepository<PromotionProducts> _promoProductService;
 		private IProductService _productService;
 		private IRepository<Product> _productRepository;
 		private IRepository<ProductManufacturer> _productManufacturerRepository;
@@ -86,6 +89,7 @@ namespace SmartStore.Services.Tests.Search
 		[SetUp]
 		public virtual void Setup()
 		{
+			_promoProductService = MockRepository.GenerateMock<IRepository<PromotionProducts>>();
 			_productService = MockRepository.GenerateMock<IProductService>();
 			_productRepository = MockRepository.GenerateMock<IRepository<Product>>();
 			_productManufacturerRepository = MockRepository.GenerateMock<IRepository<ProductManufacturer>>();
@@ -100,6 +104,7 @@ namespace SmartStore.Services.Tests.Search
 			_categoryService = MockRepository.GenerateMock<ICategoryService>();
 
 			_linqCatalogSearchService = new LinqCatalogSearchService(
+				_promoProductService,
 				_productService,
 				_productRepository,
 				_productManufacturerRepository,

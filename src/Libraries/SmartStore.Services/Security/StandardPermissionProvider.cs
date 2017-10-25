@@ -16,7 +16,8 @@ namespace SmartStore.Services.Security
         public static readonly PermissionRecord ManageGiftCards = new PermissionRecord { Name = "Admin area. Manage Gift Cards", SystemName = "ManageGiftCards", Category = "Orders" };
         public static readonly PermissionRecord ManageReturnRequests = new PermissionRecord { Name = "Admin area. Manage Return Requests", SystemName = "ManageReturnRequests", Category = "Orders" };
         public static readonly PermissionRecord ManageAffiliates = new PermissionRecord { Name = "Admin area. Manage Affiliates", SystemName = "ManageAffiliates", Category = "Promo" };
-        public static readonly PermissionRecord ManageCampaigns = new PermissionRecord { Name = "Admin area. Manage Campaigns", SystemName = "ManageCampaigns", Category = "Promo" };
+		public static readonly PermissionRecord ManagePromotions = new PermissionRecord { Name = "Admin area. Manage Promotions", SystemName = "ManagePromotions", Category = "Promo" };//new gyoal
+		public static readonly PermissionRecord ManageCampaigns = new PermissionRecord { Name = "Admin area. Manage Campaigns", SystemName = "ManageCampaigns", Category = "Promo" };
         public static readonly PermissionRecord ManageDiscounts = new PermissionRecord { Name = "Admin area. Manage Discounts", SystemName = "ManageDiscounts", Category = "Promo" };
         public static readonly PermissionRecord ManageNewsletterSubscribers = new PermissionRecord { Name = "Admin area. Manage Newsletter Subscribers", SystemName = "ManageNewsletterSubscribers", Category = "Promo" };
         public static readonly PermissionRecord ManagePolls = new PermissionRecord { Name = "Admin area. Manage Polls", SystemName = "ManagePolls", Category = "Content Management" };
@@ -74,7 +75,8 @@ namespace SmartStore.Services.Security
                 ManageGiftCards,
                 ManageReturnRequests,
                 ManageAffiliates,
-                ManageCampaigns,
+				ManagePromotions,
+				ManageCampaigns,
                 ManageDiscounts,
                 ManageNewsletterSubscribers,
                 ManagePolls,
@@ -134,7 +136,8 @@ namespace SmartStore.Services.Security
                         ManageGiftCards,
                         ManageReturnRequests,
                         ManageAffiliates,
-                        ManageCampaigns,
+						ManagePromotions,
+						ManageCampaigns,
                         ManageDiscounts,
                         ManageNewsletterSubscribers,
                         ManagePolls,

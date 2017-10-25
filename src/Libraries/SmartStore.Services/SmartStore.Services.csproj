@@ -492,6 +492,10 @@
     <Compile Include="Pdf\WkHtmlToPdfConverter.cs" />
     <Compile Include="Polls\IPollService.cs" />
     <Compile Include="Polls\PollService.cs" />
+    <Compile Include="Promotions\IPromotionProductsService.cs" />
+    <Compile Include="Promotions\IPromotionService.cs" />
+    <Compile Include="Promotions\PromotionProductsService.cs" />
+    <Compile Include="Promotions\PromotionService.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

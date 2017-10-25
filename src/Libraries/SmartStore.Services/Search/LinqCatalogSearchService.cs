@@ -14,6 +14,7 @@ using SmartStore.Core.Search.Facets;
 using SmartStore.Services.Catalog;
 using SmartStore.Services.Directory;
 using SmartStore.Services.Search.Extensions;
+using SmartStore.Core.Domain.Promotions;
 
 namespace SmartStore.Services.Search
 {
@@ -21,6 +22,7 @@ namespace SmartStore.Services.Search
 	{
 		private static int[] _priceThresholds = new int[] { 10, 25, 50, 100, 250, 500, 1000 };
 
+		private readonly IRepository<PromotionProducts> _PromotionRepository;
 		private readonly IProductService _productService;
 		private readonly IRepository<Product> _productRepository;
 		private readonly IRepository<ProductManufacturer> _productManufacturerRepository;
@@ -35,6 +37,7 @@ namespace SmartStore.Services.Search
 		private readonly ICategoryService _categoryService;
 
 		public LinqCatalogSearchService(
+			IRepository<PromotionProducts> PromotionRepository,
 			IProductService productService,
 			IRepository<Product> productRepository,
 			IRepository<ProductManufacturer> productManufacturerRepository,
@@ -48,6 +51,7 @@ namespace SmartStore.Services.Search
 			IManufacturerService manufacturerService,
 			ICategoryService categoryService)
 		{
+			_PromotionRepository = PromotionRepository;
 			_productService = productService;
 			_productRepository = productRepository;
 			_productManufacturerRepository = productManufacturerRepository;
@@ -197,6 +201,17 @@ namespace SmartStore.Services.Search
 			var query = baseQuery ?? _productRepository.Table;
 
 			query = query.Where(x => !x.Deleted);
+
+			if (searchQuery.PromoId > 0)
+			{
+				var promoquery = _PromotionRepository.Table;
+				promoquery = promoquery.Where(a => !a.Deleted);
+				promoquery = promoquery.Where(a => a.PromotionId == searchQuery.PromoId);
+				promoquery = promoquery.OrderBy(a => a.Id);
+
+				var promoproductIds = promoquery.Select(d => d.ProductId);
+				query = query.Where(x => promoproductIds.Contains(x.Id));
+			}
 			query = ApplySearchTerm(query, searchQuery);
 
 			#region Filters

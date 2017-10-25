@@ -1,0 +1,20 @@
+﻿@model PromotionModel
+@{
+    //page title
+    ViewBag.Title = "Add New Advert to Promotions";
+}
+@using SmartStore.Admin.Models.Promotions
+@using (Html.BeginForm())
+{
+    <div class="section-header">
+        <div class="title">
+            Add  New Promotion @Html.ActionLink("(" + "Back to promotions list" + ")", "List")
+        </div>
+        <div class="options">
+            <button type="submit" name="save" value="save" class="btn btn-primary"><i class="fa fa-check"></i>&nbsp;@T("Admin.Common.Save")</button>
+            <button type="submit" name="save" value="save-continue" class="btn">@T("Admin.Common.SaveContinue")</button>
+        </div>
+    </div>
+
+    Html.RenderPartial("_CreateOrUpdate", Model);
+}

@@ -1979,24 +1979,24 @@
 	</LocaleResource>
 	<LocaleResource Name="Admin.Catalog.Products.BundleItems.AdminNoteBundlePricing">
 		<Value>
-		&lt;p&gt;Not included in bundle pricing and not taken into account are:&lt;br /&gt;Price adjustments of attributes, discounts of bundle items. A selection of attributes by the customer is not possible.&lt;/p&gt;
+			&lt;p&gt;Not included in bundle pricing and not taken into account are:&lt;br /&gt;Price adjustments of attributes, discounts of bundle items. A selection of attributes by the customer is not possible.&lt;/p&gt;
 		</Value>
 	</LocaleResource>
 	<LocaleResource Name="Admin.Catalog.Products.BundleItems.AdminNoteGeneral">
 		<Value>
-		&lt;p&gt;All simple products except such with recurring payments and downloads can be part of a bundle.&lt;/p&gt;
+			&lt;p&gt;All simple products except such with recurring payments and downloads can be part of a bundle.&lt;/p&gt;
 		</Value>
 	</LocaleResource>
 	<LocaleResource Name="Admin.Catalog.Products.BundleItems.AdminNotePerItemPricing">
 		<Value>
-		&lt;p&gt;Included or taken into account during calculation of the price of bundle items are:&lt;br /&gt;Special price, price adjustment of attributes, per bundle item specified discounts and quantities.&lt;/p&gt;
-		&lt;p&gt;Not included and taken into account are:&lt;br /&gt;Tier prices, customer enters price, call for price, weight adjustment of attributes, all other discounts.&lt;/p&gt;
-		&lt;p&gt;The display of basic prices can be controlled by an option (see catalog settings).&lt;/p&gt;
+			&lt;p&gt;Included or taken into account during calculation of the price of bundle items are:&lt;br /&gt;Special price, price adjustment of attributes, per bundle item specified discounts and quantities.&lt;/p&gt;
+			&lt;p&gt;Not included and taken into account are:&lt;br /&gt;Tier prices, customer enters price, call for price, weight adjustment of attributes, all other discounts.&lt;/p&gt;
+			&lt;p&gt;The display of basic prices can be controlled by an option (see catalog settings).&lt;/p&gt;
 		</Value>
 	</LocaleResource>
 	<LocaleResource Name="Admin.Catalog.Products.BundleItems.AdminNotePerItemShipping">
 		<Value>
-		&lt;p&gt;Included or taken into account during calculation of shipping cost of bundle items are:&lt;br /&gt;Shipping enabled, Free shipping, Additional shipping charge.&lt;/p&gt;
+			&lt;p&gt;Included or taken into account during calculation of shipping cost of bundle items are:&lt;br /&gt;Shipping enabled, Free shipping, Additional shipping charge.&lt;/p&gt;
 		</Value>
 	</LocaleResource>
 	<LocaleResource Name="Admin.Catalog.Products.BundleItems.Attributes">
@@ -3737,19 +3737,23 @@
 		<Value>Transfer this ACL configuration to children</Value>
 	</LocaleResource>
 	<LocaleResource Name="Admin.Configuration.Category.Acl.AssignToSubCategoriesAndProducts.Hint">
-		<Value>This function assigns the ACL configuration of this category to all subcategories and products included in this category.&lt;br /&gt;
-                    Please keep in mind you have to save changes in the ACL configuration &lt;br/&gt; 
-                    before you can assign them to all subcategories and products. &lt;br/&gt;
-                    &lt;b&gt;Attention:&lt;/b&gt; Please keep in mind that &lt;b&gt;existing ACL records will be deleted&lt;/b&gt;</Value>
+		<Value>
+			This function assigns the ACL configuration of this category to all subcategories and products included in this category.&lt;br /&gt;
+			Please keep in mind you have to save changes in the ACL configuration &lt;br/&gt;
+			before you can assign them to all subcategories and products. &lt;br/&gt;
+			&lt;b&gt;Attention:&lt;/b&gt; Please keep in mind that &lt;b&gt;existing ACL records will be deleted&lt;/b&gt;
+		</Value>
 	</LocaleResource>
 	<LocaleResource Name="Admin.Configuration.Category.Stores.AssignToSubCategoriesAndProducts">
 		<Value>Transfer this store configuration to children</Value>
 	</LocaleResource>
 	<LocaleResource Name="Admin.Configuration.Category.Stores.AssignToSubCategoriesAndProducts.Hint">
-		<Value>This function assigns the store configuration of this category to all subcategories and products included in this category.&lt;br /&gt;
-                    Please keep in mind you have to save changes in the store configuration &lt;br/&gt; 
-                    before you can assign them to all subcategories and products. &lt;br/&gt;
-                    &lt;b&gt;Attention:&lt;/b&gt; Please keep in mind that &lt;b&gt;existing store mappings will be deleted&lt;/b&gt;</Value>
+		<Value>
+			This function assigns the store configuration of this category to all subcategories and products included in this category.&lt;br /&gt;
+			Please keep in mind you have to save changes in the store configuration &lt;br/&gt;
+			before you can assign them to all subcategories and products. &lt;br/&gt;
+			&lt;b&gt;Attention:&lt;/b&gt; Please keep in mind that &lt;b&gt;existing store mappings will be deleted&lt;/b&gt;
+		</Value>
 	</LocaleResource>
 	<LocaleResource Name="Admin.Configuration.Countries">
 		<Value>Countries</Value>
@@ -4958,8 +4962,10 @@
 		<Value>Share button widget code</Value>
 	</LocaleResource>
 	<LocaleResource Name="Admin.Configuration.Settings.Catalog.PageShareCode.Hint">
-		<Value>Specifies the code to render the share button widget. By going to addthis.com you can create your own widget code and paste it here. 
-                    This way you can configure the display type of the widget as well as get statistic insight.</Value>
+		<Value>
+			Specifies the code to render the share button widget. By going to addthis.com you can create your own widget code and paste it here.
+			This way you can configure the display type of the widget as well as get statistic insight.
+		</Value>
 	</LocaleResource>
 	<LocaleResource Name="Admin.Configuration.Settings.Catalog.PriceDisplayType">
 		<Value>Price display</Value>
@@ -12792,23 +12798,25 @@
 		<Value>Upload files</Value>
 	</LocaleResource>
 	<LocaleResource Name="Admin.Theme.GoogleFonts.Hint">
-		<Value>&lt;p&gt;To embed &lt;b&gt;Google Fonts&lt;/b&gt; please not the following advices.&lt;/p&gt;
-                    &lt;ul&gt;
-                        &lt;li&gt;
-                            Go to &lt;a href="https://fonts.google.com/" target="_blank"&gt;https://fonts.google.com/&lt;/a&gt; and choose the font-families you want to use in your store.
-                        &lt;/li&gt;
-                        &lt;li&gt;
-                            The Html code that will be provided to you to embed the choosen fonts into your website looks like this:
-                            &lt;pre&gt;&amp;lt;link href="https://fonts.googleapis.com/css?family=&lt;b&gt;Roboto:100,300,400,500,700|Ubuntu&lt;/b&gt;" rel="stylesheet"&gt;&lt;/pre&gt;
-                        &lt;/li&gt;
-                        &lt;li&gt;
-                            Copy the bold marked part of the link and enter it into one of the threee fields within the theme configurator that's intended for this purpose.
-                        &lt;/li&gt;
-                        &lt;li&gt;
-                            Now you can use the fonts by entering the name of a font-family (e.g. &lt;i&gt;Roboto&lt;/i&gt;) into one of the input fields which are 
-                            provided to configure font-families (e.g. &lt;i&gt;$font-family-sans-serif)&lt;/i&gt;.
-                        &lt;/li&gt;
-                    &lt;/ul&gt;</Value>
+		<Value>
+			&lt;p&gt;To embed &lt;b&gt;Google Fonts&lt;/b&gt; please not the following advices.&lt;/p&gt;
+			&lt;ul&gt;
+			&lt;li&gt;
+			Go to &lt;a href="https://fonts.google.com/" target="_blank"&gt;https://fonts.google.com/&lt;/a&gt; and choose the font-families you want to use in your store.
+			&lt;/li&gt;
+			&lt;li&gt;
+			The Html code that will be provided to you to embed the choosen fonts into your website looks like this:
+			&lt;pre&gt;&amp;lt;link href="https://fonts.googleapis.com/css?family=&lt;b&gt;Roboto:100,300,400,500,700|Ubuntu&lt;/b&gt;" rel="stylesheet"&gt;&lt;/pre&gt;
+			&lt;/li&gt;
+			&lt;li&gt;
+			Copy the bold marked part of the link and enter it into one of the threee fields within the theme configurator that's intended for this purpose.
+			&lt;/li&gt;
+			&lt;li&gt;
+			Now you can use the fonts by entering the name of a font-family (e.g. &lt;i&gt;Roboto&lt;/i&gt;) into one of the input fields which are
+			provided to configure font-families (e.g. &lt;i&gt;$font-family-sans-serif)&lt;/i&gt;.
+			&lt;/li&gt;
+			&lt;/ul&gt;
+		</Value>
 	</LocaleResource>
 	<LocaleResource Name="Admin.Themes">
 		<Value>Buttons</Value>
@@ -14467,9 +14475,11 @@
 		<Value>Not supported</Value>
 	</LocaleResource>
 	<LocaleResource Name="ErrorPage.Body">
-		<Value>We apologize, a server error ocurred while handling your request, this is not a problem with your computer or internet connection.
+		<Value>
+			We apologize, a server error ocurred while handling your request, this is not a problem with your computer or internet connection.
 			The details have been sent to our support team and we will investigate the issue very soon.&lt;br /&gt;&lt;br /&gt;
-			In the meantime, please retry your request as it may have been temporary.</Value>
+			In the meantime, please retry your request as it may have been temporary.
+		</Value>
 	</LocaleResource>
 	<LocaleResource Name="ErrorPage.Title">
 		<Value>Oops!</Value>
@@ -17485,5 +17495,332 @@
 	</LocaleResource>
 	<LocaleResource Name="Wishlist.YourWishlistURL">
 		<Value>Your wishlist URL for sharing</Value>
+	</LocaleResource>
+
+
+	<LocaleResource Name="Admin.Promotions.Promotion">
+		<Value>Promotions</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.Added">
+		<Value>The new promotion has been added successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.AddNew">
+		<Value>Add a new promotion</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.BackToList">
+		<Value>back to promotion list</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.Deleted">
+		<Value>The promotion has been deleted successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.Updated">
+		<Value>The promotion has been updated successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.EditPromotionDetails">
+		<Value>Edit promotion details</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.Fields">
+		<Value>Allow customers to select page size</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.Fields.AllowCustomersToSelectPageSize">
+		<Value>Allow customers to select page size</Value>
+	</LocaleResource>
+
+
+	<LocaleResource Name="Admin.Configuration.ContentSlider">
+		<Value>Content Slider</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Added">
+		<Value>The new slider has been added successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.AddNew">
+		<Value>Add a new slider</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.BackToList">
+		<Value>back to slider list</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Deleted">
+		<Value>The slider has been deleted successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Updated">
+		<Value>The slider has been updated successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.EditSliderDetails">
+		<Value>Edit slider details</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Fields">
+		<Value>Allow customers to select page size</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Fields.AllowCustomersToSelectPageSize">
+		<Value>Allow customers to select page size</Value>
+	</LocaleResource>
+
+
+
+	<LocaleResource Name="Admin.Promotions.Promotion.Title">
+		<Value>Title</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.Title.Hint">
+		<Value>Title</Value>
+	</LocaleResource>
+
+	<LocaleResource Name="Admin.Promotions.Promotion.TitleFontType">
+		<Value>TitleFontType</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.TitleFontType.Hint">
+		<Value>TitleFontType.</Value>
+	</LocaleResource>
+
+	<LocaleResource Name="Admin.Promotions.Promotion.TitleFontSize">
+		<Value>TitleFontSize</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.TitleFontSize.Hint">
+		<Value>TitleFontSize.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.TitleFontColor">
+		<Value>TitleFontColor</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.TitleFontColor.Hint">
+		<Value>TitleFontColor.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.SubTitle">
+		<Value>SubTitle</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.SubTitle.Hint">
+		<Value>SubTitle.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.SubTitleFontType">
+		<Value>SubTitleFontType</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.SubTitleFontType.Hint">
+		<Value>SubTitleFontType.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.SubTitleFontSize">
+		<Value>SubTitleFontSize</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.SubTitleFontSize.Hint">
+		<Value>SubTitleFontSize.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.SubTitleFontColor">
+		<Value>SubTitleFontColor</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.SubTitleFontColor.Hint">
+		<Value>SubTitleFontColor.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.DiscountText">
+		<Value>DiscountText</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.DiscountText.Hint">
+		<Value>DiscountText</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.DiscountTextFontType">
+		<Value>DiscountTextFontType</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.DiscountTextFontType.Hint">
+		<Value>DiscountTextFontType.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.DiscountTextFontSize">
+		<Value>DiscountTextFontSize</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.DiscountTextFontSize.Hint">
+		<Value>DiscountTextFontSize.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.DiscountTextFontColor">
+		<Value>DiscountTextFontColor</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.DiscountTextFontColor.Hint">
+		<Value>DiscountTextFontColor.</Value>
+	</LocaleResource>
+
+	<LocaleResource Name="Admin.Promotions.Promotion.Description">
+		<Value>Description</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.Description.Hint">
+		<Value>Description.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.TextFrame">
+		<Value>TextFrame</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.TextFrame.Hint">
+		<Value>TextFrame.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.TextFrameType">
+		<Value>TextFrameType</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.TextFrameType.Hint">
+		<Value>TextFrameType.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.TextFrameBackground">
+		<Value>TextFrameBackground</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.TextFrameBackground.Hint">
+		<Value>TextFrameBackground.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.TextFrameHeight">
+		<Value>TextFrameHeight</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.TextFrameHeight.Hint">
+		<Value>TextFrameHeight.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.TextFrameWidth">
+		<Value>TextFrameWidth</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.TextFrameWidth.Hint">
+		<Value>TextFrameWidth.</Value>
+	</LocaleResource>
+
+
+
+	<LocaleResource Name="Admin.Promotions.Promotion.ExpiryDate">
+		<Value>ExpiryDate</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.ExpiryDate.Hint">
+		<Value>ExpiryDate.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.NoOfColumn">
+		<Value>NoOfColumn</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.NoOfColumn.Hint">
+		<Value>NoOfColumn.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.Picture">
+		<Value>Picture</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.Picture.Hint">
+		<Value>Picture.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.DiscountPercentage">
+		<Value>DiscountPercentage</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.DiscountPercentage.Hint">
+		<Value>DiscountPercentage.</Value>
+	</LocaleResource>
+
+	<LocaleResource Name="Admin.Promotions.Promotion.DiscountAmount">
+		<Value>DiscountAmount</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.DiscountAmount.Hint">
+		<Value>Discount Amount</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.Published">
+		<Value>Publish Promotion</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.Published.Hint">
+		<Value>Check if you want to publish this Promotion.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.DisplayOrder">
+		<Value>Display Order</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Promotion.DisplayOrder.Hint">
+		<Value>Display Order of Promotions</Value>
+	</LocaleResource>
+
+	
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Slide.DisplayOrder">
+		<Value>Display Order</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Slide.DisplayOrder.Hint">
+		<Value>Display Order.</Value>
+	</LocaleResource>
+	
+
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Slide.Title">
+		<Value>Slider Title</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Slide.Title.Hint">
+		<Value>Slider Title</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Slide.Text">
+		<Value>Slider Text</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Slide.Text.Hint">
+		<Value>Slider Text</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Slide.Picture">
+		<Value>Picture</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Slide.Picture.Hint">
+		<Value>Picture</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Slide.Published">
+		<Value>Published</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Slide.Published.Hint">
+		<Value>Published</Value>
+	</LocaleResource>
+
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Slide.Button1">
+		<Value>Button 1</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Slide.Button1.Hint">
+		<Value>Button 1</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Slide.Button2">
+		<Value>Button 2</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Slide.Button2.Hint">
+		<Value>Button 2</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Slide.Button3">
+		<Value>Button 3</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Slide.Button3.Hint">
+		<Value>Button 3</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Button.Text">
+		<Value>Button Type</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Button.Text.Hint">
+		<Value>Button Text</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Button.Type">
+		<Value>Button Type</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Button.Type.Hint">
+		<Value>Button Type</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Button.Url">
+		<Value>Button Url</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Button.Url.Hint">
+		<Value>Button Url</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Button.Published">
+		<Value>Published</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Button.Published.Hint">
+		<Value>Published</Value>
+	</LocaleResource>
+
+
+	<LocaleResource Name="Admin.Configuration.ContentSlider.IsActive">
+		<Value>Active</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.IsActive.Hint">
+		<Value>Active</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.SliderHeight">
+		<Value>SliderHeight</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.SliderHeight.Hint">
+		<Value>SliderHeight</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Background">
+		<Value>Background</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.Background.Hint">
+		<Value>Background</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.AutoPlay">
+		<Value>AutoPlay</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.AutoPlay.Hint">
+		<Value>AutoPlay</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.AutoPlayDelay">
+		<Value>AutoPlayDelay</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.ContentSlider.AutoPlayDelay.Hint">
+		<Value>AutoPlayDelay</Value>
 	</LocaleResource>
 </Language>
