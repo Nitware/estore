@@ -1,14 +1,21 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
 using Autofac;
-using Autofac.Core;
+using Autofac.Integration.Mvc;
 using SmartStore.Core.Data;
-using SmartStore.Core.Fakes;
+using SmartStore.GTPay.Data;
+using SmartStore.GTPay.Filters;
+using SmartStore.GTPay.Interfaces;
+using SmartStore.GTPay.Services;
+using SmartStore.Web.Controllers;
 using SmartStore.Core.Infrastructure;
 using SmartStore.Core.Infrastructure.DependencyManagement;
-using SmartStore.GTPay.Data;
-using SmartStore.GTPay.Models;
-using SmartStore.GTPay.Services;
-using System.Web;
+using SmartStore.GTPay.Domain;
+using SmartStore.Data;
+using Autofac.Core;
 
 namespace SmartStore.GTPay
 {
@@ -16,30 +23,47 @@ namespace SmartStore.GTPay
     {
         public virtual void Register(ContainerBuilder builder, ITypeFinder typeFinder, bool isActiveModule)
         {
-            //builder.RegisterType<ShippingByWeightService>().As<IShippingByWeightService>().InstancePerRequest();
-            //builder.Register(HttpContextBaseFactory).As<HttpContextBase>();
-
             builder.RegisterType<GatewayLuncher>().As<IGatewayLuncher>().InstancePerRequest();
-            //builder.RegisterType<CardIconManager>().As<ICardIconManager>().InstancePerRequest();
-            
+            builder.RegisterType<GTPayCurrencyService>().As<IGTPayCurrencyService>().InstancePerRequest();
+            builder.RegisterType<TransactionStatusService>().As<ITransactionStatusService>().InstancePerRequest();
+            builder.RegisterType<TransactionLogService>().As<ITransactionLogService>().InstancePerRequest();
 
             // data layer
             // register named context
             builder.Register<IDbContext>(c => new GTPayObjectContext(DataSettings.Current.DataConnectionString))
                 .Named<IDbContext>(GTPayObjectContext.ALIASKEY)
                 .InstancePerRequest();
-            
+
             builder.Register<GTPayObjectContext>(c => new GTPayObjectContext(DataSettings.Current.DataConnectionString))
                 .InstancePerRequest();
 
-            
-           
+            builder.RegisterType<CheckoutConfirmWidgetZoneFilter>()
+                    .AsActionFilterFor<CheckoutController>(x => x.Confirm())
+                    .InstancePerRequest();
 
-            //// override required repository with our custom context
-            //builder.RegisterType<EfRepository<ShippingByWeightRecord>>()
-            //    .As<IRepository<ShippingByWeightRecord>>()
-            //    .WithParameter(ResolvedParameter.ForNamed<IDbContext>(GTPayObjectContext.ALIASKEY))
-            //    .InstancePerRequest();
+            builder.RegisterType<OrderDetailsWidgetZoneFilter>()
+                 .AsActionFilterFor<OrderController>(x => x.Details(0))
+                 .InstancePerRequest();
+
+            builder.RegisterType<CheckoutCompletedWidgetZoneFilter>()
+                   .AsActionFilterFor<CheckoutController>(x => x.Completed())
+                   .InstancePerRequest();
+
+            // override required repository with our custom context
+            builder.RegisterType<EfRepository<GTPayTransactionLog>>()
+                .As<IRepository<GTPayTransactionLog>>()
+                .WithParameter(ResolvedParameter.ForNamed<IDbContext>(GTPayObjectContext.ALIASKEY))
+                .InstancePerRequest();
+
+            builder.RegisterType<EfRepository<GTPayTransactionStatus>>()
+               .As<IRepository<GTPayTransactionStatus>>()
+               .WithParameter(ResolvedParameter.ForNamed<IDbContext>(GTPayObjectContext.ALIASKEY))
+               .InstancePerRequest();
+
+            builder.RegisterType<EfRepository<GTPaySupportedCurrency>>()
+               .As<IRepository<GTPaySupportedCurrency>>()
+               .WithParameter(ResolvedParameter.ForNamed<IDbContext>(GTPayObjectContext.ALIASKEY))
+               .InstancePerRequest();
         }
 
         public int Order
@@ -47,7 +71,8 @@ namespace SmartStore.GTPay
             get { return 1; }
         }
 
-      
+
+
 
 
     }

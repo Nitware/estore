@@ -1,7 +1,12 @@
-﻿using SmartStore.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+using SmartStore.Data;
 using SmartStore.Data.Setup;
-using SmartStore.GTPay.Data.Migrations;
 using System.Data.Entity;
+using SmartStore.GTPay.Data.Migrations;
 
 namespace SmartStore.GTPay.Data
 {
@@ -13,7 +18,8 @@ namespace SmartStore.GTPay.Data
         {
             var initializer = new MigrateDatabaseInitializer<GTPayObjectContext, Configuration>
             {
-                TablesToCheck = new[] { "GTPay" }
+                TablesToCheck = new[] { "GTPaySupportedCurrency", "GTPayTransactionLog", "GTPayTransactionStatus" }
+                //TablesToCheck = new[] { "GTPay" }
             };
             Database.SetInitializer(initializer);
         }
@@ -34,12 +40,15 @@ namespace SmartStore.GTPay.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new GTPayTransactionLogRecordMap());
+            modelBuilder.Configurations.Add(new GTPayCurrencyRecordMap());
             modelBuilder.Configurations.Add(new GTPayTransactionStatusRecordMap());
+
 
             //disable EdmMetadata generation
             //modelBuilder.Conventions.Remove<IncludeMetadataConvention>();
             base.OnModelCreating(modelBuilder);
         }
+
 
 
     }

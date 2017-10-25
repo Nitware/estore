@@ -1,0 +1,48 @@
+﻿@using SmartStore.GTPay.Models;
+@using SmartStore.Web.Framework;
+@using SmartStore.Web.Framework.UI;
+@using Telerik.Web.Mvc.UI;
+@model ConfigurationModel
+   
+                <table class="adminContent">
+                    <tr>
+                        <td>
+                            @(Html.Telerik().Grid<GTPayCurrencyModel>(Model.GTPayCurrencyGrid.Data)
+                                .Name("Grid")
+                                .DataKeys(keys => keys.Add(x => x.Id).RouteKey("Id"))
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(x => x.Code);
+                                    columns.Bound(x => x.Alias);
+                                    columns.Bound(x => x.Name);
+                                    columns.Bound(x => x.Gateway);
+                                    columns.Bound(x => x.LeastValueUnitMultiplier);
+                                    columns.Bound(x => x.IsSupported);
+
+                                    //columns.Command(commands =>
+                                    //{
+                                    //    commands.Edit();
+                                    //    //commands.Delete();
+                                    //}).Width(180);
+
+                                })
+                                .Editable(x =>
+                                {
+                                    x.Mode(GridEditMode.InLine);
+                                })
+                                .DataBinding(dataBinding =>
+                                {
+                                    dataBinding.Ajax()
+                                        .Select("CurrencyList", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
+                                        //.Update("CurrencyUpdate", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
+                                    //.Delete("CurrencyDelete", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
+                                })
+                                //.Pageable(settings => settings.PageSize(Model.GridPageSize).Position(GridPagerPosition.Both))
+                                .PreserveGridState()
+                                .EnableCustomBinding(true))
+                        </td>
+                    </tr>
+                </table>
+      
+
+

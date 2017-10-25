@@ -7,13 +7,13 @@ namespace SmartStore.GTPay.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class GTPayInit : IMigrationMetadata
+    public sealed partial class GTPayTransactionLogFieldEdit : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(GTPayInit));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(GTPayTransactionLogFieldEdit));
         
         string IMigrationMetadata.Id
         {
-            get { return "201709260632329_GTPayInit"; }
+            get { return "201710162218265_GTPayTransactionLogFieldEdit"; }
         }
         
         string IMigrationMetadata.Source

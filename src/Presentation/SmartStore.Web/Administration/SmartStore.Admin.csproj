@@ -439,6 +439,7 @@
     <Compile Include="Validators\Catalog\ProductValidator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\favicon.ico" />
     <Content Include="Content\filemanager\css\images\animated-overlay.gif" />
     <Content Include="Content\filemanager\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\filemanager\css\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -741,6 +742,7 @@
     <Content Include="Content\images\icon-plugin-social.png" />
     <Content Include="Content\images\icon-plugin-tax.png" />
     <Content Include="Content\images\smnet.png" />
+    <Content Include="Content\images\_smnet.png" />
     <Content Include="favicon.ico" />
     <Content Include="Scripts\admin.common.js" />
     <Content Include="Content\filemanager\conf.json" />
@@ -1573,9 +1575,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>43797</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-
           <IISUrl>http://localhost:42798/</IISUrl>
-
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>http://localhost:33864/admin</CustomServerUrl>

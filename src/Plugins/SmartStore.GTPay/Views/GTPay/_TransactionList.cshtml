@@ -1,0 +1,140 @@
+﻿@using Telerik.Web.Mvc.UI;
+@using SmartStore.Web.Framework;
+@using SmartStore.Web.Framework.UI;
+@using SmartStore.GTPay.Models;
+@model ConfigurationModel
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#btnFind').click(function () {
+            var date = $("#TransactionRequest_Date").val();
+            var referenceNo = $("#TransactionRequest_ReferenceNo").val();
+
+            if ((date == "" || date == null) && (referenceNo == "" || referenceNo == null)) {
+                alert("No search criteria specified! You must select at least one criteria");
+                return;
+            }
+
+            findTransaction(date, referenceNo);
+        })
+
+        function findTransaction(date, referenceNo) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("FindTransactionBy", "GTPay", new { Area = "SmartStore.GTPay" })',
+                data: { transactionRef: referenceNo, transactionDate: date },
+                //data: $("#frmSearch").serialize(),
+
+
+                //beforeSend: function () {
+                //    $("#busy").show();
+                //},
+                //complete: function () {
+                //    $("#busy").hide();
+                //},
+
+
+                success: function (result) {
+                    $("#grid").html(result);
+
+                    @*if (jsonResult.isSuccessful) {
+                        window.location.href = '@Url.Action("Result", "Search", new { Area = "Common" })';
+                    }
+                    else {
+                        alert(jsonResult.message);
+                    }*@
+                },
+                //error: function () {
+                //    alert("Operation failed!");
+                //}
+            });
+
+            return false;
+        }
+
+
+    })
+
+</script>
+
+<div id="grid">
+    <table class="adminContent">
+      
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.TransactionRequest.Date)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.TransactionRequest.Date)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.TransactionRequest.ReferenceNo)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.TransactionRequest.ReferenceNo)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                &nbsp;
+            </td>
+            <td class="adminData">
+                <button type="button" id="btnFind" value="btnFind" class="btn"><i class="fa fa-search"></i>&nbsp;@T("Admin.Common.Search")</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="adminData" colspan="2">
+                @using (Html.BeginForm())
+            {
+                    <div>
+
+                        @(Html.Telerik().Grid<TransactionLog>(Model.TransactionLogsForGrid.Data)
+        .Name("Grid")
+        .DataKeys(keys => keys.Add(x => x.TransactionRefNo).RouteKey("TransactionRefNo"))
+        .Columns(columns =>
+        {
+            columns.Command(commands =>
+            {
+                commands.Edit().Text("Update");
+            }).Width(70);
+
+            columns.Bound(x => x.TransactionStatus).ReadOnly();
+            columns.Bound(x => x.TransactionRefNo).ReadOnly();
+            columns.Bound(x => x.TransactionDate).Format("{0:yyyy-MM-dd HH:mm:ss}").ReadOnly();
+            columns.Bound(x => x.ApprovedAmount).Format("{0:0,0.00}").ReadOnly();
+            columns.Bound(x => x.ResponseCode).ReadOnly();
+            columns.Bound(x => x.ResponseDescription).ReadOnly();
+            columns.Bound(x => x.MerchantReference).ReadOnly();
+            columns.Bound(x => x.DatePaid).Format("{0:yyyy-MM-dd HH:mm:ss}").ReadOnly();
+        })
+         .DataBinding(dataBinding =>
+         {
+             dataBinding.Ajax()
+                 .Select("TransactionList", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
+                 .Update("TransactionLog", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
+         })
+        .Editable(x =>
+        {
+            x.Mode(GridEditMode.InLine);
+        })
+      .Sortable(x =>
+      {
+          x.AllowUnsort(true);
+          x.SortMode(GridSortMode.SingleColumn);
+      })
+
+        .Pageable(settings => settings.PageSize(Model.GridPageSize).Position(GridPagerPosition.Both))
+        .PreserveGridState()
+        .EnableCustomBinding(true)
+                        )
+                    </div>
+                }
+            </td>
+        </tr>
+    </table>
+
+</div>

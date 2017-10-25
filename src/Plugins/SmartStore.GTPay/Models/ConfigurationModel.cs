@@ -3,15 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-using SmartStore.Web.Framework.Modelling;
+using SmartStore.Core.Configuration;
 using SmartStore.Web.Framework;
 using System.Web.Mvc;
-using SmartStore.GTPay.Settings;
+using Telerik.Web.Mvc;
+using SmartStore.GTPay.Domain;
 
 namespace SmartStore.GTPay.Models
 {
-    public abstract class GTPayConfigurationModelBase : ModelBase
+    public class ConfigurationModel
     {
+        public ConfigurationModel()
+        {
+            GTPayCurrencyGrid = new GridModel<GTPayCurrencyModel>();
+            TransactionLogsForGrid = new GridModel<TransactionLog>();
+            TransactionRequest = new TransactionRequest();
+            //TransactionRequest.Date = DateTime.UtcNow;
+        }
+
         [AllowHtml]
         [SmartResourceDisplayName("Plugins.SmartStore.GTPay.DescriptionText")]
         public string DescriptionText { get; set; }
@@ -21,22 +30,34 @@ namespace SmartStore.GTPay.Models
 
         [SmartResourceDisplayName("Plugins.SmartStore.GTPay.AdditionalFeePercentage")]
         public bool AdditionalFeePercentage { get; set; }
+        
+        [SmartResourceDisplayName("Plugins.Payments.GTPay.Fields.HashKey")]
+        public string HashKey { get; set; }
+
+        [SmartResourceDisplayName("Plugins.Payments.GTPay.Fields.MerchantID")]
+        public string MerchantId { get; set; }
+
+        [SmartResourceDisplayName("Plugins.Payments.GTPay.Fields.GatewayPostUrl")]
+        public string GatewayPostUrl { get; set; }
+
+        [SmartResourceDisplayName("Plugins.Payments.GTPay.Fields.GatewayRequeryUrl")]
+        public string GatewayRequeryUrl { get; set; }
+
+        [SmartResourceDisplayName("Plugins.Payments.GTPay.Fields.ShowGatewayInterface")]
+        public bool ShowGatewayInterface { get; set; }
+
+        [SmartResourceDisplayName("Plugins.Payments.GTPay.Fields.ShowGatewayNameFirst")]
+        public bool ShowGatewayNameFirst { get; set; }
+
+        public List<GTPayCurrencyModel> SupportedCurrencies { get; set; }
+        public GTPayCurrencyModel SupportedCurrency { get; set; }
+
+        public int GridPageSize { get; set; }
+        public GridModel<GTPayCurrencyModel> GTPayCurrencyGrid { get; set; }
+
+        public GridModel<TransactionLog> TransactionLogsForGrid { get; set; }
+        public TransactionRequest TransactionRequest { get; set; }
     }
-
-    public class GTPayCardConfigurationModel : GTPayConfigurationModelBase
-    {
-        public List<SelectListItem> TransactionStatusValues { get; set; }
-        [SmartResourceDisplayName("Plugins.Payments.GTPay.Fields.TransactionStatus")]
-        public TransactionStatus TransactionStatus { get; set; }
-
-        [SmartResourceDisplayName("Plugins.Payments.GTPay.ExcludedATMCards")]
-        public string[] ExcludedATMCards { get; set; }
-        public List<SelectListItem> AvailableATMCards { get; set; }
-    }
-
-    //public class GTPayPayInStoreConfigurationModel : GTPayConfigurationModelBase { }
-    //public class GTPayPrepaymentConfigurationModel : GTPayConfigurationModelBase { }
-    //public class GTPayCashOnDeliveryConfigurationModel : GTPayConfigurationModelBase { }
 
 
 

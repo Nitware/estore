@@ -27,9 +27,9 @@ namespace SmartStore.Admin.Controllers
         private readonly ILocalizationService _localizationService;
         private readonly IPermissionService _permissionService;
         private readonly ILocalizedEntityService _localizedEntityService;
+        private readonly ContentSliderSettings _contentSliderSettings;
         private readonly ILanguageService _languageService;
         private readonly IPictureService _pictureService;
-        private readonly ContentSliderSettings _contentSliderSettings;
 		private readonly IStoreService _storeService;
 
         #endregion

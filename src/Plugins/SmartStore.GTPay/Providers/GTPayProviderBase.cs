@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-using SmartStore.Services.Payments;
-using SmartStore.GTPay.Settings;
 using SmartStore.Core.Configuration;
-using SmartStore.Services;
-using SmartStore.Services.Orders;
+using SmartStore.GTPay.Settings;
+using SmartStore.Services.Payments;
 using SmartStore.GTPay.Controllers;
-using SmartStore.Core.Domain.Payments;
-using System.Web.Routing;
+using SmartStore.Services.Orders;
+using SmartStore.Services;
 using SmartStore.Core.Domain.Orders;
+using System.Web.Routing;
+using SmartStore.Core.Domain.Payments;
 
 namespace SmartStore.GTPay.Providers
 {
-    public abstract class GTPayProviderBase<TSetting> : PaymentMethodBase where TSetting : GTPayPaymentSettingsBase, ISettings, new()
+    public abstract class GTPayProviderBase<TSetting> : PaymentMethodBase where TSetting : GTPaySettings, ISettings, new()
     {
         public ICommonServices CommonServices { get; set; }
         public IOrderTotalCalculationService OrderTotalCalculationService { get; set; }
