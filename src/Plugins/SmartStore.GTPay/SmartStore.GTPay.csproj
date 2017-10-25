@@ -347,7 +347,6 @@
     <Compile Include="Settings\TransactionStatus.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\web2.config" />
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
