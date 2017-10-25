@@ -23,11 +23,12 @@
 
 {
     x.Add().Text(T("Plugins.SmartStore.GTPay.SettingTab").Text)
-       .Icon("fa fa-sliders fa-lg fa-fw")
+    .Icon("fa fa-gear fa-lg fa-fw")
+        //.Icon("fa fa-sliders fa-lg fa-fw")
         .LinkHtmlAttributes(new { data_tab_name = "Setting" })
         .Content(Html.Partial("_Setting", Model).ToHtmlString())
         .Selected(true);
-    
+
     x.Add().Text(T("Plugins.SmartStore.GTPay.TransactionListTab").Text)
          .Name("tab-transaction-list")
          //.Visible(!(Model.ProductTypeId == (int)ProductType.BundledProduct && Model.BundlePerItemPricing))

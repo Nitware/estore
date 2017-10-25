@@ -46,8 +46,20 @@
       </LocaleResource>
 
 
-
-
+      <LocaleResource Name="Fields.ReferenceNo">
+        <Value>Transaction reference No.</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.ReferenceNo.Hint">
+        <Value>This is the unique identifier of transactions</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.Date">
+        <Value>Transaction Date</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.Date.Hint">
+        <Value>The date transaction was conducted</Value>
+      </LocaleResource>
+     
+      
       <LocaleResource Name="Fields.TransactionStatus">
         <Value>Payment status after order completion</Value>
       </LocaleResource>

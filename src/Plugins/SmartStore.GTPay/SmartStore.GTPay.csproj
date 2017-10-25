@@ -333,6 +333,7 @@
     <Compile Include="Models\PaymentInfoModel.cs" />
     <Compile Include="Models\GTPayCurrencyModel.cs" />
     <Compile Include="Models\TransactionLog.cs" />
+    <Compile Include="Models\TransactionRequest.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\CardProvider.cs" />

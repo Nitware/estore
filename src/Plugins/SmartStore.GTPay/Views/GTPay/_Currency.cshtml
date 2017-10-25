@@ -37,7 +37,7 @@
                                         //.Update("CurrencyUpdate", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
                                     //.Delete("CurrencyDelete", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
                                 })
-                                .Pageable(settings => settings.PageSize(Model.GridPageSize).Position(GridPagerPosition.Both))
+                                //.Pageable(settings => settings.PageSize(Model.GridPageSize).Position(GridPagerPosition.Both))
                                 .PreserveGridState()
                                 .EnableCustomBinding(true))
                         </td>

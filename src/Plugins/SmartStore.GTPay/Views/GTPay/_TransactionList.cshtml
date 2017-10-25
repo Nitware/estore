@@ -4,41 +4,38 @@
 @using SmartStore.GTPay.Models;
 @model ConfigurationModel
 
-<script>
+<script type="text/javascript">
     $(document).ready(function () {
 
-
         $('#btnFind').click(function () {
-            //var url = '@Url.Action("Result", "Search", new { Area = "Common" })';
-            findTransaction();
+            var date = $("#TransactionRequest_Date").val();
+            var referenceNo = $("#TransactionRequest_ReferenceNo").val();
+
+            if ((date == "" || date == null) && (referenceNo == "" || referenceNo == null)) {
+                alert("No search criteria specified! You must select at least one criteria");
+                return;
+            }
+
+            findTransaction(date, referenceNo);
         })
 
-        function findTransaction() {
-            //var teacherTypeId = $("#TeacherType_Id").val();
-            //var studentCategoryId = $("#StudentCategory_Id").val();
-            //var qualificationId = $("#Qualification_Id").val();
-            //var locationId = $("#State_Id").val();
-
-            //if ((teacherTypeId == "" || teacherTypeId == null) && (studentCategoryId == "" || studentCategoryId == null) && (qualificationId == "" || qualificationId == null) && (locationId == "" || locationId == null)) {
-            //    alert("No search criteria selected! You must select at least one");
-            //    return;
-            //}
-
+        function findTransaction(date, referenceNo) {
             $.ajax({
                 type: "GET",
                 url: '@Url.Action("FindTransactionBy", "GTPay", new { Area = "SmartStore.GTPay" })',
+                data: { transactionRef: referenceNo, transactionDate: date },
                 //data: $("#frmSearch").serialize(),
-                data: { transactionRef: "transactionRef"},
-                beforeSend: function () {
-                    //$("#busy").show();
-                },
-                complete: function () {
-                    //$("#busy").hide();
-                },
+
+
+                //beforeSend: function () {
+                //    $("#busy").show();
+                //},
+                //complete: function () {
+                //    $("#busy").hide();
+                //},
+
 
                 success: function (result) {
-                    //var jsonResult = $.parseJSON(result);
-
                     $("#grid").html(result);
 
                     @*if (jsonResult.isSuccessful) {
@@ -48,9 +45,9 @@
                         alert(jsonResult.message);
                     }*@
                 },
-                error: function () {
-                    alert("Operation failed!");
-                }
+                //error: function () {
+                //    alert("Operation failed!");
+                //}
             });
 
             return false;
@@ -63,101 +60,23 @@
 
 <div id="grid">
     <table class="adminContent">
-        @*<tr>
+      
+        <tr>
             <td class="adminTitle">
-                @Html.SmartLabelFor(model => model.SearchProductName)
+                @Html.SmartLabelFor(model => model.TransactionRequest.Date)
             </td>
             <td class="adminData">
-                @Html.EditorFor(model => Model.SearchProductName)
+                @Html.EditorFor(model => model.TransactionRequest.Date)
             </td>
         </tr>
         <tr>
             <td class="adminTitle">
-                @Html.SmartLabelFor(model => model.SearchProductTypeId)
+                @Html.SmartLabelFor(model => model.TransactionRequest.ReferenceNo)
             </td>
             <td class="adminData">
-                @Html.DropDownListFor(model => model.SearchProductTypeId, Model.AvailableProductTypes, allString)
+                @Html.EditorFor(model => model.TransactionRequest.ReferenceNo)
             </td>
         </tr>
-        @if (Model.AvailableStores.Count > 1)
-        {
-            <tr>
-                <td class="adminTitle">
-                    @Html.SmartLabelFor(model => model.SearchStoreId)
-                </td>
-                <td class="adminData">
-                    @Html.DropDownListFor(model => model.SearchStoreId, Model.AvailableStores, allString)
-                </td>
-            </tr>}
-        <tr>
-            <td class="adminTitle">
-                @Html.SmartLabelFor(model => model.SearchWithoutCategories)
-            </td>
-            <td class="adminData">
-                @Html.EditorFor(model => model.SearchWithoutCategories)
-            </td>
-        </tr>
-        <tr id="SearchCategoryIdContainer">
-            <td class="adminTitle">
-                @Html.SmartLabelFor(model => model.SearchCategoryId)
-            </td>
-            <td class="adminData">
-                @Html.DropDownListFor(model => model.SearchCategoryId, Model.AvailableCategories, allString)
-            </td>
-        </tr>
-        <tr>
-            <td class="adminTitle">
-                @Html.SmartLabelFor(model => model.SearchWithoutManufacturers)
-            </td>
-            <td class="adminData">
-                @Html.EditorFor(model => model.SearchWithoutManufacturers)
-            </td>
-        </tr>
-        <tr id="SearchManufacturerIdContainer">
-            <td class="adminTitle">
-                @Html.SmartLabelFor(model => model.SearchManufacturerId)
-            </td>
-            <td class="adminData">
-                @Html.DropDownListFor(model => model.SearchManufacturerId, Model.AvailableManufacturers, allString)
-            </td>
-        </tr>
-        <tr>
-            <td class="adminTitle">
-                @Html.SmartLabelFor(model => model.SearchIsPublished)
-            </td>
-            <td class="adminData">
-                @Html.EditorFor(model => model.SearchIsPublished)
-            </td>
-        </tr>
-        <tr>
-            <td class="adminTitle">
-                @Html.SmartLabelFor(model => model.SearchHomePageProducts)
-            </td>
-            <td class="adminData">
-                @Html.EditorFor(model => model.SearchHomePageProducts)
-            </td>
-        </tr>
-        <tr>
-            <td class="adminTitle">
-                @Html.SmartLabelFor(model => model.GoDirectlyToSku)
-            </td>
-            <td class="adminData">
-                @Html.EditorFor(model => Model.GoDirectlyToSku)
-                <button type="submit" id="go-to-product-by-sku" name="go-to-product-by-sku" value="go-to-product-by-sku" class="btn">
-                    <i class="fa fa-play-circle-o"></i>&nbsp;@T("Admin.Common.Go")
-                </button>
-            </td>
-        </tr>*@
-
-
-        @*<tr>
-            <td class="adminTitle">
-                @Html.SmartLabelFor(model => model.StartDate)
-            </td>
-            <td class="adminData">
-                @Html.EditorFor(model => model.StartDate)
-            </td>
-        </tr>*@
         <tr>
             <td class="adminTitle">
                 &nbsp;
@@ -166,29 +85,23 @@
                 <button type="button" id="btnFind" value="btnFind" class="btn"><i class="fa fa-search"></i>&nbsp;@T("Admin.Common.Search")</button>
             </td>
         </tr>
-    </table>
 
-
-
-    @*@using (Html.BeginForm("TransactionUpdate", "GTPay", FormMethod.Post, new { id = "manufacturer-form" }))*@
-
-
-    @using (Html.BeginForm())
+        <tr>
+            <td class="adminData" colspan="2">
+                @using (Html.BeginForm())
             {
-        <div>
+                    <div>
 
-            @(Html.Telerik().Grid<TransactionLog>(Model.TransactionLogsForGrid.Data)
+                        @(Html.Telerik().Grid<TransactionLog>(Model.TransactionLogsForGrid.Data)
         .Name("Grid")
         .DataKeys(keys => keys.Add(x => x.TransactionRefNo).RouteKey("TransactionRefNo"))
         .Columns(columns =>
         {
             columns.Command(commands =>
             {
-                commands.Edit().Text("Update Transaction");
-            }).Width(180);
+                commands.Edit().Text("Update");
+            }).Width(70);
 
-            //columns.Bound(x => x.TransactionRefNo)
-            //       .ClientTemplate("<a href=\"Edit/<#= Id #>\"><#= TransactionRefNo #></a>");
             columns.Bound(x => x.TransactionStatus).ReadOnly();
             columns.Bound(x => x.TransactionRefNo).ReadOnly();
             columns.Bound(x => x.TransactionDate).Format("{0:yyyy-MM-dd HH:mm:ss}").ReadOnly();
@@ -196,7 +109,6 @@
             columns.Bound(x => x.ResponseCode).ReadOnly();
             columns.Bound(x => x.ResponseDescription).ReadOnly();
             columns.Bound(x => x.MerchantReference).ReadOnly();
-            //columns.Bound(x => x.Gateway).ReadOnly();
             columns.Bound(x => x.DatePaid).Format("{0:yyyy-MM-dd HH:mm:ss}").ReadOnly();
         })
          .DataBinding(dataBinding =>
@@ -204,22 +116,25 @@
              dataBinding.Ajax()
                  .Select("TransactionList", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
                  .Update("TransactionLog", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
-             //.Update("UpdateTransactionLog", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
          })
         .Editable(x =>
         {
             x.Mode(GridEditMode.InLine);
         })
-        //.ToolBar(commands => commands.Edit())
-        //.ClientEvents(events => {
-        //    events.OnEdit("onEdit");
-        //    //events.OnDataBound("onProductCategoryDataBound");
-        //})
+      .Sortable(x =>
+      {
+          x.AllowUnsort(true);
+          x.SortMode(GridSortMode.SingleColumn);
+      })
 
         .Pageable(settings => settings.PageSize(Model.GridPageSize).Position(GridPagerPosition.Both))
         .PreserveGridState()
         .EnableCustomBinding(true)
-            )
-        </div>
-    }
+                        )
+                    </div>
+                }
+            </td>
+        </tr>
+    </table>
+
 </div>

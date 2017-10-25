@@ -88,42 +88,60 @@ namespace SmartStore.GTPay.Controllers
             _ctx = ctx;
         }
 
-        public ActionResult FindTransactionBy(string transactionRef)
+        public ActionResult FindTransactionBy(string transactionRef, DateTime? transactionDate)
         {
-            List<GTPayTransactionLog> transactionLogs = _transactionLogService.GetLatest500Transactions();
-            List<TransactionLog> transactionLogModels = PrepareTransactionLogModel(transactionLogs);
+            List<GTPayTransactionLog> transactionLogs = new List<GTPayTransactionLog>();
+            if (transactionDate.HasValue && transactionRef.HasValue())
+            {
+                transactionLogs = _transactionLogService.GetBy(transactionRef, transactionDate.Value);
+            }
+            else if (transactionDate.HasValue)
+            {
+                transactionLogs = _transactionLogService.GetBy(transactionDate.Value);
+            }
+            else if (transactionRef.HasValue())
+            {
+                GTPayTransactionLog transactionLog = _transactionLogService.GetBy(transactionRef);
+                if (transactionLog != null)
+                {
+                    transactionLogs.Add(transactionLog);
+                }
+            }
+                        
+            List <TransactionLog> transactionLogModels = PrepareTransactionLogModel(transactionLogs);
+            ConfigurationModel model = PrepareConfigurationModel(transactionLogModels);
+            
+            return PartialView("_TransactionList", model);
+        }
 
-            transactionLogModels = transactionLogModels.Take(7).ToList();
+        private ConfigurationModel PrepareConfigurationModel(List<TransactionLog> transactionLogModels)
+        {
+            GridModel<TransactionLog> gridModel = new GridModel<TransactionLog>();
+            if (transactionLogModels == null || transactionLogModels.Count <= 0)
+            {
+                gridModel.Data = Enumerable.Empty<TransactionLog>();
+                gridModel.Total = 0;
+            }
+            else
+            {
+                gridModel.Data = transactionLogModels;
+                gridModel.Total = transactionLogModels.Count;
+            }
 
             ConfigurationModel model = new ConfigurationModel();
-            var gridModel = new GridModel<TransactionLog>
-            {
-                Data = transactionLogModels,
-                Total = transactionLogModels.Count
-            };
-
             model.GridPageSize = _adminAreaSettings.GridPageSize;
             model.TransactionLogsForGrid = gridModel;
 
-
-            return PartialView("_TransactionList", model);
+            return model;
         }
 
         public ActionResult TransactionLog()
         {
             List<GTPayTransactionLog> transactionLogs = _transactionLogService.GetLatest500Transactions();
             List<TransactionLog> transactionLogModels = PrepareTransactionLogModel(transactionLogs);
-
-            ConfigurationModel model = new ConfigurationModel();
-            var gridModel = new GridModel<TransactionLog>
-            {
-                Data = transactionLogModels,
-                Total = transactionLogModels.Count
-            };
-
-            model.GridPageSize = _adminAreaSettings.GridPageSize;
-            model.TransactionLogsForGrid = gridModel;
-
+                       
+            ConfigurationModel model = PrepareConfigurationModel(transactionLogModels);
+           
             return View(model);
         }
 
@@ -199,19 +217,13 @@ namespace SmartStore.GTPay.Controllers
 
         private void UpdateTransactionLog(GTPayGatewayResponse gtpayResponse, string tranxId)
         {
-            //public decimal Amount { get; set; }
-            //public string MerchantReference { get; set; }
-            //public string MertID { get; set; }
-            //public string ResponseCode { get; set; }
-            //public string ResponseDescription { get; set; }
-
-            GTPayTransactionLog transactionLog = _transactionLogService.GetByTransactionReference(tranxId);
+            GTPayTransactionLog transactionLog = _transactionLogService.GetBy(tranxId);
             transactionLog.ResponseCode = gtpayResponse.ResponseCode;
             transactionLog.MerchantReference = gtpayResponse.MerchantReference;
             transactionLog.ResponseDescription = gtpayResponse.ResponseDescription;
             transactionLog.AmountInUnit = (long)gtpayResponse.Amount;
             transactionLog.ApprovedAmount = gtpayResponse.Amount / 100;
-            transactionLog.GTPayTransactionStatusId = gtpayResponse.ResponseCode == "00" ? 2 : 3;
+            transactionLog.GTPayTransactionStatusId = gtpayResponse.ResponseCode == "00" ? (int)TransactionStatus.Successful : (int)TransactionStatus.Failed;
             _transactionLogService.Update(transactionLog);
         }
         
@@ -253,15 +265,15 @@ namespace SmartStore.GTPay.Controllers
             return new JsonResult { Data = gridModel };
         }
         
-        private string GetLocalizedText(string text)
-        {
-            if (text.EmptyNull().StartsWith("@"))
-            {
-                return T(text.Substring(1));
-            }
+        //private string GetLocalizedText(string text)
+        //{
+        //    if (text.EmptyNull().StartsWith("@"))
+        //    {
+        //        return T(text.Substring(1));
+        //    }
 
-            return text;
-        }
+        //    return text;
+        //}
 
         [NonAction]
         public override IList<string> ValidatePaymentForm(FormCollection form)
@@ -371,27 +383,30 @@ namespace SmartStore.GTPay.Controllers
         private List<TransactionLog> PrepareTransactionLogModel(List<GTPayTransactionLog> transactionLogs)
         {
             List<TransactionLog> transactionLogModels = new List<TransactionLog>();
-            foreach (GTPayTransactionLog transactionLog in transactionLogs)
+            if (transactionLogs != null && transactionLogs.Count > 0)
             {
-                transactionLogModels.Add(new TransactionLog()
+                foreach (GTPayTransactionLog transactionLog in transactionLogs)
                 {
-                    TransactionRefNo = transactionLog.TransactionRefNo,
-                    //GTPayTransactionStatusId = transactionLog.GTPayTransactionStatusId,
-                    TransactionStatus = TranslateTransactionStatusBy(transactionLog.GTPayTransactionStatusId),
-                    ApprovedAmount = transactionLog.ApprovedAmount,
-                    AmountInUnit = transactionLog.AmountInUnit,
-                    OrderId = transactionLog.OrderId,
-                    ResponseCode = transactionLog.ResponseCode,
-                    ResponseDescription = transactionLog.ResponseDescription,
-                    DatePaid = transactionLog.DatePaid,
-                    MerchantReference = transactionLog.MerchantReference,
-                    IsAmountMismatch = transactionLog.IsAmountMismatch,
-                    TransactionDate = transactionLog.TransactionDate,
-                    CurrencyAlias = transactionLog.CurrencyAlias,
-                    Gateway = transactionLog.Gateway,
-                    VerificationHash = transactionLog.VerificationHash,
-                    FullVerificationHash = transactionLog.FullVerificationHash
-                });
+                    transactionLogModels.Add(new TransactionLog()
+                    {
+                        TransactionRefNo = transactionLog.TransactionRefNo,
+                        //GTPayTransactionStatusId = transactionLog.GTPayTransactionStatusId,
+                        TransactionStatus = TranslateTransactionStatusBy(transactionLog.GTPayTransactionStatusId),
+                        ApprovedAmount = transactionLog.ApprovedAmount,
+                        AmountInUnit = transactionLog.AmountInUnit,
+                        OrderId = transactionLog.OrderId,
+                        ResponseCode = transactionLog.ResponseCode,
+                        ResponseDescription = transactionLog.ResponseDescription,
+                        DatePaid = transactionLog.DatePaid,
+                        MerchantReference = transactionLog.MerchantReference,
+                        IsAmountMismatch = transactionLog.IsAmountMismatch,
+                        TransactionDate = transactionLog.TransactionDate,
+                        CurrencyAlias = transactionLog.CurrencyAlias,
+                        Gateway = transactionLog.Gateway,
+                        VerificationHash = transactionLog.VerificationHash,
+                        FullVerificationHash = transactionLog.FullVerificationHash
+                    });
+                }
             }
 
             return transactionLogModels;
@@ -795,7 +810,7 @@ namespace SmartStore.GTPay.Controllers
                 throw new ArgumentNullException("Order or Customer was not specified!");
             }
 
-            GTPayTransactionLog transactionLog = _transactionLogService.GetByTransactionReference(gatewayMessage[_gatewayLuncher.GtpayTranxId]);
+            GTPayTransactionLog transactionLog = _transactionLogService.GetBy(gatewayMessage[_gatewayLuncher.GtpayTranxId]);
             if (transactionLog == null || !transactionLog.TransactionRefNo.HasValue())
             {
                 throw new ArgumentNullException("Transaction log retreival failed!");

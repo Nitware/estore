@@ -7,6 +7,7 @@ using SmartStore.Core.Data;
 using System.Linq.Expressions;
 using SmartStore.GTPay.Interfaces;
 using SmartStore.GTPay.Domain;
+using System.Data.Entity;
 
 namespace SmartStore.GTPay.Services
 {
@@ -28,7 +29,7 @@ namespace SmartStore.GTPay.Services
             return _gTPayTransactionLogRepository.Get(selector, orderBy).Take(FIVE_HUNDRED).ToList();
         }
 
-        public virtual GTPayTransactionLog GetByTransactionReference(string transactionReference)
+        public virtual GTPayTransactionLog GetBy(string transactionReference)
         {
             if (!transactionReference.HasValue())
                 return null;
@@ -43,7 +44,7 @@ namespace SmartStore.GTPay.Services
             if (!transactionReference.HasValue())
                 throw new ArgumentNullException("transactionReference");
 
-            GTPayTransactionLog transactionLog = GetByTransactionReference(transactionReference);
+            GTPayTransactionLog transactionLog = GetBy(transactionReference);
             if (transactionLog != null && transactionLog.TransactionRefNo.HasValue())
             {
                 isExist = true;
@@ -66,6 +67,30 @@ namespace SmartStore.GTPay.Services
                 throw new ArgumentNullException("gTPayTransactionLog");
 
             _gTPayTransactionLogRepository.Update(gTPayTransactionLog);
+        }
+
+
+
+        public virtual List<GTPayTransactionLog> GetBy(string transactionReference, DateTime transactionDate)
+        {
+            if (!transactionReference.HasValue())
+                return null;
+
+            Expression<Func<GTPayTransactionLog, bool>> selector = t => t.TransactionRefNo == transactionReference && t.TransactionDate.Date == transactionDate.Date;
+            Func<IQueryable<GTPayTransactionLog>, IOrderedQueryable<GTPayTransactionLog>> orderBy = t => t.OrderByDescending(x => x.Id);
+
+            return _gTPayTransactionLogRepository.Get(selector, orderBy).ToList();
+        }
+
+        public virtual List<GTPayTransactionLog> GetBy(DateTime transactionDate)
+        {
+            if (transactionDate == DateTime.MinValue)
+                return null;
+
+            Expression<Func<GTPayTransactionLog, bool>> selector = t => DbFunctions.TruncateTime(t.TransactionDate) == transactionDate.Date;
+            Func<IQueryable<GTPayTransactionLog>, IOrderedQueryable<GTPayTransactionLog>> orderBy = t => t.OrderByDescending(x => x.Id);
+
+            return _gTPayTransactionLogRepository.Get(selector, orderBy).ToList();
         }
 
 

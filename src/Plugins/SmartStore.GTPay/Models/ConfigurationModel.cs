@@ -17,6 +17,8 @@ namespace SmartStore.GTPay.Models
         {
             GTPayCurrencyGrid = new GridModel<GTPayCurrencyModel>();
             TransactionLogsForGrid = new GridModel<TransactionLog>();
+            TransactionRequest = new TransactionRequest();
+            //TransactionRequest.Date = DateTime.UtcNow;
         }
 
         [AllowHtml]
@@ -54,6 +56,7 @@ namespace SmartStore.GTPay.Models
         public GridModel<GTPayCurrencyModel> GTPayCurrencyGrid { get; set; }
 
         public GridModel<TransactionLog> TransactionLogsForGrid { get; set; }
+        public TransactionRequest TransactionRequest { get; set; }
     }
 
 
