@@ -82,6 +82,8 @@
 		/*border: 2px solid orange !important;*/
 		padding: 15px;
 		min-height: 450px;
+        
+        
 	}
 	article.art-style {
 		-webkit-background-size: cover;
@@ -93,6 +95,7 @@
 		min-width: 48.58%;
 		padding: 15px;
 		min-height: 400px;
+        
 		/*border: 2px solid orange !important;*/
 	}
 
@@ -106,6 +109,7 @@
 		min-width: 31.9%;
 		padding: 15px;
 		min-height: 400px;
+       
 		/*border: 2px solid orange !important;*/
 	}
 
@@ -122,6 +126,7 @@
 		-webkit-border-radius: 3px;
 		-moz-border-radius: 3px;
 		margin: 30px auto;
+        
 	}
 
 	.discount-amount::first-letter {
@@ -247,9 +252,9 @@
 	}
 	private string GeteTextFrameStyle(string frame_type, string frame_background, int height, int width)
 	{
-		string result = "";
+		string result = "border-width:0;";
 		if (!string.IsNullOrEmpty(frame_background))
-			result += "color:#FFF;background-color:#" + frame_background + ";";
+			result += "color:#FFF;opacity:0.9;background-color:#" + frame_background + ";";
 		height = height > 0 ? height : 300;
 		width = width > 0 ? width : 300;
 
@@ -303,8 +308,15 @@
 	int virtualCount = 1;
 }
 
-
+<div class="block">
+    <div class="heading heading-center">
+        @*<h3 class="heading-title fs-h1">@T("HomePage.Products")</h3>*@
+        <h3 class="heading-title fs-h1">Promotions</h3>
+    </div>
+</div>
 <div class="artlist artlist-grid artlist-6-cols artlist-boxed artlist-homepage-categories">
+   
+
 	@for (int i = 0; i < Model.Count; i++)
 	{
 		int totalCount = Model.Count;

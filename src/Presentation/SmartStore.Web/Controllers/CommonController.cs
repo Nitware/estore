@@ -520,8 +520,8 @@ namespace SmartStore.Web.Controllers
             model.PinterestLink = _socialSettings.Value.PinterestLink;
             model.YoutubeLink = _socialSettings.Value.YoutubeLink;
 
-			model.SmartStoreHint = "<a href='http://www.smartstore.com/' class='sm-hint' target='_blank'><strong>{0}</strong></a> by SmartStore AG &copy; {1}"
-				.FormatCurrent(hint, DateTime.Now.Year);
+			//model.SmartStoreHint = "<a href='http://www.smartstore.com/' class='sm-hint' target='_blank'><strong>{0}</strong></a> by SmartStore AG &copy; {1}"
+			//	.FormatCurrent(hint, DateTime.Now.Year);
 
             return PartialView(model);
         }
