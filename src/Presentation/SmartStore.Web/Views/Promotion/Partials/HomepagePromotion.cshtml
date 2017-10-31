@@ -334,11 +334,10 @@
 
 			}
 		}
-
-		var picture = item.PictureModel;
+		
 		var url = Url.RouteUrl("Category", new { SeName = item.Title });
 		<article class="art @className" data-id="@item.Id"
-				 style="background: url('@picture.ImageUrl') no-repeat center center;background-size: cover;">
+				 style="background: url('@item.PictureUrl') no-repeat center center;background-size: cover;">
                  
 			<div class="text-frame" style="@GeteTextFrameStyle(item.TextFrameType,item.TextFrameBackground, item.TextFrameHeight,item.TextFrameWidth)">
 				<div class="art-genericname" style="@GetCriclePadding(item.TextFrameType,item.TitleFontSize)padding-top:25px;padding-bottom:5px;">

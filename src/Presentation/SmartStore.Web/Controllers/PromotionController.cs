@@ -67,36 +67,17 @@ namespace SmartStore.Web.Controllers
 			var listModel = promotions
 				.Select(x =>
 				{
-					var catModel =new PromotionModel().ToModel(x);
+					var catModel = new PromotionModel().ToModel(x);
 					catModel.Categories = new List<CategoryModel>();
+					catModel.PictureUrl = _pictureService.GetPictureUrl(catModel.PictureId, 0, false);
 					var promotionsList = this._promotionProductsService.GetProductsByPromoId(x.Id);
 					foreach (var item in promotionsList)
 					{
 						List<CategoryModel> d1 = this._categoryService.GetProductCategoriesByProductId(item.ProductId).Select(d => d.Category.ToModel()).ToList();
-						catModel.Categories= catModel.Categories.Concat(d1).ToList();
+						catModel.Categories = catModel.Categories.Concat(d1).ToList();
 					}
-					catModel.Categories = catModel.Categories.DistinctBy(d=>d.SeName).ToList();
-					//catModel.Categories = this._categoryService.GetProductCategoriesByProductId(x.ProductId).Select(d => d.Category.ToModel()).ToList();
-					// Prepare picture model
-					int pictureSize = _mediaSettings.CategoryThumbPictureSize;
-					var categoryPictureCacheKey = string.Format(ModelCacheEventConsumer.CATEGORY_PICTURE_MODEL_KEY, x.Id, pictureSize, true,
-						_services.WorkContext.WorkingLanguage.Id,
-						_services.StoreContext.CurrentStore.Id);
-
-					catModel.PictureModel = _services.Cache.Get(categoryPictureCacheKey, () =>
-					{
-						var pictureModel = new PictureModel
-						{
-							PictureId = x.PictureId,
-							Size = pictureSize,
-							FullSizeImageUrl = _pictureService.GetPictureUrl(x.PictureId),
-							ImageUrl = _pictureService.GetPictureUrl(x.PictureId, pictureSize, false),
-							Title = string.Format(T("Media.Category.ImageLinkTitleFormat"), catModel.Title),
-							AlternateText = string.Format(T("Media.Category.ImageAlternateTextFormat"), catModel.Title)
-						};
-						return pictureModel;
-					}, TimeSpan.FromHours(6));
-
+					catModel.Categories = catModel.Categories.DistinctBy(d => d.SeName).ToList();
+					
 					return catModel;
 				})
 				.ToList();
