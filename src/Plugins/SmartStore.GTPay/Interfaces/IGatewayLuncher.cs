@@ -40,6 +40,9 @@ namespace SmartStore.GTPay.Interfaces
         string SelectedCurrencyId { get; }
         string GTPaySettings { get; }
         string GtpayFullVerificationHash { get; }
+        string PamentRequestParameter { get; }
+        string SiteRedirectUrl { get; }
+        string GtpayTranxHash { get; }
 
         string CreateTransactionRef();
         string GenerateSHA512String(string inputString);

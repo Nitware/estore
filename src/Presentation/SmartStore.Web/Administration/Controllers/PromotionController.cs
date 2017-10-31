@@ -234,8 +234,9 @@ namespace SmartStore.Admin.Controllers
 			if (ModelState.IsValid)
 			{
 				model.PictureUrl = _pictureService.GetPictureUrl(model.PictureId);
-				//model.LanguageName = _languageService.GetLanguageByCulture(model.LanguageCulture).Name;
-				MediaHelper.UpdatePictureTransientState(0, model.PictureId, true);
+                //model.LanguageName = _languageService.GetLanguageByCulture(model.LanguageCulture).Name;
+                
+                MediaHelper.UpdatePictureTransientState(0, model.PictureId, true);
 				model.Active = model.Published;
 				Promotion promo = model.ToEntity();
 				promo.CreationDate = DateTime.Now;

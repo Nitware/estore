@@ -12,6 +12,7 @@ using SmartStore.Core.Domain.Common;
 using SmartStore.Core.Domain.Orders;
 using SmartStore.GTPay.Domain;
 using SmartStore.GTPay.Settings;
+using System.Collections.Specialized;
 
 namespace SmartStore.GTPay.Services
 {
@@ -53,6 +54,9 @@ namespace SmartStore.GTPay.Services
         private string _selected_currency_id = "selected_currency_id";
         private string _gtpay_settings = "GTPaySettings";
         private string _gtpay_full_verification_hash = "gtpay_full_verification_hash";
+        private string _pament_request_parameter = "pament_request_parameter";
+        private string _site_redirect_url = "site_redirect_url";
+        private string _gtpay_tranx_hash = "gtpay_tranx_hash";
 
         public string GtpayMertId { get { return _gtpay_mert_id; } }
         //public string GtpayMertIdValue { get { return _gtpay_mert_id_value; } }
@@ -81,6 +85,10 @@ namespace SmartStore.GTPay.Services
         public string SelectedCurrencyId { get { return _selected_currency_id; } }
         public string GTPaySettings { get { return _gtpay_settings; } }
         public string GtpayFullVerificationHash { get { return _gtpay_full_verification_hash; } }
+        public string PamentRequestParameter { get { return _pament_request_parameter; } }
+        public string SiteRedirectUrl { get { return _site_redirect_url; } }
+        public string GtpayTranxHash { get { return _gtpay_tranx_hash; } }
+
 
         public GatewayLuncher(ITransactionLogService transactionLogService)
         {
@@ -102,7 +110,7 @@ namespace SmartStore.GTPay.Services
             string gtpay_tranx_amt = orderTotal.ToString();
             //string gtpay_tranx_amt = "0";
             string gtpay_tranx_curr = currency.Code.ToString();
-            //string gtpay_tranx_curr = null;
+            //string gtpay_tranx_curr = "840";
             string gtpay_cust_id = postProcessPaymentRequest.Order.Customer.Id.ToString();
             string gtpay_cust_name = nameAndEmail.Item1;
             string gtpay_tranx_noti_url = GetRedirectUrl(httpContext.Request, "Details", "Order", OrderId);
@@ -118,6 +126,24 @@ namespace SmartStore.GTPay.Services
             string gtpay_gway_name = currency.Gateway;
 
             
+
+            //store payment request parameter in session
+            NameValueCollection paymentRequest = new NameValueCollection();
+            paymentRequest.Set(GtpayTranxMemo, gtpay_tranx_memo);
+            paymentRequest.Set(GtpayTranxId, gtpay_tranx_id);
+            paymentRequest.Set(GtpayMertId, gtpay_mert_id);
+            paymentRequest.Set(GtpayTranxAmt, gtpay_tranx_amt);
+            paymentRequest.Set(GtpayTranxCurr, gtpay_tranx_curr);
+            paymentRequest.Set(GtpayCustId, gtpay_cust_id);
+            paymentRequest.Set(GtpayCustName, gtpay_cust_name);
+            paymentRequest.Set(GtpayTranxNotiUrl, gtpay_tranx_noti_url);
+            paymentRequest.Set(GtpayEchoData, gtpay_echo_data);
+            paymentRequest.Set(GtpayHash, gtpay_hash);
+            paymentRequest.Set(GtpayGwayName, gtpay_gway_name);
+            httpContext.Session[PamentRequestParameter] = paymentRequest;
+
+            //gtpay_tranx_noti_url = "SR" + gtpay_tranx_noti_url;
+
             HttpResponseBase response = httpContext.Response;
             response.Clear();
 
@@ -126,24 +152,16 @@ namespace SmartStore.GTPay.Services
             form.AppendFormat("<body onload='document.forms[0].submit()'>");
             form.AppendFormat("<form action='{0}' method='post'>", url);
             
-            //form.AppendFormat("<input type='hidden' name='" + GtpayMertId + "' value='{0}'>", GtpayMertIdValue);
             form.AppendFormat("<input type='hidden' name='" + GtpayMertId + "' value='{0}'>", gtpay_mert_id);
-
             form.AppendFormat("<input type='hidden' name='" + GtpayTranxId + "' value='{0}'>", gtpay_tranx_id);
             form.AppendFormat("<input type='hidden' name='" + GtpayTranxAmt + "' value='{0}'>", gtpay_tranx_amt);
             form.AppendFormat("<input type='hidden' name='" + GtpayTranxCurr + "' value='{0}'>", gtpay_tranx_curr);
             form.AppendFormat("<input type='hidden' name='" + GtpayCustId + "' value='{0}'>", gtpay_cust_id);
             form.AppendFormat("<input type='hidden' name='" + GtpayCustName + "' value='{0}'>", gtpay_cust_name);
             form.AppendFormat("<input type='hidden' name='" + GtpayTranxMemo + "' value='{0}'>", gtpay_tranx_memo);
-            
-            //form.AppendFormat("<input type='hidden' name='" + GtpayNoShowGtbank + "' value='{0}'>", "yes");
             form.AppendFormat("<input type='hidden' name='" + GtpayNoShowGtbank + "' value='{0}'>", gtpaySetting.ShowGatewayInterface == true ? "yes" : "no");
-
             form.AppendFormat("<input type='hidden' name='" + GtpayEchoData + "' value='{0}'>", gtpay_echo_data);
-            
-            //form.AppendFormat("<input type='hidden' name='" + GtpayGwayFirst + "' value='{0}'>", "yes");
             form.AppendFormat("<input type='hidden' name='" + GtpayGwayFirst + "' value='{0}'>", gtpaySetting.ShowGatewayNameFirst == true ? "yes" : "no");
-
             form.AppendFormat("<input type='hidden' name='" + GtpayGwayName + "' value='{0}'>", gtpay_gway_name);
             form.AppendFormat("<input type='hidden' name='" + GtpayHash + "' value='{0}'>", gtpay_hash);
             form.AppendFormat("<input type='hidden' name='" + GtpayTranxNotiUrl + "' value='{0}'>", gtpay_tranx_noti_url);
@@ -154,7 +172,7 @@ namespace SmartStore.GTPay.Services
             response.Write(form.ToString());
             response.End();
         }
-
+        
         private string GetOrderSummary(Tuple<string, string> nameAndEmail, Order order)
         {
             if (order == null || order.OrderItems == null)
@@ -259,7 +277,7 @@ namespace SmartStore.GTPay.Services
         {
             Random rng = new Random();
             StringBuilder builder = new StringBuilder();
-            while (builder.Length < 16)
+            while (builder.Length < 20)
             {
                 builder.Append(rng.Next(10).ToString());
             }

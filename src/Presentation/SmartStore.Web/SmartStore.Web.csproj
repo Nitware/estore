@@ -2060,6 +2060,8 @@
     <Content Include="Views\ContentSlider\_CreateOrUpdate.cshtml" />
     <Content Include="Views\Home\ContentSlider.cshtml" />
     <Content Include="Views\Promotion\Partials\HomepagePromotion.cshtml" />
+    <Content Include="Views\Promotion\Partials\HomepagePromotion - Copy.cshtml" />
+    <Content Include="Views\Promotion\demo.cshtml" />
     <None Include="Web.EFMigrations.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

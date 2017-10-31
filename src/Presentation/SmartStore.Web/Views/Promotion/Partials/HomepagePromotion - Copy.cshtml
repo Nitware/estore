@@ -1,0 +1,438 @@
+﻿@model IList<PromotionModel>
+
+@using SmartStore.Web.Models.Promotions;
+
+@*<img src="@Model[0].PictureModel.ImageUrl" alt="Fjords" width="400">*@
+
+@{
+	if (Model.Count == 0)
+	{
+		return;
+	}
+}
+<style>
+	@@media screen and (max-width: 1399px) home:626 .slide-menu.jackets-banner {
+		top: 16%; left: 77%;
+	}
+
+
+
+	ol, ul {
+		list-style: none;
+	}
+
+	.slide-menu {
+		/*position: absolute;
+		top: 55%;
+		left: 45%;*/
+		width: 100px;
+		margin: 0 auto;
+		padding: 0;
+		z-index: 100;
+	}
+
+	.slide-menu-shop-now.btn-white-blk-border {
+		background: #fff;
+		color: #000;
+		outline: 2px solid #333;
+	}
+
+	.slide-menu-shop-now {
+		text-align: center;
+		font-family: "AvenirHeavy", arial, sans-serif;
+		list-style-type: none;
+		padding: 2px 0px 0px;
+		font-size: 10px;
+	}
+
+	.slide-menu-shop-now a, .slide-menu-shop-now a:hover {
+		text-decoration: none;
+		/* padding: 10px; */
+		padding: 4px;
+		display: block;
+	}
+
+	.slide-menu-shop-now a, .slide-menu-shop-now a:hover {
+		color: black;
+	}
+
+	.slide-menu .submenu {
+		display: none;
+		padding: 0;
+		margin: 0;
+	}
+
+		.slide-menu .submenu li {
+			padding: 5px 0;
+			border-top: 1px solid #ccc;
+			list-style-type: none;
+			text-align: left;
+		}
+
+			.slide-menu .submenu li a {
+				text-transform: uppercase;
+			}
+
+	article.art-style-1 {
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		margin: 1%;
+		min-width: 98.5%;
+		/*margin-left: 25% !important;*/
+		/*border: 2px solid orange !important;*/
+		padding: 15px;
+		min-height: 450px;
+        
+        
+	}
+	article.art-style {
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		float: left;
+		margin: 1%;
+		min-width: 48.58%;
+		padding: 15px;
+		min-height: 400px;
+        
+		/*border: 2px solid orange !important;*/
+	}
+
+	article.art-style-3 {
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		float: left;
+		margin: 1%;
+		min-width: 31.9%;
+		padding: 15px;
+		min-height: 400px;
+       
+		/*border: 2px solid orange !important;*/
+	}
+
+	.art-genericname {
+		width: 95%;
+		text-align: center;
+		margin: 0 auto;
+	}
+
+	.text-frame {
+		border: 2px solid #000;
+		padding: 5px;
+		border-radius: 2px;
+		-webkit-border-radius: 3px;
+		-moz-border-radius: 3px;
+		margin: 30px auto;
+        
+	}
+
+	.discount-amount::first-letter {
+		font-size: 200%;
+		color: #8A2BE2;
+	}
+
+	/* Portrait */
+@@media only screen and (max-width: 768px) and (orientation: portrait) {
+	article.art-style-1, article.art-style, article.art-style-3 {
+		margin: 1%;
+		min-width: 95.7%;
+		padding: 15px;
+		min-height: 450px;
+	}
+
+	.text-frame{
+		width:auto!important;
+		height:250px!important;
+		margin-top:80px!important;
+	}
+
+	}
+
+
+/* ------------------------------------------------------------ *\
+                       Mobile Orientation Landscape
+\* ------------------------------------------------------------ */
+/* Landscape */
+@@media only screen and (min-device-width : 420px) and (max-device-width : 1024px) and (orientation: landscape) {
+	article.art-style-1, article.art-style, article.art-style-3 {
+		margin: 1%;
+		min-width: 95.7%;
+		padding: 15px;
+		min-height: 450px;
+	}
+
+	.text-frame {
+		/*width: auto !important;*/
+		height: 300px !important;
+		margin-top: 60px !important;
+	}
+	}
+
+	@@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+		article.art-style-1, article.art-style, article.art-style-3 {
+			margin: 1%;
+			min-width: 95.7%;
+			padding: 15px;
+			min-height: 450px;
+		}
+
+		.text-frame {
+			width: 300px!important;
+			height: 300px !important;
+			margin-top: 60px !important;
+		}
+	}
+</style>
+
+@functions
+{
+	private string GetDiscountAmtPercFontSize(int fontsize)
+	{
+		fontsize = fontsize > 0 ? fontsize : 45;
+		return ("font-size:" + (fontsize + 20) + "px;");
+	}
+	private string GetStyle(string fonttype, int fontsize, string type)
+	{
+		switch (type)
+		{
+			case "title":
+				fontsize = fontsize > 0 ? fontsize : 25;
+				break;
+			case "subTitle":
+				fontsize = fontsize > 0 ? fontsize : 20;
+				break;
+			case "discountText":
+				fontsize = fontsize > 0 ? fontsize : 45;
+				break;
+			default:
+				break;
+		}
+		string result = "";
+
+		if (!string.IsNullOrEmpty(fonttype))
+			result = "font-family:" + fonttype + ";";
+
+		if (fontsize > 0)
+			result = "font-size:" + fontsize + "px;";
+
+		return result;
+	}
+	private string GetClassName(string font_color)
+	{
+		string result = "text-default";
+
+		switch (font_color)
+		{
+			case "0":
+				result = "text-default";
+				break;
+			case "1":
+				result = "text-primary";
+				break;
+			case "2":
+				result = "text-success";
+				break;
+			case "3":
+				result = "text-info";
+				break;
+			case "4":
+				result = "text-warning";
+				break;
+			case "5":
+				result = "text-danger";
+				break;
+			default:
+				break;
+		}
+
+		return result;
+	}
+	private string GeteTextFrameStyle(string frame_type, string frame_background, int height, int width)
+	{
+		string result = "border-width:0;";
+		if (!string.IsNullOrEmpty(frame_background))
+			result += "color:#FFF;background-color:#" + frame_background + ";";
+		height = height > 0 ? height : 300;
+		width = width > 0 ? width : 300;
+
+		result += result + "height:" + height + "px;width:" + width + "px;";
+
+		switch (frame_type)
+		{
+			case "circle":
+				{
+					result += "margin-top:50px;border-radius:" + height + "px;-moz-border-radius:" + height + "px;-webkit-border-radius:" + height + "px;";
+				}
+				break;
+			case "oval":
+				{
+					result += "margin-top:50px;border-radius:" + height + "px;-moz-border-radius:" + height + "px;-webkit-border-radius:" + height + "px;";
+				}
+				break;
+			case "square":
+				{
+					//result += "border-radius:" + height + "px;-moz-border-radius:" + height + "px;-webkit-border-radius:" + height + "px;";
+				}
+				break;
+			case "rectangle":
+				{
+					//result += "border-radius:" + height + "px;-moz-border-radius:" + height + "px;-webkit-border-radius:" + height + "px;";
+				}
+				break;
+			default:
+				break;
+		}
+
+		return result;
+	}
+
+	private string GetCriclePadding(string frame_type,int fontsize)
+	{ string style = "";
+		if (frame_type == "circle")
+		{if (fontsize <= 25)
+			{
+				style = "padding-left:28px;padding-right:28px;";
+			}
+			else if(fontsize<=30)
+			{
+				style = "padding-left:30px;padding-right:30px;";
+			}
+		}
+		return style;
+	}
+	bool useDefaultClass = false;
+	string className = "art-style";
+	int virtualCount = 1;
+}
+
+<div class="block">
+    <div class="heading heading-center">
+        @*<h3 class="heading-title fs-h1">@T("HomePage.Products")</h3>*@
+        <h3 class="heading-title fs-h1">Promotions</h3>
+    </div>
+</div>
+
+
+
+
+@*@for (int i = 0; i < Model.Count; i++)
+{
+    var item = Model[i];
+    var picture = item.PictureModel;
+
+    <img src="@picture.ImageUrl" alt="Fjords" >
+}*@
+
+<div class="artlist artlist-grid artlist-6-cols artlist-boxed artlist-homepage-categories">
+	@for (int i = 0; i < Model.Count; i++)
+    {
+        int totalCount = Model.Count;
+        var item = Model[i];
+        if (!useDefaultClass)
+        {
+            if (totalCount == 1)
+            {
+                className = "art-style-1";
+            }
+            else if (totalCount % 2 == 0)
+            {
+                useDefaultClass = true;
+                className = "art-style";
+            }
+            else
+            {
+                if (virtualCount <= 3)
+                {
+                    virtualCount++;
+                    className = "art-style-3";
+                }
+                else
+                {
+                    className = "art-style";
+                }
+
+            }
+        }
+
+        var picture = item.PictureModel;
+        var url = Url.RouteUrl("Category", new { SeName = item.Title });
+
+
+       
+
+		<article class="art @className" data-id="@item.Id"
+                 style="background: url('@picture.ImageUrl') no-repeat center center;background-size: cover;">
+				 @*style="background: url('@picture.ImageUrl') no-repeat center center;background-size: cover;image-rendering: -webkit-optimize-contrast;">*@
+            
+
+       
+            <div class="text-frame" style="@GeteTextFrameStyle(item.TextFrameType,item.TextFrameBackground, item.TextFrameHeight,item.TextFrameWidth)">
+                <div class="art-genericname" style="@GetCriclePadding(item.TextFrameType,item.TitleFontSize)padding-top:25px;padding-bottom:5px;">
+                    <h2 class="@GetClassName(item.TitleFontColor)" style="@GetStyle(item.TitleFontType,item.TitleFontSize,"title")">@item.Title</h2>
+                    <h1 class="@GetClassName(item.DiscountTextFontColor)" style="font-weight:bold;@GetStyle(item.DiscountTextFontType, item.DiscountTextFontSize,"discountText")">
+                        <p style="margin:0px;padding:0px;">@item.DiscountText</p>
+                        @if (item.DiscountPercentage > 0)
+                        {
+                            <span style="font-weight:bolder;@GetDiscountAmtPercFontSize(item.DiscountTextFontSize)">@item.DiscountPercentage<text>%</text></span>
+                        }
+                        else
+                        {
+                            string discount = item.DiscountAmount > 0 ? item.DiscountAmount.ToString() : string.Empty;
+                            <span class="discount-amount" style="font-weight:bolder;@GetDiscountAmtPercFontSize(item.DiscountTextFontSize)">@discount</span>
+                        }
+                    </h1>
+                    <span class="@GetClassName(item.SubTitleFontColor)" style="@GetStyle(item.SubTitleFontType,item.SubTitleFontSize,"subTitle")">@item.SubTitle</span>
+                </div>
+
+                @if (item.Categories != null && item.Categories.Count > 0)
+                {
+                    <ul class="slide-menu jackets-banner" onclick="javascript:toggleShopNow(this)">
+                        <li class="slide-menu-shop-now btn-white-blk-border">
+                            <a href="javascript:void(0);">SHOP NOW <span class="state-change">+</span></a>
+                            @foreach (var cat in item.Categories)
+                            {
+                                var caturl = Url.RouteUrl("Category", new { SeName = cat.SeName, promoId = item.Id.ToString() });
+                                <ul class="submenu">
+                                    <li>
+                                        <a href="@caturl" title="@cat.Name">
+                                            <span>@cat.Name</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            }
+                        </li>
+                    </ul>
+                }
+            </div>
+            <div class="clearfix"></div>
+        </article>
+    }
+
+    
+
+</div>
+<script>
+	function toggleShopNow(elem) {
+		var isOpened = false;
+		if ($(elem).hasClass('open')) {
+			$(elem).removeClass('open');
+		}
+		else {
+			isOpened = true;
+			$(elem).addClass('open');
+		}
+		if (isOpened) {
+			$(elem).find('span.state-change').html('-');
+			$(elem).find('ul.submenu').show();
+		}
+		else {
+			$(elem).find('span.state-change').html('+');
+			$(elem).find('ul.submenu').hide();
+		}
+	}
+</script>

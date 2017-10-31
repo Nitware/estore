@@ -93,8 +93,9 @@ namespace SmartStore.Services.Promotions
 				query = query.Where(a => a.Active);
 			query = query.Where(a => !a.Deleted);
 			query = query.Where(a => (a.ExpiryDate >= DateTime.Now || a.ExpiryDate == null));
-			query = query.OrderBy(a => a.Id);
-			var Promotions = query.ToList();
+            //query = query.OrderBy(a => a.Id);
+            query = query.OrderBy(a => a.DisplayOrder);
+            var Promotions = query.ToList();
 			return Promotions;
 		}
 
