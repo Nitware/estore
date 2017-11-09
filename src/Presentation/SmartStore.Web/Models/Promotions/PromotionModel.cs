@@ -93,7 +93,10 @@ namespace SmartStore.Web.Models.Promotions
 		[SmartResourceDisplayName("Admin.Promotions.Promotion.Published")]
 		public bool Published { get; set; }
 
-		public int DisplayOrder { get; set; }
+        [SmartResourceDisplayName("Admin.Promotions.Promotion.MenuColor")]
+        public string MenuColor { get; set; }
+
+        public int DisplayOrder { get; set; }
 
 		public List<SelectListItem> AvailableCategories { get; set; }
 		public List<SelectListItem> AvailableProducts { get; set; }
@@ -146,7 +149,7 @@ namespace SmartStore.Web.Models.Promotions
 				PictureId = model.PictureId,
 				PictureUrl = model.PictureUrl,
 
-
+                MenuColor = model.MenuColor,
 				DiscountAmount = model.DiscountAmount,
 				DiscountPercentage = model.DiscountPercentage,
 

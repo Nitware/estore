@@ -1,0 +1,92 @@
+﻿@using Telerik.Web.Mvc.UI;
+@using SmartStore.GTPay.Models;
+@model ConfigurationModel
+    
+<div id="tl-grid">
+    @(Html.Telerik().Grid<TransactionLog>(Model.TransactionLogsForGrid.Data)
+        .Name("transaction-log-grid")
+        //.ClientEvents(events => events.OnComplete("Grid_onComplete"))
+        .DataKeys(keys => keys.Add(x => x.TransactionRefNo).RouteKey("TransactionRefNo"))
+        .Columns(columns =>
+        {
+            columns.Command(commands =>
+            {
+                commands.Edit().Text("Update Status");
+
+                //// Declare a custom command named "showDetails"
+                //commands.Custom("showDetails")
+                //        // Specify that the action command will make ajax requests
+                //        .Ajax(true)
+                //        // Set the text which the command button will display
+                //        .Text("Update Status")
+                //        // Specify the action method which the command will invoke
+                //        .Action("UpdateTransactionLog", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
+
+                //// Specify which properties of the data item will be passed as action method arguments
+                //.DataRouteValues(route =>
+                // {
+                //     // Send the OrderID property of the data item as "orderID" parameter
+                //     route.Add(o => o.TransactionRefNo).RouteKey("TransactionRefNo");
+                // });
+
+
+            }).Width(70);
+
+            columns.Bound(x => x.TransactionStatus).ReadOnly();
+            columns.Bound(x => x.TransactionRefNo).ReadOnly();
+            columns.Bound(x => x.TransactionDate).Format("{0:yyyy-MM-dd HH:mm:ss}").ReadOnly();
+            columns.Bound(x => x.ApprovedAmount).Format("{0:0,0.00}").ReadOnly();
+            columns.Bound(x => x.ResponseCode).ReadOnly();
+            columns.Bound(x => x.ResponseDescription).ReadOnly();
+            columns.Bound(x => x.MerchantReference).ReadOnly();
+            columns.Bound(x => x.DatePaid).Format("{0:yyyy-MM-dd HH:mm:ss}").ReadOnly();
+        })
+         .DataBinding(dataBinding =>
+         {
+             dataBinding.Ajax()
+                .Select("LoadLatestTransactionList", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
+                .Update("UpdateTransactionLog", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
+         })
+        .Editable(x =>
+        {
+            x.Mode(GridEditMode.InLine);
+        })
+        //.Sortable(x =>
+        //{
+        //    x.AllowUnsort(true);
+        //    x.SortMode(GridSortMode.SingleColumn);
+        //})
+        //.ClientEvents(events => events.OnDataBinding("onDataBinding").OnDataBound("onDataBound"))
+
+        //.ClientEvents(events => events.OnDataBinding("productsGrid_onDataBinding").OnDataBound("productsGrid_onDataBound"))
+        .ClientEvents(events => events.OnDataBinding("onDataBinding"))
+
+        .Pageable(settings => settings.PageSize(25).Position(GridPagerPosition.Both))
+        .PreserveGridState()
+        .EnableCustomBinding(true)
+    )
+</div>
+
+<script>
+    $(document).ready(function () {
+
+       
+        function productsGrid_onDataBound() {
+
+        }
+
+
+        //function Grid_onComplete(e) {
+        //    if (e.name == "showDetails") {
+
+        //        //var order = e.response.order; 
+        //        //e.response is contains the action method result
+        //        alert(e.response);
+                
+        //        //use the order object
+                    
+        //        $("#tl-grid").html(e.response);
+        //    }
+        //}
+    })
+</script>

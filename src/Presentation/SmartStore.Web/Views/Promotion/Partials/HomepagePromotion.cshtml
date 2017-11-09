@@ -3,35 +3,36 @@
 @using SmartStore.Web.Models.Promotions;
 
 @{
+   
     if (Model.Count == 0)
     {
         return;
     }
 
-    
+
 }
 <style>
 
     .promotion-section {
         box-sizing: border-box;
     }
- 
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
-}
- 
-.promotion-section {
-  min-height: 100%;
-}
- 
-.promo {
-  /*margin: 64px auto;
+
+    *,
+    *:before,
+    *:after {
+        box-sizing: inherit;
+    }
+
+    .promotion-section {
+        min-height: 100%;
+    }
+
+    .promo {
+        /*margin: 64px auto;
   max-width: 640px;
   width: 94%;*/
-  text-align: center;
-}
+        text-align: center;
+    }
  
 /**
  * Circle Styles
@@ -44,121 +45,148 @@
         background-color: transparent;
         color: #222;
         text-align: center;
+        font-size: 1.5vw;
 
-      
-        
+        padding-bottom: 100%;
+        width: 100%;
+        height: 0;
+        border-radius: 50%;
+        background-color: #fff;
+        content: "";
     }
 
-        .circle:after {
+        /*.circle:after {
             display: block;
             padding-bottom: 100%;
             width: 100%;
             height: 0;
             border-radius: 50%;
-            /*background-color: #ddd;*/
             background-color: #fff;
             content: "";
+        }*/
 
+    .circle__inner {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
 
+    .circle__wrapper {
+        display: table;
+        width: 100%;
+        height: 100%;
+    }
+
+    .circle__content {
+        display: table-cell;
+        padding: 1em;
+        vertical-align: middle;
+        /*background-color:navajowhite;*/
+        line-height: 1;
+    }
+    .sm-item-black {
+        background-color: black !important;
+        color: white !important;
+        
+    }
+    .sm-item {
+        background-color: white !important;
+        color: black !important;
+        
+    }
+        .sm-item:hover,
+        .sm-item-black:hover {
+            /*color: gainsboro !important;*/
+            font-weight: bold !important;
         }
- 
-.circle__inner {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
- 
-.circle__wrapper {
-  display: table;
-  width: 100%;
-  height: 100%;
-}
- 
-.circle__content {
-  display: table-cell;
-  padding: 1em;
-  vertical-align: middle;
-    
-  /*background-color:navajowhite;*/
-  line-height:1;
-}
-.sm-item-black{
-    background-color:black!important;
-    color:white!important;
-}
-.sm-item{
-    background-color:white!important;
-    color:black!important;
-}
-.sm-item:hover{
-    color:red!important;
-    font-weight:bold!important;
-}
-.sm-item-black:hover{
-    color:red!important;
-    font-weight:bold!important;
-}
- 
-/*@@media (min-width: 200px) {
-  .circle__content {
-    font-size: 20px;
-  }
-}
-@@media (min-width: 320px) {
-  .circle__content {
-    font-size: 24px;
-  }
-}
-@@media (min-width: 480px) {
-  .circle__content {
-    font-size: 28px;
-  }
-}
- @@media (min-width: 570px) {
-  .circle__content {
-    font-size: 32px;
-  }
-}
-  @@media (min-width: 620px) {
-  .circle__content {
-    font-size: 36px;
-  }
-}
-  @@media (min-width: 680px) {
-  .circle__content {
-    font-size: 40px;
-  }
-}
+    /*.sm-item-black:hover {
+        color: red !important;
+        font-weight: bold !important;
+    }*/
 
-@@media (min-width: 800px) {
-  .circle__content {
-    font-size: 30px;
-  }
-}
-@@media (min-width: 860px) {
-  .circle__content {
-    font-size: 34px;
-  }
-}
-@@media (min-width: 920px) {
-  .circle__content {
-    font-size: 38px;
-  }
-}
-@@media (min-width: 1000px) {
-  .circle__content {
-    font-size: 44px;
-  }
-}*/
+    @@media (min-width: 200px) {
+        .circle__content {
+            font-size: 15px;
+        }
 
+        .sm-item, .sm-item-black{
+            font-size: 7px !important;
+        }
+    }
+    @@media (min-width: 320px) {
+        .circle__content {
+            font-size: 22px;
+        }
+         .sm-item, .sm-item-black{
+            font-size: 8px !important;
+        }
+    }
+    @@media (min-width: 480px) {
+        .circle__content {
+            font-size: 28px;
+        }
+         .sm-item, .sm-item-black{
+            font-size: 9px !important;
+        }
+    }
+    @@media (min-width: 570px) {
+        .circle__content {
+            font-size: 28px;
+        }
+       
+        .sm-item, .sm-item-black{
+            font-size: 9px !important;
+        }
+    }
+    @@media (min-width: 620px) {
+        .circle__content {
+            font-size: 28px;
+        }
+         .sm-item, .sm-item-black{
+            font-size: 9px !important;
+        }
+    }
+    @@media (min-width: 680px) {
+        .circle__content {
+            font-size: 30px;
+        }
+        .sm-item, .sm-item-black {
+            font-size: 10px !important;
+        }
+    }
 
-
-
-	
-
+    @@media (min-width: 800px) {
+        .circle__content {
+            font-size: 24px;
+        }
+    }
+    @@media (min-width: 860px) {
+        .circle__content {
+            font-size: 28px;
+        }
+        .sm-item, .sm-item-black{
+            font-size: 10px !important;
+        }
+    }
+    @@media (min-width: 920px) {
+        .circle__content {
+            font-size: 28px;
+        }
+         .sm-item, .sm-item-black{
+            font-size: 10px !important;
+        }
+    }
+    @@media (min-width: 1000px) {
+        .circle__content {
+            font-size: 32px;
+        }
+        .sm-item, .sm-item-black{
+            font-size: 11px !important;
+        }
+    }
 
 	ol, ul {
 		list-style: none;
@@ -274,7 +302,6 @@
 		border-radius: 2px;
 		-webkit-border-radius: 3px;
 		-moz-border-radius: 3px;
-		/*margin: 30px auto;*/
 
 	}
 
@@ -282,70 +309,6 @@
 		font-size: 200%;
 		color: #8A2BE2;
 	}
-
-    /*.circle {
-        position: relative;
-        display: inline-block;
-       
-        width: 100%;
-        height: 0;
-        padding: 50% 0%;
-        border-radius: 50%;
-       
-        text-align: center;
-        vertical-align: middle;
-        line-height: 1;
-        -webkit-box-shadow: 0 4px 0 0 rgba(0, 0, 0, .1);
-        box-shadow: 0 4px 0 0 rgba(0, 0, 0, .1);
-        text-shadow: 0 4px 0 rgba(0, 0, 0, .1);
-        background: #38a9e4;
-        color: white;
-        font-family: Helvetica, Arial Black, sans;
-        font-size: 2rem;
-
-    }*/
-    .circle-responsive {
-        background: #38a9e4;
-        border-radius: 50%;
-        height: 0;
-        padding-bottom: 100%;
-        width: 100%;
-         
-        font-size: 2rem;
-    }
-    .circle-content {
-        color: #fff;
-        float: left;
-        line-height: 1;
-        margin-top: -0.5em;
-        padding-top: 50%;
-        text-align: center;
-        vertical-align:middle;
-        align-content:center;
-        width: 100%;
-    }
-
-    .circle-text {
-        display: table-cell;
-        width: 350px;
-        height: 350px;
-        
-        border-radius: 50%;
-        text-align: center;
-        vertical-align: middle;
-        /*height: 200px;
-        width: 400px;
-        text-align: center;
-        vertical-align: middle;
-        border-radius: 50%;*/
-        /*make it pretty*/
-        background: #000;
-        color: #fff;
-        font: 18px "josefin sans", arial;
-        /*change this for font-size and font-family*/
-    }
-
-
 
 .gutter-10.row {
   margin-right: -5px;
@@ -376,257 +339,55 @@ article div .text-sub-title{
 article div h2{
     color:yellowgreen;
     font-size: 9px;
-
+    
 }
-
-    @@media screen and (min-width:500px) {
-        article div p {
-            font-size: 8px;
-        }
-
-        article div .text-title {
-            font-size: 14px;
-        }
-        article div .text-sub-title {
-            font-size: 12px;
-        }
-
-        article div h2 {
-            font-size: 10px;
-        }
-        .discount-text {
-            font-size: 40px;
-        }
-    }
-    @@media screen and (min-width:570px) {
-        article div p {
-            font-size: 9px;
-        }
-
-        article div .text-title {
-            font-size: 16px;
-        }
-          article div .text-sub-title {
-            font-size: 13px;
-        }
-        article div h2 {
-            font-size: 11px;
-        }
-         .discount-text {
-            font-size: 42px;
-        }
-    }
-    @@media screen and (min-width:620px) {
-        article div p {
-            font-size: 10px;
-        }
-
-        article div .text-title {
-            font-size: 18px;
-        }
-            article div .text-sub-title {
-            font-size: 14px;
-        }
-        article div h2 {
-            font-size: 12px;
-        }
-          .discount-text {
-            font-size: 44px;
-        }
-    }
-    @@media screen and (min-width:680px) {
-           article div p {
-            font-size: 11px;
-        }
-        article div .text-title {
-            font-size: 20px;
-        }
-           article div .text-sub-title {
-            font-size: 15px;
-        }
-        article div h2 {
-            font-size: 13px;
-        }
-          .discount-text {
-            font-size: 46px;
-        }
-    }
-    @@media screen and (min-width:720px) {
-          article div p {
-            font-size: 12px;
-        }
-        article div .text-title {
-            font-size: 22px;
-        }
-          article div .text-sub-title {
-            font-size: 16px;
-        }
-        article div h2 {
-            font-size: 14px;
-        }
-           .discount-text {
-            font-size: 48px;
-        }
-    }
-    @@media screen and (min-width:800px) {
-         article div p {
-            font-size: 13px;
-        }
-        article div .text-title {
-            font-size: 24px;
-        }
-          article div .text-sub-title {
-            font-size: 17px;
-        }
-        article div h2 {
-            font-size: 15px;
-        }
-         .discount-text {
-            font-size: 50px;
-        }
-    }
-    @@media screen and (min-width:860px) {
-
-         article div p {
-            font-size: 14px;
-        }
-        article div .text-title {
-            font-size: 26px;
-        }
-         article div .text-sub-title {
-            font-size: 18px;
-        }
-        article div h2 {
-            font-size: 16px;
-        }
-         .discount-text {
-            font-size: 52px;
-        }
-    }
-    @@media screen and (min-width:920px) {
-
-        article div p {
-            font-size: 15px;
-        }
-        article div .text-title {
-            font-size: 28px;
-        }
-         article div .text-sub-title {
-            font-size: 20px;
-        }
-        article div h2 {
-            font-size: 17px;
-        }
-         .discount-text {
-            font-size: 54px;
-        }
-    }
-    @@media screen and (min-width:1000px) {
-
-        article div p {
-            font-size: 16px;
-        }
-        article div .text-title {
-            font-size: 30px;
-        }
-         article div .text-sub-title {
-            font-size: 22px;
-        }
-        article div h2 {
-            font-size: 18px;
-        }
-         .discount-text {
-            font-size: 21px;
-        }
-          .discount-text {
-            font-size: 56px;
-        }
-    }
-
-
-
-	/* Portrait */
-/*@@media only screen and (max-width: 768px) and (orientation: portrait) {
-	article.art-style-1, article.art-style, article.art-style-3 {
-		margin: 1%;
-		min-width: 95.7%;
-		padding: 15px;
-		min-height: 450px;
-	}
-
-	.text-frame{
-		width:auto!important;
-		height:250px!important;
-		margin-top:80px!important;
-	}
-
-	}*/
-
-
-/* ------------------------------------------------------------ *\
-                       Mobile Orientation Landscape
-\* ------------------------------------------------------------ */
-/* Landscape */
-/*@@media only screen and (min-device-width : 420px) and (max-device-width : 1024px) and (orientation: landscape) {
-	article.art-style-1, article.art-style, article.art-style-3 {
-		margin: 1%;
-		min-width: 95.7%;
-		padding: 15px;
-		min-height: 450px;
-	}
-
-	.text-frame {
-		height: 300px !important;
-		margin-top: 60px !important;
-	}
-	}*/
-
-	/*@@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
-		article.art-style-1, article.art-style, article.art-style-3 {
-			margin: 1%;
-			min-width: 95.7%;
-			padding: 15px;
-			min-height: 450px;
-		}
-
-		.text-frame {
-			margin-top: 60px !important;
-		}
-	}*/
+  
 </style>
+
+
 
 @functions
 {
-    private string GetDiscountAmtPercFontSize(int fontsize)
-    {
-        //fontsize = fontsize > 0 ? fontsize : 45;
-        //return ("font-size:" + (fontsize + 20) + "px;");
+    //private string GetDiscountAmtPercFontSize(int fontsize)
+    //{
+    //    //fontsize = fontsize > 0 ? fontsize : 45;
+    //    //return ("font-size:" + (fontsize + 20) + "px;");
 
-        return "font-size:2rem;";
-    }
-    private string GetStyle(string fonttype, int fontsize, string type)
+    //    return "font-size:2rem;";
+    //}
+    //private string GetStyle(string fonttype, int fontsize, string type)
+    //{
+    //    switch (type)
+    //    {
+    //        case "title":
+    //            fontsize = fontsize > 0 ? fontsize : 25;
+    //            break;
+    //        case "subTitle":
+    //            fontsize = fontsize > 0 ? fontsize : 20;
+    //            break;
+    //        case "discountText":
+    //            fontsize = fontsize > 0 ? fontsize : 45;
+    //            break;
+    //        default:
+    //            break;
+    //    }
+    //    string result = "";
+
+    //    if (!string.IsNullOrEmpty(fonttype))
+    //        result = "font-family:" + fonttype + ";";
+
+    //    if (fontsize > 0)
+    //        result = "font-size:" + fontsize + "px;";
+
+    //    return result;
+    //}
+
+    private string GetStyle(string fontFamily)
     {
-        switch (type)
-        {
-            case "title":
-                fontsize = fontsize > 0 ? fontsize : 25;
-                break;
-            case "subTitle":
-                fontsize = fontsize > 0 ? fontsize : 20;
-                break;
-            case "discountText":
-                fontsize = fontsize > 0 ? fontsize : 45;
-                break;
-            default:
-                break;
-        }
         string result = "";
 
-        if (!string.IsNullOrEmpty(fonttype))
-            result = "font-family:" + fonttype + ";";
-
-        if (fontsize > 0)
-            result = "font-size:" + fontsize + "px;";
+        if (!string.IsNullOrEmpty(fontFamily))
+            result = "font-family:" + fontFamily + ";";
 
         return result;
     }
@@ -653,6 +414,9 @@ article div h2{
                 break;
             case "5":
                 result = "text-danger";
+                break;
+            case "6":
+                result = "text-white";
                 break;
             default:
                 break;
@@ -716,6 +480,7 @@ article div h2{
         }
         return style;
     }
+
     bool useDefaultClass = false;
     string className = "art-style";
     int virtualCount = 1;
@@ -729,43 +494,10 @@ article div h2{
 </div>
 
 
-
-
-
 @*<div class="artlist artlist-grid artlist-6-cols artlist-boxed artlist-homepage-categories">*@
     <div class="block promotion-section">
     <div class="promo">
         @{
-            //int totalCount = Model.Count;
-            //var item = Model[i];
-            //if (!useDefaultClass)
-            //{
-            //    if (totalCount == 1)
-            //    {
-            //        className = "art-style-1";
-            //    }
-            //    else if (totalCount % 2 == 0)
-            //    {
-            //        useDefaultClass = true;
-            //        className = "art-style";
-            //    }
-            //    else
-            //    {
-            //        if (virtualCount <= 3)
-            //        {
-            //            virtualCount++;
-            //            className = "art-style-3";
-            //        }
-            //        else
-            //        {
-            //            className = "art-style";
-            //        }
-
-            //    }
-            //}
-
-
-
             int rows = 0;
             int columns = 0;
             int excessRow = 0;
@@ -791,21 +523,6 @@ article div h2{
                 cssClass = "col-md-6";
                 columns = 2;
             }
-
-            //else if (totalAdvert == 3)
-            //{
-            //    rows = 1;
-            //    columns = 3;
-            //    cssClass = "col-md-4";
-            //}
-            //else if (totalAdvert >= 4)
-            //{
-            //    excessRow = totalAdvert % 2;
-            //    rows = Math.Abs(totalAdvert / 2);
-            //    cssClass = "col-md-6";
-            //    columns = 2;
-            //}
-
 
             int row = 0;
             int column = 0;
@@ -834,70 +551,66 @@ article div h2{
                     cssClasses[row, column++] = cssClass;
                 }
             }
-
-
+            
             for (int r = 0; r < rows; r++)
             {
                 <div class="row gutter-10 " style="margin-bottom:10px">
                     @for (int c = 0; c < columns; c++)
-                {
-                    var item = promotions[r, c];
-                    if (item == null)
                     {
-                        continue;
-                    }
-
-                    var picture = item.PictureModel;
-                    var url = Url.RouteUrl("Category", new { SeName = item.Title });
-
+                        var item = promotions[r, c];
+                        if (item == null)
+                        {
+                            continue;
+                        }
+                        
+                        var picture = item.PictureModel;
+                        var url = Url.RouteUrl("Category", new { SeName = item.Title });
+                        var menuColorClass = item.MenuColor == "white" ? "sm-item" : "sm-item-black";
+                        
                         <div class="@cssClasses[r, c]">
-                            <img src="@picture.ImageUrl" style="width:100%;image-rendering:auto; margin:5px 0;  " />
+                            <img src="@picture.ImageUrl" style="width:100%;image-rendering:auto; margin:5px 0; " />
 
-                            @*<div style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%); opacity:0.9;border:2px solid black;">*@
-
-                            <div style="width:50%; height:auto; position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%); opacity:0.9;">
-
+                            <div style="width:50%; height:auto; position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%); opacity:0.9; ">
                                 @if (item.Title.HasValue() || item.SubTitle.HasValue() || item.Description.HasValue() || item.DiscountPercentage > 0 || item.DiscountText.HasValue())
                                 {
-                                    <div class="circle">
-                                        <div class="circle__inner">
-                                            <div class="circle__wrapper">
-                                                <div class="circle__content">
-
-                                                    <div id="promo-title" class="@GetClassName(item.TitleFontColor)" style="font-size:3vw;font-family:'Century Gothic'">@item.Title</div>
-                                                    <div id="promo-sub-title" class="@GetClassName(item.SubTitleFontColor)" style="font-size:3vw;font-family:'Century Gothic'">@item.SubTitle</div>
-                                                    <div id="promo-description" style="font-size:2vw;font-weight:bold;font-family:'Century Gothic'">@item.Description</div>
-                                                    <div id="promo-discount-percent" class="@GetClassName(item.DiscountTextFontColor)" style="font-size:2.5vw;font-weight:bold;font-family:'Century Gothic'">
-                                                        @if (item.DiscountPercentage > 0)
-                                                        {
-                                                            <span style="font-size:7vw;font-weight:bold;">@item.DiscountPercentage<text>%</text></span>
-                                                        }
-                                                        else
-                                                        {
-                                                            string discount = item.DiscountAmount > 0 ? item.DiscountAmount.ToString() : string.Empty;
-                                                            <span style="font-size:7vw;font-weight:bold;">@discount</span>
-                                                        }
-
-                                                        <div id="promo-discount-text" style="font-size:2vw;font-family:'Century Gothic'">@item.DiscountText</div>
+                                    if (item.TextFrameBackground.HasValue() && item.TextFrameType == "circle")
+                                    {
+                                        <div class="circle" style="background-color:@item.TextFrameBackground">
+                                            <div class="circle__inner">
+                                                <div class="circle__wrapper">
+                                                    <div class="circle__content">
+                                                        @RenderPromotion(item)
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="circle">
+                                            <div class="circle__inner">
+                                                <div class="circle__wrapper">
+                                                    <div class="circle__content" style="background-color:@item.TextFrameBackground">
+                                                        @RenderPromotion(item)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
                                 }
 
                                 <div style="margin-top:10px;">
                                     @if (item.Categories != null && item.Categories.Count > 0)
                                     {
-                                        <ul class="slide-menu " onclick="javascript:toggleShopNow(this)" style="position:absolute;top: 90%;left: 50%;transform: translate(-50%, -50%);">
+                                        <ul class="slide-menu " onclick="javascript:toggleShopNow(this)" style="position:absolute;top: 82%;left: 50%;transform: translate(-50%, -50%);">
                                             <li class="slide-menu-shop-now btn-white-blk-border">
-                                                <a href="javascript:void(0);" class="sm-item-black"> SHOP NOW<span class="state-change sm-item-black"> +</span></a>
+                                                <a href="javascript:void(0);" class="@menuColorClass"> SHOP NOW<span class="state-change @menuColorClass"> +</span></a>
                                                 @foreach (var cat in item.Categories)
                                                 {
                                                     var caturl = Url.RouteUrl("Category", new { SeName = cat.SeName, promoId = item.Id.ToString() });
                                                     <ul class="submenu">
                                                         <li>
-                                                            <a href="@caturl" title="@cat.Name" class="sm-item-black">
+                                                            <a href="@caturl" title="@cat.Name" class="@menuColorClass" >
                                                                 <span>@cat.Name</span>
                                                             </a>
                                                         </li>
@@ -907,151 +620,43 @@ article div h2{
                                         </ul>
                                     }
                                 </div>
-
-
-
-
-
-
-
                             </div>
-
-
-
-
-                            @*<div class="circle-responsive" >
-                                    <span class="circle-content">This made my circle show like this, which was brilliant, as it was already responsive, but I wasn’t happy with the positioning of the text yet:</span>
-                                </div>*@
-
-
-
-
-
-
-
-
-                            @*<article data-id="@item.Id" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%); ">*@
-                            @*<article class="art @className" data-id="@item.Id">*@
-
-                            @*<span >@item.Title</span>
-                                <span >@item.SubTitle</span>
-                                <span>@item.DiscountPercentage<text>%</text></span>
-                                <span style="margin:0 0 10px 0;padding:0;">@item.DiscountText</span>*@
-
-                            @*<div style="margin:0;padding:0;">
-                                    @if (item.DiscountPercentage > 0)
-                                    {
-                                        <span>@item.DiscountPercentage<text>%</text></span>
-                                    }
-                                    else
-                                    {
-                                        string discount = item.DiscountAmount > 0 ? item.DiscountAmount.ToString() : string.Empty;
-                                        <span class="discount-amount">@discount</span>
-                                    }
-                                </div>
-                                <div style="margin:0 0 10px 0;padding:0;">@item.DiscountText</div>*@
-
-
-
-
-                            @*<div class="@GetClassName(item.TitleFontColor) text-title">@item.Title</div>
-                                <span class="@GetClassName(item.SubTitleFontColor) text-sub-title">@item.SubTitle</span>
-
-                                <div class="@GetClassName(item.DiscountTextFontColor) discount-text" style="margin:0;padding:0;">
-                                    @if (item.DiscountPercentage > 0)
-                                    {
-                                        <span>@item.DiscountPercentage<text>%</text></span>
-                                    }
-                                    else
-                                    {
-                                        string discount = item.DiscountAmount > 0 ? item.DiscountAmount.ToString() : string.Empty;
-                                        <span class="discount-amount">@discount</span>
-                                    }
-                                </div>
-                                <div class="@GetClassName(item.DiscountTextFontColor)" style="margin:0 0 10px 0;padding:0;">@item.DiscountText</div>*@
-
-
-
-
-                            @*<div class="text-frame" style="@GeteTextFrameStyle(item.TextFrameType, item.TextFrameBackground, item.TextFrameHeight, item.TextFrameWidth)">
-
-                                    <div class="art-genericname" style="@GetCriclePadding(item.TextFrameType,item.TitleFontSize)padding-top:25px;padding-bottom:5px;">
-                                        <div class="@GetClassName(item.TitleFontColor) text-title">@item.Title</div>
-                                        <span class="@GetClassName(item.SubTitleFontColor) text-sub-title">@item.SubTitle</span>
-
-                                        <div class="@GetClassName(item.DiscountTextFontColor) discount-text" style="margin:0;padding:0;">
-                                            @if (item.DiscountPercentage > 0)
-                                            {
-                                                <span>@item.DiscountPercentage<text>%</text></span>
-                                            }
-                                            else
-                                            {
-                                                string discount = item.DiscountAmount > 0 ? item.DiscountAmount.ToString() : string.Empty;
-                                                <span class="discount-amount">@discount</span>
-                                            }
-                                        </div>
-                                        <div class="@GetClassName(item.DiscountTextFontColor)" style="margin:0 0 10px 0;padding:0;">@item.DiscountText</div>
-                                    </div>
-
-
-                                    @if (item.Categories != null && item.Categories.Count > 0)
-                                    {
-                                        <ul class="slide-menu " onclick="javascript:toggleShopNow(this)">
-                                            <li class="slide-menu-shop-now btn-white-blk-border">
-                                                <a href="javascript:void(0);"> SHOP NOW<span class="state-change"> +</span></a>
-                                                @foreach (var cat in item.Categories)
-                                                {
-                                                    var caturl = Url.RouteUrl("Category", new { SeName = cat.SeName, promoId = item.Id.ToString() });
-                                                    <ul class="submenu">
-                                                        <li>
-                                                            <a href="@caturl" title="@cat.Name">
-                                                                <span>@cat.Name</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                }
-                                            </li>
-                                        </ul>
-                                    }
-                                </div>*@
                             <div class="clearfix"></div>
-                            @*</article>*@
-
-
-                            @*</div>*@
-
                         </div>
                     }
                 </div>
-
-
             }
-
-
-
-
         }
     </div>
 </div>
 
+@helper RenderPromotion(PromotionModel item)
+{
+    <div id="promo-title" class="@GetClassName(item.TitleFontColor)" style="font-size:0.9em; @GetStyle(item.TitleFontType)">@item.Title</div>
+    <div id="promo-sub-title" class="@GetClassName(item.SubTitleFontColor)" style="font-size:0.6em; @GetStyle(item.SubTitleFontType)">@item.SubTitle</div>
+    <div class="@GetClassName(item.DiscountTextFontColor)" style="font-weight:bold;@GetStyle(item.DiscountTextFontType)">
+        @if (item.DiscountPercentage > 0)
+        {
+            <span id="promo-discount-percent" style="font-size:2.2em;font-weight:bold">@item.DiscountPercentage<text>%</text></span>
+        }
+        else
+        {
+            string discount = item.DiscountAmount > 0 ? item.DiscountAmount.ToString("#,#") : string.Empty;
+            <span id="promo-discount-amount" style="font-size:1.2em;font-weight:bold">@discount</span>
+        }
+        <div id="promo-discount-text" style="font-size:0.6em; @GetStyle(item.DiscountTextFontType)">@item.DiscountText</div>
+    </div>
+}
 
+@*@helper SetCircleBackground(string backgroundColor)
+{
+    <style>
+        .circle:after {
+            background-color:@backgroundColor;
+        }
+    </style>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}*@
 
 <script>
 	function toggleShopNow(elem) {

@@ -36,6 +36,8 @@
          //.LinkHtmlAttributes(new { data_tab_name = "TransactionList" })
          //.Action("TransactionLog", "GTPay", new { area = "SmartStore.GTPay" })
          .Content(Html.Partial("_TransactionList", Model).ToHtmlString())
+
+         
          .Ajax();
 
     x.Add().Text(T("Plugins.SmartStore.GTPay.CurrencyTab").Text)
@@ -43,8 +45,8 @@
        //.Visible(Model.ProductTypeId == (int)ProductType.SimpleProduct || (Model.ProductTypeId == (int)ProductType.BundledProduct && !Model.BundlePerItemShoppingCart))
        .Icon("fa fa-money fa-lg fa-fw")
        .LinkHtmlAttributes(new { data_tab_name = "Currency" })
-       .Content(Html.Partial("_Currency", Model).ToHtmlString())
-       //.Action("LoadEditTab", "Product", new { id = Model.Id, tabName = "Inventory" })
+       //.Content(Html.Partial("_Currency", Model).ToHtmlString())
+       .Content(Html.Partial("_Currency").ToHtmlString())
        .Ajax();
 
     //x.Add().Text(T("Plugins.SmartStore.GTPay.TransactionSearchTab").Text)

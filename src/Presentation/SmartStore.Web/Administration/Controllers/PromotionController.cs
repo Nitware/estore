@@ -135,9 +135,10 @@ namespace SmartStore.Admin.Controllers
 			fontColors.Add(new SelectListItem { Value = "3", Text = "Info" });
 			fontColors.Add(new SelectListItem { Value = "4", Text = "Warning" });
 			fontColors.Add(new SelectListItem { Value = "5", Text = "Danger" });
+            fontColors.Add(new SelectListItem { Value = "6", Text = "White" });
+            
 
-
-			IList<SelectListItem> fontTypes = new List<SelectListItem>();
+            IList<SelectListItem> fontTypes = new List<SelectListItem>();
 			fontTypes.Add(new SelectListItem { Value = "'AvenirHeavy', arial, sans-serif", Text = "'AvenirHeavy', arial, sans-serif" });
 			fontTypes.Add(new SelectListItem { Value = "Arial", Text = "Arial" });
 			fontTypes.Add(new SelectListItem { Value = "Times New Roman", Text = "Times New Roman" });
@@ -150,13 +151,18 @@ namespace SmartStore.Admin.Controllers
 			frameTypes.Add(new SelectListItem { Value = "square", Text = "Square" });
 			frameTypes.Add(new SelectListItem { Value = "rectangle", Text = "Rectangle" });
 
+            IList<SelectListItem> menuColors = new List<SelectListItem>();
+            menuColors.Add(new SelectListItem { Value = "white", Text = "White" });
+            menuColors.Add(new SelectListItem { Value = "black", Text = "Black" });
 
-			ViewBag.AllProducts = products;
+
+            ViewBag.AllProducts = products;
 			ViewBag.AllCategories = categories;
 			ViewBag.fontColors = fontColors;
 			ViewBag.frameTypes = frameTypes;
 			ViewBag.fontTypes = fontTypes;
-		}
+            ViewBag.menuColors = menuColors;
+        }
 		#endregion
 
 		#region Methods
@@ -328,7 +334,9 @@ namespace SmartStore.Admin.Controllers
 				promotion.DiscountAmount = model.DiscountAmount;
 				promotion.DiscountPercentage = model.DiscountPercentage;
 
-				promotion.ExpiryDate = model.ExpiryDate;
+                promotion.MenuColor = model.MenuColor;
+
+                promotion.ExpiryDate = model.ExpiryDate;
 				promotion.NoOfColumn = model.NoOfColumn;
 				promotion.Published = model.Published;
 				promotion.DisplayOrder = model.DisplayOrder;

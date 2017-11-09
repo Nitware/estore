@@ -18,15 +18,13 @@
   <LocaleResource Name="AdditionalFeePercentage.Hint">
     <Value>Determines whether to apply a percentage additional fee to the order total. If not enabled, a fixed value is used.</Value>
   </LocaleResource>
+  
 
   <LocaleResource Name="CurrencyTab">
-    <Value>Supported currencies</Value>
+    <Value>Supported Currencies</Value>
   </LocaleResource>
   <LocaleResource Name="SettingTab">
     <Value>Basic Setting</Value>
-  </LocaleResource>
-  <LocaleResource Name="TransactionSearchTab">
-    <Value>Transaction Search</Value>
   </LocaleResource>
   <LocaleResource Name="TransactionListTab">
     <Value>Transaction List</Value>
@@ -44,13 +42,13 @@
           <![CDATA[ ]]>
         </Value>
       </LocaleResource>
-
+      
 
       <LocaleResource Name="Fields.ReferenceNo">
         <Value>Transaction reference No.</Value>
       </LocaleResource>
       <LocaleResource Name="Fields.ReferenceNo.Hint">
-        <Value>This is the unique identifier of transactions</Value>
+        <Value>This is a merchant-wide unique identifier of each transaction request sent to GTPay by merchant. The transaction reference no. must be unique per transaction.</Value>
       </LocaleResource>
       <LocaleResource Name="Fields.Date">
         <Value>Transaction Date</Value>
@@ -58,48 +56,63 @@
       <LocaleResource Name="Fields.Date.Hint">
         <Value>The date transaction was conducted</Value>
       </LocaleResource>
-     
       
+     
       <LocaleResource Name="Fields.TransactionStatus">
+        <Value>Payment Status</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.TransactionStatus.Hint">
         <Value>Payment status after order completion</Value>
+      </LocaleResource>
+       <LocaleResource Name="Fields.TransactMode">
+        <Value>Payment Mode</Value>
       </LocaleResource>
       <LocaleResource Name="Fields.TransactMode.Hint">
         <Value>Specifies the payment status after order completion.</Value>
       </LocaleResource>
-      <LocaleResource Name="ExcludedATMCards">
-        <Value>Excluded credit cards</Value>
-      </LocaleResource>
-      <LocaleResource Name="ExcludedATMCards.Hint">
-        <Value>Credit cards that customers may not pay with.</Value>
-      </LocaleResource>
-
-
+      
+     
       <LocaleResource Name="Fields.SupportedCard">
-        <Value>Supported card</Value>
+        <Value>Supported Card</Value>
       </LocaleResource>
       <LocaleResource Name="Fields.HashKey">
-        <Value>Gateway hash key</Value>
+        <Value>Gateway Hash Key</Value>
+      </LocaleResource>
+       <LocaleResource Name="Fields.HashKey.Hint">
+        <Value>This is a sha512 hash of the following parameters: gtpay_mert_id, gtpay_tranx_id, gtpay_tranx_amt, gtpay_tranx_curr, gtpay_cust_id, gtpay_tranx_noti_url</Value>
       </LocaleResource>
       <LocaleResource Name="Fields.MerchantID">
         <Value>Merchant ID</Value>
       </LocaleResource>
+      <LocaleResource Name="Fields.MerchantID.Hint">
+        <Value>This is the GTPay-wide unique identifier of merchant, assigned by GTPay and communicated to merchant by GTBank.</Value>
+      </LocaleResource>
       <LocaleResource Name="Fields.SupportedCurrency">
         <Value>Supported currency</Value>
-      </LocaleResource>
-      <LocaleResource Name="Fields.GatewayUrl">
-        <Value>Gateway post url</Value>
       </LocaleResource>
       <LocaleResource Name="Fields.GatewayPostUrl">
         <Value>Gateway post url</Value>
       </LocaleResource>
+       <LocaleResource Name="Fields.GatewayPostUrl.Hint">
+        <Value>This is the URL that accepts all transaction requests.</Value>
+      </LocaleResource>
       <LocaleResource Name="Fields.GatewayRequeryUrl">
         <Value>Gateway requery url</Value>
+      </LocaleResource>
+       <LocaleResource Name="Fields.GatewayRequeryUrl.Hint">
+        <Value>This URL is used to confirm the status of specific transaction at the gateway.</Value>
       </LocaleResource>
       <LocaleResource Name="Fields.ShowGatewayInterface">
         <Value>Show gateway interface</Value>
       </LocaleResource>
+       <LocaleResource Name="Fields.ShowGatewayInterface.Hint">
+        <Value>If selected, then merchant site redirects straight to the gateway without passing through GTPay interface</Value>
+      </LocaleResource>
       <LocaleResource Name="Fields.ShowGatewayNameFirst">
         <Value>Show gateway name first</Value>
+      </LocaleResource>
+      <LocaleResource Name="Fields.ShowGatewayNameFirst.Hint">
+        <Value>If selected, GTPay should take customer directly from merchant's page to the gateway to effect the debit/credit. If not specified, customer will be shown GTPay's own first page, from where he/she will continue to the gateway</Value>
       </LocaleResource>
       <LocaleResource Name="Fields.CurrencyCode">
         <Value>Currency code</Value>
@@ -116,6 +129,7 @@
       <LocaleResource Name="Fields.IsSupported">
         <Value>Is supported</Value>
       </LocaleResource>
+      
 
       <LocaleResource Name="Fields.TransactionRefNo">
         <Value>Transaction Ref</Value>
@@ -133,11 +147,12 @@
         <Value>Amount In Unit</Value>
       </LocaleResource>
       <LocaleResource Name="Fields.CustomerId">
-        <Value>Order Id</Value>
+        <Value>Customer ID</Value>
       </LocaleResource>
        <LocaleResource Name="Fields.OrderId">
-        <Value>CustomerId</Value>
+        <Value>Order ID</Value>
       </LocaleResource>
+      
       
       <LocaleResource Name="Fields.ResponseCode">
         <Value>Response Code</Value>
@@ -171,6 +186,5 @@
       </LocaleResource>
     </Children>
   </LocaleResource>
-
 
 </Language>

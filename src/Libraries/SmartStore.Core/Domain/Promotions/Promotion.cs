@@ -96,7 +96,12 @@ namespace SmartStore.Core.Domain.Promotions
 		[DataMember]
 		public bool Active { get; set; }
 
-		public virtual Picture Picture { get; set; }
+
+        [DataMember]
+        public string MenuColor { get; set; }
+
+
+        public virtual Picture Picture { get; set; }
 		public virtual IList<PromotionProducts> PromotionProducts { get; set; }
 	}
 }

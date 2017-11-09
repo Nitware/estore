@@ -63,7 +63,7 @@
 				@Html.ValidationMessageFor(model => model.TitleFontType)
 			</td>
 		</tr>
-		<tr>
+		@*<tr>
 			<td class="adminTitle">
 				@Html.SmartLabelFor(model => model.TitleFontSize)
 			</td>
@@ -71,7 +71,7 @@
 				@Html.EditorFor(model => model.TitleFontSize)<span class="muted">(In PX)</span>
 				@Html.ValidationMessageFor(model => model.TitleFontSize)
 			</td>
-		</tr>
+		</tr>*@
 		<tr>
 			<td class="adminTitle">
 				@Html.SmartLabelFor(model => model.TitleFontColor)
@@ -100,7 +100,7 @@
 				@Html.ValidationMessageFor(model => model.SubTitleFontType)
 			</td>
 		</tr>
-		<tr>
+		@*<tr>
 			<td class="adminTitle">
 				@Html.SmartLabelFor(model => model.SubTitleFontSize)
 			</td>
@@ -108,7 +108,7 @@
 				@Html.EditorFor(model => model.SubTitleFontSize)<span class="muted">(In PX)</span>
 				@Html.ValidationMessageFor(model => model.SubTitleFontSize)
 			</td>
-		</tr>
+		</tr>*@
 		<tr>
 			<td class="adminTitle">
 				@Html.SmartLabelFor(model => model.SubTitleFontColor)
@@ -137,7 +137,7 @@
 				@Html.ValidationMessageFor(model => model.DiscountTextFontType)
 			</td>
 		</tr>
-		<tr>
+		@*<tr>
 			<td class="adminTitle">
 				@Html.SmartLabelFor(model => model.DiscountTextFontSize)
 			</td>
@@ -145,7 +145,7 @@
 				@Html.EditorFor(model => model.DiscountTextFontSize)<span class="muted">(In PX)</span>
 				@Html.ValidationMessageFor(model => model.DiscountTextFontSize)
 			</td>
-		</tr>
+		</tr>*@
 		<tr>
 			<td class="adminTitle">
 				@Html.SmartLabelFor(model => model.DiscountTextFontColor)
@@ -156,7 +156,7 @@
 			</td>
 		</tr>
 
-		<tr>
+		@*<tr>
 			<td class="adminTitle">
 				@Html.SmartLabelFor(model => model.Description)
 			</td>
@@ -164,7 +164,7 @@
 				@Html.EditorFor(model => model.Description)
 				@Html.ValidationMessageFor(model => model.Description)
 			</td>
-		</tr>
+		</tr>*@
 
 
 		<tr>
@@ -176,7 +176,17 @@
 				@Html.ValidationMessageFor(model => model.TextFrameType)
 			</td>
 		</tr>
-		<tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.TextFrameBackground)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.TextFrameBackground, "Color")
+                @Html.ValidationMessageFor(model => model.TextFrameBackground)
+            </td>
+        </tr>
+
+		@*<tr>
 			<td class="adminTitle">
 				@Html.SmartLabelFor(model => model.TextFrameBackground)
 			</td>
@@ -184,8 +194,9 @@
 				@Html.EditorFor(model => model.TextFrameBackground)<span class="muted">(HEX Code)</span>
 				@Html.ValidationMessageFor(model => model.TextFrameBackground)
 			</td>
-		</tr>
-		<tr>
+		</tr>*@
+
+		@*<tr>
 			<td class="adminTitle">
 				@Html.SmartLabelFor(model => model.TextFrameHeight)
 			</td>
@@ -202,7 +213,7 @@
 				@Html.EditorFor(model => model.TextFrameWidth) <span class="muted">(In PX)</span>
 				@Html.ValidationMessageFor(model => model.TextFrameWidth)
 			</td>
-		</tr>
+		</tr>*@
 
 		<tr>
 			<td class="adminTitle">
@@ -233,6 +244,16 @@
 				@Html.ValidationMessageFor(model => model.DiscountAmount)
 			</td>
 		</tr>
+
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.MenuColor)
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.MenuColor, new SelectList(ViewBag.menuColors, "Value", "Text"))
+                @Html.ValidationMessageFor(model => model.MenuColor)
+            </td>
+        </tr>
 
 		<tr>
 			<td class="adminTitle">

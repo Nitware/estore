@@ -76,7 +76,7 @@ namespace SmartStore.GTPay.Services
             if (!transactionReference.HasValue())
                 return null;
 
-            Expression<Func<GTPayTransactionLog, bool>> selector = t => t.TransactionRefNo == transactionReference && t.TransactionDate.Date == transactionDate.Date;
+            Expression<Func<GTPayTransactionLog, bool>> selector = t => t.TransactionRefNo == transactionReference && DbFunctions.TruncateTime(t.TransactionDate) == transactionDate.Date;
             Func<IQueryable<GTPayTransactionLog>, IOrderedQueryable<GTPayTransactionLog>> orderBy = t => t.OrderByDescending(x => x.Id);
 
             return _gTPayTransactionLogRepository.Get(selector, orderBy).ToList();

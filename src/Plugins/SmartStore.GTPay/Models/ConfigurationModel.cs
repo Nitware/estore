@@ -19,6 +19,8 @@ namespace SmartStore.GTPay.Models
             TransactionLogsForGrid = new GridModel<TransactionLog>();
             TransactionRequest = new TransactionRequest();
             //TransactionRequest.Date = DateTime.UtcNow;
+
+            //int d = TransactionLogsForGrid.Data.Count();
         }
 
         [AllowHtml]

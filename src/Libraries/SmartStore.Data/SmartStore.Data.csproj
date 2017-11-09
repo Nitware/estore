@@ -524,6 +524,10 @@
     <Compile Include="Migrations\201710181508418_promoAdvert.Designer.cs">
       <DependentUpon>201710181508418_promoAdvert.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711010721372_promoAdvert_AddedMenuColorColumn.cs" />
+    <Compile Include="Migrations\201711010721372_promoAdvert_AddedMenuColorColumn.Designer.cs">
+      <DependentUpon>201711010721372_promoAdvert_AddedMenuColorColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="ObjectContextBase.SaveChanges.cs" />
     <Compile Include="Setup\Builder\ActivityLogTypeMigrator.cs" />
     <Compile Include="Setup\Builder\PermissionMigrator.cs" />
@@ -950,6 +954,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710181508418_promoAdvert.resx">
       <DependentUpon>201710181508418_promoAdvert.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711010721372_promoAdvert_AddedMenuColorColumn.resx">
+      <DependentUpon>201711010721372_promoAdvert_AddedMenuColorColumn.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Sql\Indexes.sql" />
     <EmbeddedResource Include="Sql\StoredProcedures.sql" />

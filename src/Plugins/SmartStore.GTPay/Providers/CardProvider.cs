@@ -71,27 +71,24 @@ namespace SmartStore.GTPay.Providers
 
         //    result.AllowStoringCreditCardNumber = true;
 
-        //    //switch (settings.TransactionStatus)
-        //    //{
-        //    //    case TransactionStatus.Pending:
-        //    //        result.NewPaymentStatus = PaymentStatus.Pending;
-        //    //        break;
-        //    //    case TransactionStatus.Authorize:
-        //    //        result.NewPaymentStatus = PaymentStatus.Authorized;
-        //    //        break;
-        //    //    case TransactionStatus.Paid:
-        //    //        result.NewPaymentStatus = PaymentStatus.Paid;
-        //    //        break;
-        //    //    default:
-        //    //        result.AddError(T("Common.Payment.TranactionTypeNotSupported"));
-        //    //        return result;
-        //    //}
+        //    switch (settings.TransactionStatus)
+        //    {
+        //        case TransactionStatus.Pending:
+        //            result.NewPaymentStatus = PaymentStatus.Pending;
+        //            break;
+        //        case TransactionStatus.Authorize:
+        //            result.NewPaymentStatus = PaymentStatus.Authorized;
+        //            break;
+        //        case TransactionStatus.Paid:
+        //            result.NewPaymentStatus = PaymentStatus.Paid;
+        //            break;
+        //        default:
+        //            result.AddError(T("Common.Payment.TranactionTypeNotSupported"));
+        //            return result;
+        //    }
 
         //    return result;
         //}
-
-
-
 
 
         /// <summary>
@@ -102,30 +99,31 @@ namespace SmartStore.GTPay.Providers
         {
             if (postProcessPaymentRequest.Order.PaymentStatus == Core.Domain.Payments.PaymentStatus.Paid)
                 return;
-
+                        
             int selectedCurrencyId = Convert.ToInt32(_httpContext.Session[_gatewayLuncher.SelectedCurrencyId]);
             GTPaySupportedCurrency supportedCurrency = _supportedCurrencyService.GetSupportedCurrencyById(selectedCurrencyId);
             if (supportedCurrency == null || supportedCurrency.Id <= 0)
             {
-                throw new ArgumentNullException("supportedCurrency failed on retreival! Please try again");
+                throw new ArgumentNullException("supportedCurrency retreival failed! Please try again");
             }
 
             GTPaySettings gtpaysettings = _httpContext.Session[_gatewayLuncher.GTPaySettings] as GTPaySettings;
             if (gtpaysettings == null)
             {
-                throw new ArgumentNullException("GTPaySettings could not be retreived! Please try againut contact you system administrator after three unsuccessful trials");
+                throw new ArgumentNullException("GTPaySettings could not be retreived! Please try again, but contact your system administrator after three unsuccessful trials");
             }
 
             _gatewayLuncher.Lunch(postProcessPaymentRequest, supportedCurrency, gtpaysettings, _httpContext);
         }
-
-
+        
         public override ProcessPaymentResult ProcessRecurringPayment(ProcessPaymentRequest processPaymentRequest)
         {
             var result = new ProcessPaymentResult();
             var settings = CommonServices.Settings.LoadSetting<GTPaySettings>(processPaymentRequest.StoreId);
 
             result.AllowStoringCreditCardNumber = true;
+
+
             //switch (settings.TransactMode)
             //{
             //    case TransactMode.Pending:

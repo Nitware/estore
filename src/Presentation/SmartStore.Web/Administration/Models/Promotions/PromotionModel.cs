@@ -94,7 +94,12 @@ namespace SmartStore.Admin.Models.Promotions
 		[SmartResourceDisplayName("Admin.Promotions.Promotion.Published")]
 		public bool Published { get; set; }
 
-		public int DisplayOrder { get; set; }
+
+        [SmartResourceDisplayName("Admin.Promotions.Promotion.MenuColor")]
+        public string MenuColor { get; set; }
+
+
+        public int DisplayOrder { get; set; }
 		public List<SelectListItem> AvailableCategories { get; set; }
 		public List<SelectListItem> AvailableProducts { get; set; }
 
@@ -108,40 +113,41 @@ namespace SmartStore.Admin.Models.Promotions
 
 		public PromotionModel ToModel(Promotion model)
 		{
-			return new PromotionModel
-			{
-				Active = model.Active,
-				
-				//title
-				Title = model.Title,
-				TitleFontType = model.TitleFontType,
-				TitleFontSize = model.TitleFontSize,
-				TitleFontColor = model.TitleFontColor,
+            return new PromotionModel
+            {
+                Active = model.Active,
 
-				//subtitle
-				SubTitle = model.SubTitle,
-				SubTitleFontType = model.SubTitleFontType,
-				SubTitleFontSize = model.SubTitleFontSize,
-				SubTitleFontColor = model.SubTitleFontColor,
+                //title
+                Title = model.Title,
+                TitleFontType = model.TitleFontType,
+                TitleFontSize = model.TitleFontSize,
+                TitleFontColor = model.TitleFontColor,
 
-				//discountext
-				DiscountText = model.DiscountText,
-				DiscountTextFontType = model.DiscountTextFontType,
-				DiscountTextFontSize = model.DiscountTextFontSize,
-				DiscountTextFontColor = model.DiscountTextFontColor,
+                //subtitle
+                SubTitle = model.SubTitle,
+                SubTitleFontType = model.SubTitleFontType,
+                SubTitleFontSize = model.SubTitleFontSize,
+                SubTitleFontColor = model.SubTitleFontColor,
 
-				Description = model.Description,
+                //discountext
+                DiscountText = model.DiscountText,
+                DiscountTextFontType = model.DiscountTextFontType,
+                DiscountTextFontSize = model.DiscountTextFontSize,
+                DiscountTextFontColor = model.DiscountTextFontColor,
 
-				//textframe
-				//TextFrame= model.TextFrameType,
-				TextFrameType = model.TextFrameType,
-				TextFrameBackground = model.TextFrameBackground,
-				TextFrameHeight = model.TextFrameHeight,
-				TextFrameWidth = model.TextFrameWidth,
+                Description = model.Description,
 
-				PictureId = model.PictureId,
-				PictureUrl = model.PictureUrl,
+                //textframe
+                //TextFrame= model.TextFrameType,
+                TextFrameType = model.TextFrameType,
+                TextFrameBackground = model.TextFrameBackground,
+                TextFrameHeight = model.TextFrameHeight,
+                TextFrameWidth = model.TextFrameWidth,
 
+                PictureId = model.PictureId,
+                PictureUrl = model.PictureUrl,
+
+                MenuColor = model.MenuColor,
 
 				DiscountAmount = model.DiscountAmount,
 				DiscountPercentage = model.DiscountPercentage,
@@ -192,7 +198,7 @@ namespace SmartStore.Admin.Models.Promotions
 				PictureId = this.PictureId,
 				PictureUrl = this.PictureUrl,
 
-
+                MenuColor = this.MenuColor,
 				DiscountAmount = this.DiscountAmount,
 				DiscountPercentage = this.DiscountPercentage,
 
