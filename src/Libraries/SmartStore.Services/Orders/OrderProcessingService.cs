@@ -30,6 +30,7 @@ using SmartStore.Services.Payments;
 using SmartStore.Services.Security;
 using SmartStore.Services.Shipping;
 using SmartStore.Services.Tax;
+using System.Transactions;
 
 namespace SmartStore.Services.Orders
 {
@@ -989,7 +990,7 @@ namespace SmartStore.Services.Orders
                 {
                     //save order in data storage
                     //uncomment this line to support transactions
-                    //using (var scope = new System.Transactions.TransactionScope())
+                    using (var scope = new TransactionScope())
                     {
                         #region Save order details
 
@@ -1418,7 +1419,9 @@ namespace SmartStore.Services.Orders
 							}
 						}
 
-						#endregion
+                        #endregion
+                        
+                        scope.Complete();
 					}
 				}
                 else
