@@ -8,19 +8,9 @@
 	Layout = "";
 }
 
-@*@{ Html.RenderAction("StoreScopeConfiguration", "Setting", new { area = "Admin" }); }*@
-
-@*@{
-    Html.AddCssFileParts(true, "~/Content/x-editable/bootstrap-editable.css");
-    Html.AppendScriptParts(true, "~/Content/x-editable/bootstrap-editable.js");
-}*@
-
 @Html.ValidationSummary(false)
 
-@*@Html.SmartStore().TabStrip().Name("gtpay-config").Style(TabsStyle.Tabs).Position(TabsPosition.Left).Items(x =>*@
-
 @Html.SmartStore().TabStrip().Name("gtpay-config").Items(x =>
-
 {
     x.Add().Text(T("Plugins.SmartStore.GTPay.SettingTab").Text)
     .Icon("fa fa-gear fa-lg fa-fw")
@@ -34,10 +24,8 @@
          //.Visible(!(Model.ProductTypeId == (int)ProductType.BundledProduct && Model.BundlePerItemPricing))
          .Icon("fa fa-bars fa-lg fa-flip-horizontal fa-fw")
          //.LinkHtmlAttributes(new { data_tab_name = "TransactionList" })
-         //.Action("TransactionLog", "GTPay", new { area = "SmartStore.GTPay" })
-         .Content(Html.Partial("_TransactionList", Model).ToHtmlString())
-
-         
+         .Action("LoadTransactionList", "GTPay", new { area = "SmartStore.GTPay" })
+         //.Content(Html.Partial("_TransactionList", Model).ToHtmlString())
          .Ajax();
 
     x.Add().Text(T("Plugins.SmartStore.GTPay.CurrencyTab").Text)

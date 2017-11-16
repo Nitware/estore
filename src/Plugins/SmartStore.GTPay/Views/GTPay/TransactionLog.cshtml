@@ -9,8 +9,6 @@
 @using SmartStore.GTPay.Models;
 @model ConfigurationModel
 
-@*@using (Html.BeginForm())
-{*@
     <div>
         @(Html.Telerik().Grid<TransactionLog>(Model.TransactionLogsForGrid.Data)
         .Name("Grid")
@@ -21,22 +19,7 @@
             {
                 commands.Edit();
             }).Width(180);
-
-
-            //columns.Command(commands =>
-            //{
-            //    // Declare a custom command named "showDetails"
-            //    commands.Custom("Update")
-            //    .Text("Update")
-            //    .Action("UpdateTransaction", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
-            //    .DataRouteValues(route =>
-            //    {
-            //        route.Add(o => o.TransactionRefNo).RouteKey("tranxId");
-            //        route.Add(o => o.AmountInUnit).RouteKey("amount");
-            //    });
-            //});
-
-
+        
             columns.Bound(x => x.TransactionStatus);
             columns.Bound(x => x.TransactionRefNo);
             columns.Bound(x => x.TransactionDate).Format("{0:yyyy-MM-dd HH:mm:ss}");
@@ -44,7 +27,6 @@
             columns.Bound(x => x.ResponseCode);
             columns.Bound(x => x.ResponseDescription);
             columns.Bound(x => x.MerchantReference);
-            //columns.Bound(x => x.Gateway);
             columns.Bound(x => x.DatePaid).Format("{0:yyyy-MM-dd HH:mm:ss}");
 
         })
@@ -57,17 +39,9 @@
             dataBinding.Ajax()
                 .Select("TransactionList", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } })
                 .Update("TransactionLog", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
-
-            //.DataRouteValues(route =>
-            //{
-            //    route.Add(o => o.TransactionRefNo).RouteKey("tranxId");
-            //    route.Add(o => o.AmountInUnit).RouteKey("amount");
-            //});
-            //.Delete("TransactionUpdate", "GTPay", new RouteValueDictionary() { { "area", "SmartStore.GTPay" } });
         })
         .Pageable(settings => settings.PageSize(Model.GridPageSize).Position(GridPagerPosition.Both))
         .PreserveGridState()
         .EnableCustomBinding(true)
         )
     </div>
-@*}*@

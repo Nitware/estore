@@ -119,60 +119,63 @@ namespace SmartStore.GTPay.Controllers
 
             return new JsonResult { Data = gridModel };
         }
-
-        public ActionResult LoadLatestTransactionList()
+        
+        public ActionResult LoadTransactionList()
         {
-            var gridModel = new GridModel<TransactionLog>
-            {
-                Data = Enumerable.Empty<TransactionLog>(),
-                Total = 0
-            };
-
-            return new JsonResult { Data = gridModel };
-
-
-
-
-
-            ////re-load transaction log to get the update
-            //List<GTPayTransactionLog> transactionLogs = _transactionLogService.GetLatest500Transactions();
-            //List<TransactionLog> transactionLogModels = PrepareTransactionLogModel(transactionLogs);
-
-            ////var tmp2 = transactionLogModels.ForCommand();
-            //var gridModel = new GridModel<TransactionLog>
-            //{
-            //    Data = transactionLogModels,
-            //    Total = transactionLogModels.Count()
-            //};
-
-            //return new JsonResult { Data = gridModel };
+            return PartialView("_TransactionList", new ConfigurationModel());
         }
-
+      
         [GridAction(EnableCustomBinding = true)]
-        public ActionResult FindTransactionBy(string transactionRef, DateTime? transactionDate)
+        public ActionResult LoadLatestTransactionList(TransactionLog model, GridCommand command)
         {
+            var gridModel = new GridModel<TransactionLog>();
+            gridModel.Data = Enumerable.Empty<TransactionLog>();
+
+            string transactionRef = TempData["transactionRef"] as string;
+            DateTime? transactionDate = TempData["transactionDate"] as DateTime?;
+
             List<GTPayTransactionLog> transactionLogs = new List<GTPayTransactionLog>();
-            if (transactionDate.HasValue && transactionRef.HasValue())
+            if (transactionRef.HasValue() || transactionDate.HasValue)
             {
-                transactionLogs = _transactionLogService.GetBy(transactionRef, transactionDate.Value);
-            }
-            else if (transactionDate.HasValue)
-            {
-                transactionLogs = _transactionLogService.GetBy(transactionDate.Value);
-            }
-            else if (transactionRef.HasValue())
-            {
-                GTPayTransactionLog transactionLog = _transactionLogService.GetBy(transactionRef);
-                if (transactionLog != null)
+                if (transactionDate.HasValue && transactionRef.HasValue())
                 {
-                    transactionLogs.Add(transactionLog);
+                    transactionLogs = _transactionLogService.GetBy(transactionRef, transactionDate.Value);
                 }
+                else if (transactionDate.HasValue)
+                {
+                    transactionLogs = _transactionLogService.GetBy(transactionDate.Value);
+                }
+                else if (transactionRef.HasValue())
+                {
+                    GTPayTransactionLog transactionLog = _transactionLogService.GetBy(transactionRef);
+                    if (transactionLog != null)
+                    {
+                        transactionLogs.Add(transactionLog);
+                    }
+                }
+            }
+            else
+            {
+                transactionLogs = _transactionLogService.GetLatest500Transactions();
             }
 
             List<TransactionLog> transactionLogModels = PrepareTransactionLogModel(transactionLogs);
-            ConfigurationModel model = PrepareConfigurationModel(transactionLogModels);
 
-            return PartialView("_TransactionList", model);
+            if (transactionLogModels != null && transactionLogModels.Count > 0)
+            {
+                var tmp2 = transactionLogModels.ForCommand(command);
+                gridModel.Data = tmp2;
+                gridModel.Total = tmp2.Count();
+            }
+
+            return new JsonResult { Data = gridModel };
+        }
+
+        public ActionResult FindTransactionBy(string transactionRef, DateTime? transactionDate)
+        {
+            TempData["transactionRef"] = transactionRef;
+            TempData["transactionDate"] = transactionDate;
+            return PartialView("_TransactionListGrid", new ConfigurationModel());
         }
 
         private ConfigurationModel PrepareConfigurationModel(List<TransactionLog> transactionLogModels)
@@ -196,83 +199,30 @@ namespace SmartStore.GTPay.Controllers
             return model;
         }
 
-        public ActionResult TransactionLog()
-        {
-            List<GTPayTransactionLog> transactionLogs = _transactionLogService.GetLatest500Transactions();
-            List<TransactionLog> transactionLogModels = PrepareTransactionLogModel(transactionLogs);
-
-            ConfigurationModel model = PrepareConfigurationModel(transactionLogModels);
-
-            return View(model);
-        }
-
-        //public ActionResult UpdateTransactionLog(string TransactionRefNo)
-        //{
-        //    GTPaySettings gtpaySettings = GetGTPaySettings();
-
-        //    if (gtpaySettings == null)
-        //        throw new Exception("GTPay settings failed on retrieval!");
-
-        //    if (!TransactionRefNo.HasValue())
-        //        throw new Exception("");
-
-        //    GTPayTransactionLog model = _transactionLogService.GetBy(TransactionRefNo);
-
-        //    //re-query transaction
-        //    string hash = CreateTransactionRequeryHashKey(gtpaySettings.MerchantId, model.TransactionRefNo, gtpaySettings.HashKey);
-        //    GTPayGatewayResponse gtpayResponse = GetTransactionDetailBy(gtpaySettings.MerchantId, model.AmountInUnit.ToString(), model.TransactionRefNo, hash);
-
-        //    //update local transaction log
-        //    UpdateTransactionLog(gtpayResponse, model.TransactionRefNo);
-
-        //    //re-load transaction log to get the update
-        //    List<GTPayTransactionLog> transactionLogs = _transactionLogService.GetLatest500Transactions();
-        //    List<TransactionLog> transactionLogModels = PrepareTransactionLogModel(transactionLogs);
-
-
-        //    var gridModel = new GridModel<TransactionLog>
-        //    {
-        //        Data = transactionLogModels,
-        //        Total = transactionLogModels.Count()
-        //    };
-
-        //    ConfigurationModel configModel = new ConfigurationModel();
-        //    configModel.GridPageSize = _adminAreaSettings.GridPageSize;
-        //    configModel.TransactionLogsForGrid = gridModel;
-
-        //    NotifySuccess("Transaction status for the transaction with Transaction Ref No. '" + TransactionRefNo + "' has been successfully updated");
-        //    return PartialView("_TransactionList", configModel);
-
-
-
-
-        //    //return new JsonResult { Data = transactionLogModels };
-
-        //    //var tmp2 = transactionLogModels.ForCommand(command);
-        //    //var gridModel = new GridModel<TransactionLog>
-        //    //{
-        //    //    Data = tmp2,
-        //    //    Total = tmp2.Count()
-        //    //};
-
-        //    //NotifySuccess("Update operation was successful");
-        //    //return new JsonResult { Data = gridModel };
-        //}
-
         [HttpPost, GridAction(EnableCustomBinding = true)]
         public ActionResult UpdateTransactionLog(TransactionLog model, GridCommand command)
         {
+            bool success = true;
             GTPaySettings gtpaySettings = GetGTPaySettings();
 
             if (gtpaySettings == null)
-                throw new Exception("GTPay settings failed on retrieval!");
+                throw new Exception(T("Plugins.SmartStore.GTPay.GTPaySettingRetrievalFailedMessage"));
+            //throw new Exception("GTPay settings failed on retrieval!");
 
-            //re-query transaction
-            string hash = CreateTransactionRequeryHashKey(gtpaySettings.MerchantId, model.TransactionRefNo, gtpaySettings.HashKey);
-            GTPayGatewayResponse gtpayResponse = GetTransactionDetailBy(gtpaySettings.MerchantId, model.AmountInUnit.ToString(), model.TransactionRefNo, hash);
+            try
+            {
+                //re-query transaction
+                string hash = CreateTransactionRequeryHashKey(gtpaySettings.MerchantId, model.TransactionRefNo, gtpaySettings.HashKey);
+                GTPayGatewayResponse gtpayResponse = GetTransactionDetailBy(gtpaySettings.MerchantId, model.AmountInUnit.ToString(), model.TransactionRefNo, hash);
 
-            //update local transaction log
-            UpdateTransactionLog(gtpayResponse, model.TransactionRefNo);
+                UpdateTransactionLog(gtpayResponse, model.TransactionRefNo, gtpaySettings.TransactionSuccessCode);
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                NotifyError(T("Plugins.SmartStore.GTPay.GTPayTransactionLogUpdateFailedMessage") + ex.Message);
+                //NotifyError("GTPay Transaction Log update operation failed! " + ex.Message);
+            }
 
             //re-load transaction log to get the update
             List<GTPayTransactionLog> transactionLogs = _transactionLogService.GetLatest500Transactions();
@@ -285,44 +235,16 @@ namespace SmartStore.GTPay.Controllers
                 Total = tmp2.Count()
             };
 
-            NotifySuccess("Update operation was successful");
+            if (success)
+            {
+                NotifySuccess(T("Plugins.SmartStore.GTPay.GTPayTransactionLogUpdateSuccessfulMessage"));
+                //NotifySuccess("GTPay Transaction Log update operation was successful");
+            }
+
             return new JsonResult { Data = gridModel };
         }
 
-        //[GridAction(EnableCustomBinding = true)]
-        //public ActionResult UpdateTransaction(string tranxId, long amount, GridCommand command)
-        //{
-        //    GTPaySettings gtpaySettings = GetGTPaySettings();
-
-        //    if (gtpaySettings == null)
-        //        throw new Exception("GTPay settings failed on retrieval!");
-
-        //    //re-query transaction
-        //    string hash = CreateTransactionRequeryHashKey(gtpaySettings.MerchantId, tranxId, gtpaySettings.HashKey);
-        //    GTPayGatewayResponse gtpayResponse = GetTransactionDetailBy(gtpaySettings.MerchantId, amount.ToString(), tranxId, hash);
-
-        //    //update local transaction log
-        //    UpdateTransactionLog(gtpayResponse, tranxId);
-
-        //    //re-load transaction log to get the update
-        //    List<GTPayTransactionLog> transactionLogs = _transactionLogService.GetLatest500Transactions();
-        //    List<TransactionLog> transactionLogModels = PrepareTransactionLogModel(transactionLogs);
-
-        //    var tmp2 = transactionLogModels.ForCommand(command);
-        //    var gridModel = new GridModel<TransactionLog>
-        //    {
-        //        Data = tmp2,
-        //        Total = tmp2.Count()
-        //    };
-
-        //    return new JsonResult
-        //    {
-        //        Data = gridModel,
-        //        //JsonRequestBehavior = JsonRequestBehavior.AllowGet
-        //    };
-        //}
-
-        private void UpdateTransactionLog(GTPayGatewayResponse gtpayResponse, string tranxId)
+        private void UpdateTransactionLog(GTPayGatewayResponse gtpayResponse, string tranxId, string transactionSuccessCode)
         {
             GTPayTransactionLog transactionLog = _transactionLogService.GetBy(tranxId);
             transactionLog.ResponseCode = gtpayResponse.ResponseCode;
@@ -330,11 +252,10 @@ namespace SmartStore.GTPay.Controllers
             transactionLog.ResponseDescription = gtpayResponse.ResponseDescription;
             transactionLog.AmountInUnit = (long)gtpayResponse.Amount;
             transactionLog.ApprovedAmount = gtpayResponse.Amount / 100;
-            transactionLog.GTPayTransactionStatusId = gtpayResponse.ResponseCode == "00" ? (int)TransactionStatus.Successful : (int)TransactionStatus.Failed;
+            transactionLog.GTPayTransactionStatusId = gtpayResponse.ResponseCode == transactionSuccessCode ? (int)TransactionStatus.Successful : (int)TransactionStatus.Failed;
             _transactionLogService.Update(transactionLog);
         }
-
-
+        
         [GridAction(EnableCustomBinding = true)]
         public ActionResult CurrencyUpdate(GTPayCurrencyModel model, GridCommand command)
         {
@@ -369,7 +290,9 @@ namespace SmartStore.GTPay.Controllers
                 Total = tmp2.Count()
             };
 
-            NotifySuccess("Update operation was successful");
+            //NotifySuccess("GTPay Supported Currency update operation was successful");
+
+            NotifySuccess(T("Plugins.SmartStore.GTPay.GTPayCurrencyUpdateSuccessfulMessage"));
             return new JsonResult { Data = gridModel };
         }
 
@@ -392,43 +315,6 @@ namespace SmartStore.GTPay.Controllers
 
             string type = form["GTPayMethodType"].NullEmpty();
 
-
-            //if (type.HasValue())
-            //{
-            //    if (type == "Manual")
-            //    {
-            //        validator = new ManualPaymentInfoValidator(Services.Localization);
-            //        var model = new ManualPaymentInfoModel
-            //        {
-            //            CardholderName = form["CardholderName"],
-            //            CardNumber = form["CardNumber"],
-            //            CardCode = form["CardCode"]
-            //        };
-            //        validationResult = validator.Validate(model);
-            //    }
-            //    else if (type == "DirectDebit")
-            //    {
-            //        validator = new DirectDebitPaymentInfoValidator(Services.Localization);
-            //        var model = new DirectDebitPaymentInfoModel
-            //        {
-            //            EnterIBAN = form["EnterIBAN"],
-            //            DirectDebitAccountHolder = form["DirectDebitAccountHolder"],
-            //            DirectDebitAccountNumber = form["DirectDebitAccountNumber"],
-            //            DirectDebitBankCode = form["DirectDebitBankCode"],
-            //            DirectDebitCountry = form["DirectDebitCountry"],
-            //            DirectDebitBankName = form["DirectDebitBankName"],
-            //            DirectDebitIban = form["DirectDebitIban"],
-            //            DirectDebitBic = form["DirectDebitBic"]
-            //        };
-            //        validationResult = validator.Validate(model);
-            //    }
-
-            //    if (validationResult != null && !validationResult.IsValid)
-            //    {
-            //        validationResult.Errors.Each(x => warnings.Add(x.ErrorMessage));
-            //    }
-            //}
-
             return warnings;
         }
 
@@ -443,15 +329,8 @@ namespace SmartStore.GTPay.Controllers
             {
                 if (type == "CardType")
                 {
-                    //paymentInfo.CreditCardType = form["CardType"];
                     _httpContext.Session[_gatewayLuncher.SelectedCurrencyId] = form["CardType"];
                     _httpContext.Session[_gatewayLuncher.GTPaySettings] = GetGTPaySettings();
-
-                    //paymentInfo.CreditCardName = form["CardholderName"];
-                    //paymentInfo.CreditCardNumber = form["CardNumber"];
-                    //paymentInfo.CreditCardExpireMonth = int.Parse(form["ExpireMonth"]);
-                    //paymentInfo.CreditCardExpireYear = int.Parse(form["ExpireYear"]);
-                    //paymentInfo.CreditCardCvv2 = form["CardCode"];
                 }
             }
 
@@ -468,25 +347,13 @@ namespace SmartStore.GTPay.Controllers
                 if (type == "CardType")
                 {
                     return form["CardType"];
-
-
-                    //var number = form["CardNumber"];
-                    //return "{0}, {1}, {2}".FormatCurrent(
-                    //    form["CreditCardType"],
-                    //    form["CardholderName"],
-                    //    number.Mask(4)
-                    //);
                 }
-
             }
 
             return null;
         }
 
         #region Card
-
-        //[AdminAuthorize, ChildActionOnly]
-        //public ActionResult TransactionList(ConfigurationModel model)
 
         private List<TransactionLog> PrepareTransactionLogModel(List<GTPayTransactionLog> transactionLogs)
         {
@@ -498,7 +365,6 @@ namespace SmartStore.GTPay.Controllers
                     transactionLogModels.Add(new TransactionLog()
                     {
                         TransactionRefNo = transactionLog.TransactionRefNo,
-                        //GTPayTransactionStatusId = transactionLog.GTPayTransactionStatusId,
                         TransactionStatus = TranslateTransactionStatusBy(transactionLog.GTPayTransactionStatusId),
                         ApprovedAmount = transactionLog.ApprovedAmount,
                         AmountInUnit = transactionLog.AmountInUnit,
@@ -545,9 +411,6 @@ namespace SmartStore.GTPay.Controllers
                 };
             }
 
-            //model.TransactionLogsForGrid = latestTransactionsGridData;
-            //model.GridPageSize = _adminAreaSettings.GridPageSize;
-
             return transactionsGridData;
         }
 
@@ -576,14 +439,12 @@ namespace SmartStore.GTPay.Controllers
 
             return status;
         }
-
-
-
+        
         [AdminAuthorize, ChildActionOnly]
         public ActionResult Configure()
         {
             List<GTPaySupportedCurrency> supportedCurrencies = _supportedCurrencyService.GetAllCurrencies();
-            GridModel<TransactionLog> transactionLogGridModels = GetLatestTransactionList();
+            //GridModel<TransactionLog> transactionLogGridModels = GetLatestTransactionList();
 
             ConfigurationModel model = new ConfigurationModel();
             model.SupportedCurrencies = new List<GTPayCurrencyModel>();
@@ -603,13 +464,15 @@ namespace SmartStore.GTPay.Controllers
 
             model.GTPayCurrencyGrid = gridModel;
             model.GridPageSize = _adminAreaSettings.GridPageSize;
-            model.TransactionLogsForGrid = transactionLogGridModels;
+            //model.TransactionLogsForGrid = transactionLogGridModels;
 
             // get and set current setting
             GTPaySettings gtpaySettings = GetGTPaySettings();
             if (gtpaySettings != null)
             {
                 model.AdditionalFee = gtpaySettings.AdditionalFee;
+                model.TransactionSuccessCode = gtpaySettings.TransactionSuccessCode;
+                model.SendMailOnFailedTransaction = gtpaySettings.SendMailOnFailedTransaction;
                 model.AdditionalFeePercentage = gtpaySettings.AdditionalFeePercentage;
                 model.ShowGatewayInterface = gtpaySettings.ShowGatewayInterface;
                 model.ShowGatewayNameFirst = gtpaySettings.ShowGatewayNameFirst;
@@ -641,6 +504,8 @@ namespace SmartStore.GTPay.Controllers
 
             // set settings with new values of the configuration model
             gtpaySettings.AdditionalFee = model.AdditionalFee;
+            gtpaySettings.TransactionSuccessCode = model.TransactionSuccessCode;
+            gtpaySettings.SendMailOnFailedTransaction = model.SendMailOnFailedTransaction;
             gtpaySettings.AdditionalFeePercentage = model.AdditionalFeePercentage;
             gtpaySettings.ShowGatewayInterface = model.ShowGatewayInterface;
             gtpaySettings.ShowGatewayNameFirst = model.ShowGatewayNameFirst;
@@ -654,10 +519,11 @@ namespace SmartStore.GTPay.Controllers
             var storeDependingSettingHelper = new StoreDependingSettingHelper(ViewData);
             storeDependingSettingHelper.UpdateSettings(gtpaySettings, form, storeScope, _settingService);
 
-            NotifySuccess("Update operation was successful");
+            //NotifySuccess("GTPay setting update operation was successful");
+
+            NotifySuccess(T("Plugins.SmartStore.GTPay.GTPaySettingUpdateSuccessfulMessage"));
             _settingService.ClearCache();
-
-
+            
             return Configure();
         }
 
@@ -693,7 +559,9 @@ namespace SmartStore.GTPay.Controllers
             }
             else
             {
-                ViewBag.CurrencyLoadMessage = "Supported curreny failed on load! Click the back button and try again.";
+                ViewBag.CurrencyLoadMessage = T("Plugins.SmartStore.GTPay.GTPayCurrenyFailedOnLoadMessage");
+
+                //ViewBag.CurrencyLoadMessage = "Supported curreny failed on load! Click the back button and try again.";
             }
 
             return PartialView(model);
@@ -725,12 +593,14 @@ namespace SmartStore.GTPay.Controllers
 
                 string tranxRefWidget = "<div class=\"comment-box card mb-3 \">";
                 tranxRefWidget += "<div class=\"card-header h5\">";
-                tranxRefWidget += "Please note the below Transaction Reference Number, because you will need it to track your payment.";
+                tranxRefWidget += T("Plugins.SmartStore.GTPay.NoteTransactionReferenceNumberMessage");
+                //tranxRefWidget += "Please note the below Transaction Reference Number, because you will need it to track your payment.";
                 tranxRefWidget += "</div>";
                 tranxRefWidget += "<div class=\"card-block\">";
                 tranxRefWidget += "<div class=\"row \">";
                 tranxRefWidget += "<div class=\"col-md-4 h4 \">";
-                tranxRefWidget += "Transaction Ref.No.:";
+                tranxRefWidget += T("Plugins.SmartStore.GTPay.TransactionRefNo");
+                //tranxRefWidget += "Transaction Ref. No.:";
                 tranxRefWidget += "</div>";
                 tranxRefWidget += "<div class=\"col-md-4 h3\">";
                 tranxRefWidget += "<label class=\"badge badge-warning\">" + transactionRef + "</label>";
@@ -763,7 +633,9 @@ namespace SmartStore.GTPay.Controllers
             GTPayGatewayResponse gatewayResponse = null;
             TransactionStatus transactionStatus = TransactionStatus.Pending;
             StringBuilder response = new StringBuilder();
-            
+
+            GTPaySettings gtpaySetting = _httpContext.Session[_gatewayLuncher.GTPaySettings] as GTPaySettings;
+
             try
             {
                 gatewayMessage = GetGatewayResponse();
@@ -771,6 +643,7 @@ namespace SmartStore.GTPay.Controllers
                 {
                     _httpContext.Session[_gatewayLuncher.GatewayMessage] = gatewayMessage;
                     gtpay_echo_data = gatewayMessage[_gatewayLuncher.GtpayEchoData].Split(';');
+
                     
                     NameValueCollection paymentRequest = _httpContext.Session[_gatewayLuncher.PamentRequestParameter] as NameValueCollection;
                     if (paymentRequest != null)
@@ -784,14 +657,12 @@ namespace SmartStore.GTPay.Controllers
                             if (gtpay_echo_data != null && gtpay_echo_data.Length > 0)
                             {
                                 hash = CreateTransactionRequeryHashKey(paymentRequest[_gatewayLuncher.GtpayMertId], paymentRequest[_gatewayLuncher.GtpayTranxId], gtpay_echo_data[1]);
-                                
                                 //hash = CreateTransactionRequeryHashKey(gtpay_echo_data[0], gatewayMessage[_gatewayLuncher.GtpayTranxId], gtpay_echo_data[1]);
                             }
 
                             string merchantId = paymentRequest[_gatewayLuncher.GtpayMertId]; //gtpay_echo_data[0];
                             string homePageUrl = _gatewayLuncher.GetRedirectUrl(_httpContext.Request, "Index", "Home");
 
-                            //gatewayResponse = GetTransactionDetailBy(merchantId, "55070", paymentRequest[_gatewayLuncher.GtpayTranxId], hash);
                             gatewayResponse = GetTransactionDetailBy(merchantId, (string)paymentRequest[_gatewayLuncher.GtpayTranxAmt], paymentRequest[_gatewayLuncher.GtpayTranxId], hash);
                             manInTheMiddleAttacked = NoManInTheMiddleAttack(gatewayResponse, gatewayMessage, merchantId);
                             if (!manInTheMiddleAttacked.HasValue())
@@ -800,8 +671,9 @@ namespace SmartStore.GTPay.Controllers
                                 string borderColor = "";
                                 string transactionSummary = null;
                                 string thankYou = null;
-
-                                if (gatewayResponse.ResponseCode == "00")
+                                
+                                //if (gatewayResponse.ResponseCode == "00")
+                                if (gatewayResponse.ResponseCode == gtpaySetting.TransactionSuccessCode)
                                 {
                                     transactionStatus = TransactionStatus.Successful;
                                 }
@@ -810,20 +682,30 @@ namespace SmartStore.GTPay.Controllers
                                     transactionStatus = TransactionStatus.Failed;
                                 }
 
-                                if (gatewayMessage[_gatewayLuncher.GtpayTranxStatusCode].HasValue() && gatewayMessage[_gatewayLuncher.GtpayTranxStatusCode] == "00")
+                                //if (gatewayMessage[_gatewayLuncher.GtpayTranxStatusCode].HasValue() && gatewayMessage[_gatewayLuncher.GtpayTranxStatusCode] == "00")
+                                if (gatewayMessage[_gatewayLuncher.GtpayTranxStatusCode].HasValue() && gatewayMessage[_gatewayLuncher.GtpayTranxStatusCode] == gtpaySetting.TransactionSuccessCode)
                                 {
                                     alertType = "info";
                                     borderColor = "blue";
-                                    thankYou = "Your transaction was successful";
-                                    transactionSummary = string.Format("An email has been sent to your registered email ({0}). You can print or download your invoice by clicking the above 'Print' or 'Order as PDF' button respectively. To do a re-order, click the 'Re-order' button below or click <a href=\"{2}\"><i class=\"fa fa-home\"></i><span> here</span></a> to go back to home page", gtpay_echo_data[3], gatewayMessage[_gatewayLuncher.GtpayTranxId], homePageUrl);
+                                    thankYou = T("Plugins.SmartStore.GTPay.SuccessfulTransactionMessage");
+                                    transactionSummary = string.Format(T("Plugins.SmartStore.GTPay.EmailHasBeenSentMessage"), gtpay_echo_data[3], string.Format("<a href=\"{0}\"><i class=\"fa fa-home\"></i><span>", homePageUrl), "</span></a>");
+                                    
+                                    //thankYou = "Your transaction was successful";
+                                    //transactionSummary = string.Format("An email has been sent to your registered email ({0}). You can print or download your invoice by clicking the above 'Print' or 'Order as PDF' button respectively. To do a re-order, click the 'Re-order' button below or click <a href=\"{2}\"><i class=\"fa fa-home\"></i><span> here</span></a> to go back to home page", gtpay_echo_data[3], gatewayMessage[_gatewayLuncher.GtpayTranxId], homePageUrl);
                                     _gatewayLuncher.IsSuccessful = true;
                                 }
                                 else
                                 {
                                     borderColor = "red";
                                     alertType = "danger";
-                                    thankYou = "Your transaction failed!";
-                                    transactionSummary = string.Format("Your payment failed with reason: {0}. Transaction Reference No.: {1}. Click on 'Continue shopping' button below to try again, or click <a href=\"{2}\"><i class=\"fa fa-home\"></i><span> here</span></a> to go back to home page", gatewayMessage[_gatewayLuncher.GtpayTranxStatusMsg], gatewayMessage[_gatewayLuncher.GtpayTranxId], homePageUrl);
+                                    thankYou = T("Plugins.SmartStore.GTPay.YourTransactionFailedMessage");
+                                    //transactionSummary = string.Format(T("Plugins.SmartStore.GTPay.PaymentFailedMessage"), gatewayMessage[_gatewayLuncher.GtpayTranxStatusMsg], string.Format("<a href=\"{0}\"><i class=\"fa fa-home\"></i><span> ", homePageUrl), "</span></a>");
+
+                                    transactionSummary = string.Format(T("Plugins.SmartStore.GTPay.PaymentFailedMessage"), gatewayMessage[_gatewayLuncher.GtpayTranxStatusMsg]);
+                                    _httpContext.Session[_gatewayLuncher.ErrorMessage] = transactionSummary;
+                                    
+                                    //thankYou = "Your transaction failed!";
+                                    //transactionSummary = string.Format("Your payment failed with reason: {0}. Transaction Reference No.: {1}. Click on 'Continue shopping' button below to try again, or click <a href=\"{2}\"><i class=\"fa fa-home\"></i><span> here</span></a> to go back to home page", gatewayMessage[_gatewayLuncher.GtpayTranxStatusMsg], gatewayMessage[_gatewayLuncher.GtpayTranxId], homePageUrl);
                                     _gatewayLuncher.IsSuccessful = false;
                                 }
 
@@ -849,32 +731,38 @@ namespace SmartStore.GTPay.Controllers
                                 response.Append("<tbody>");
 
                                 response.Append("<tr>");
-                                response.Append("<td><b>Currency</b></td>");
+                                //response.Append("<td><b>Currency</b></td>");
+                                response.Append("<td><b>" + T("Plugins.SmartStore.GTPay.Field.Currency") + "</b></td>");
                                 response.Append("<td>" + gatewayMessage[_gatewayLuncher.GtpayTranxCurr] + "</td>");
                                 response.Append("</tr>");
 
                                 response.Append("<tr>");
-                                response.Append("<td><b>Response Code</b></td>");
+                                //response.Append("<td><b>Response Code</b></td>");
+                                response.Append("<td><b>" + T("Plugins.SmartStore.GTPay.Field.ResponseCode") + "</b></td>");
                                 response.Append("<td>" + gatewayResponse.ResponseCode + "</td>");
                                 response.Append("</tr>");
 
                                 response.Append("<tr>");
-                                response.Append("<td><b>Response Description</b></td>");
+                                //response.Append("<td><b>Response Description</b></td>");
+                                response.Append("<td><b>" + T("Plugins.SmartStore.GTPay.Field.ResponseDescription") + "</b></td>");
                                 response.Append("<td>" + gatewayResponse.ResponseDescription + "</td>");
                                 response.Append("</tr>");
 
                                 response.Append("<tr>");
-                                response.Append("<td><b>Merchant Reference</b></td>");
+                                //response.Append("<td><b>Merchant Reference</b></td>");
+                                response.Append("<td><b>" + T("Plugins.SmartStore.GTPay.Field.MerchantReference") + "</b></td>");
                                 response.Append("<td>" + gatewayResponse.MerchantReference + "</td>");
                                 response.Append("</tr>");
 
                                 response.Append("<tr>");
-                                response.Append("<td><b>Transaction Ref. No.</b></td>");
+                                //response.Append("<td><b>Transaction Ref. No.</b></td>");
+                                response.Append("<td><b>" + T("Plugins.SmartStore.GTPay.TransactionRefNo") + "</b></td>");
                                 response.Append("<td>" + gatewayMessage[_gatewayLuncher.GtpayTranxId] + "</td>");
                                 response.Append("</tr>");
 
                                 response.Append("<tr>");
-                                response.Append("<td><b>Transaction Status</b></td>");
+                                //response.Append("<td><b>Transaction Status</b></td>");
+                                response.Append("<td><b>" + T("Plugins.SmartStore.GTPay.Field.TransactionStatus") + "</b></td>");
                                 response.Append("<td>" + transactionStatus.ToString() + "</td>");
                                 response.Append("</tr>");
 
@@ -901,13 +789,17 @@ namespace SmartStore.GTPay.Controllers
                     else
                     {
                         transactionStatus = TransactionStatus.Failed;
-                        _httpContext.Session[_gatewayLuncher.ErrorMessage] = "Payment Request session was accidentally cleared! Please contact your system administrator";
+                        _httpContext.Session[_gatewayLuncher.ErrorMessage] = T("Plugins.SmartStore.GTPay.PaymentRequestSessionClearedMessage");
+
+                        //_httpContext.Session[_gatewayLuncher.ErrorMessage] = "Payment Request session was accidentally cleared! Please contact your system administrator";
                     }
                 }
                 else
                 {
                     transactionStatus = TransactionStatus.Failed;
-                    _httpContext.Session[_gatewayLuncher.ErrorMessage] = "Gateway response is empty! Please click on the 'Continue button' below to initiate another transaction.";
+                    _httpContext.Session[_gatewayLuncher.ErrorMessage] = T("Plugins.SmartStore.GTPay.EmptyGatewayResponseMessage");
+                    
+                    //_httpContext.Session[_gatewayLuncher.ErrorMessage] = "Gateway response is empty! Please click on the 'Continue button' below to initiate another transaction.";
                 }
             }
             catch (Exception ex)
@@ -920,15 +812,19 @@ namespace SmartStore.GTPay.Controllers
 
             try
             {
-                LogTransaction(gtpay_echo_data, gatewayResponse, gatewayMessage, transactionStatus);
+                LogTransaction(gtpay_echo_data, gatewayResponse, gatewayMessage, gtpaySetting.TransactionSuccessCode, transactionStatus);
 
                 Order order = _orderService.GetOrderById(GTPay.Services.GatewayLuncher.OrderId);
                 SetOrderStatus(order, transactionStatus);
 
-                if (_gatewayLuncher.IsSuccessful)
-                {
-                    SendEmail(order, _gatewayLuncher.IsSuccessful);
-                }
+                bool sendMail = gtpaySetting.SendMailOnFailedTransaction == true || _gatewayLuncher.IsSuccessful == true;
+                SendEmail(order, sendMail);
+
+
+                //if (_gatewayLuncher.IsSuccessful)
+                //{
+                //    SendEmail(order, _gatewayLuncher.IsSuccessful);
+                //}
             }
             catch (Exception ex)
             {
@@ -940,25 +836,29 @@ namespace SmartStore.GTPay.Controllers
 
             return Content(response.ToString());
         }
-        private void LogTransaction(string[] gtpay_echo_data, GTPayGatewayResponse gatewayResponse, NameValueCollection gatewayMessage, TransactionStatus transactionStatus = TransactionStatus.Pending)
+        private void LogTransaction(string[] gtpay_echo_data, GTPayGatewayResponse gatewayResponse, NameValueCollection gatewayMessage, string transactionSuccessCode, TransactionStatus transactionStatus = TransactionStatus.Pending)
         {
             if (gtpay_echo_data == null)
             {
-                throw new ArgumentNullException("Order or Customer was not specified!");
+                //throw new ArgumentNullException("Order or Customer cannot be retreived!");
+                throw new ArgumentNullException(T("Plugins.SmartStore.GTPay.OrderOrCustomerCannotBeRetreivedMessage"));
             }
 
             GTPayTransactionLog transactionLog = _transactionLogService.GetBy(gatewayMessage[_gatewayLuncher.GtpayTranxId]);
             if (transactionLog == null || !transactionLog.TransactionRefNo.HasValue())
             {
-                throw new ArgumentNullException("Transaction log retreival failed!");
+                throw new ArgumentNullException(T("Plugins.SmartStore.GTPay.TransactionLogRetrievalFailedMessage"));
+                //throw new ArgumentNullException("Transaction log retrieval failed!");
             }
 
-            bool amountMismatch = true;
+            //bool amountMismatch = true;
             int amount = Convert.ToInt32(gatewayMessage[_gatewayLuncher.GtpayTranxAmtSmallDenom]);
-            if (gatewayResponse != null && amount != 0)
-            {
-                amountMismatch = gatewayResponse.Amount != amount;
-            }
+            bool amountMismatch = (gatewayResponse != null && amount != 0) ? gatewayResponse.Amount != amount : true;
+            
+            //if (gatewayResponse != null && amount != 0)
+            //{
+            //    amountMismatch = gatewayResponse.Amount != amount;
+            //}
 
             transactionLog.GTPayTransactionStatusId = (int)transactionStatus;
             transactionLog.AmountInUnit = Convert.ToInt64(gatewayMessage[_gatewayLuncher.GtpayTranxAmtSmallDenom]);
@@ -974,7 +874,7 @@ namespace SmartStore.GTPay.Controllers
             transactionLog.CustomerId = Convert.ToInt32(gtpay_echo_data[4]);
             transactionLog.OrderId = Convert.ToInt32(gtpay_echo_data[5]);
 
-            if (transactionLog.ResponseCode == "00")
+            if (transactionLog.ResponseCode == transactionSuccessCode)
             {
                 transactionLog.DatePaid = DateTime.UtcNow;
             }
@@ -986,26 +886,34 @@ namespace SmartStore.GTPay.Controllers
             StringBuilder messageBuilder = new StringBuilder();
             if (gtpayRequeryResponse.Amount != Convert.ToDecimal(gtpayResponse.Get(_gatewayLuncher.GtpayTranxAmtSmallDenom)))
             {
-                messageBuilder.AppendLine(string.Format("<li>GTPay Transaction Amount was modified from {0} to {1} in transit</li>", Convert.ToDecimal(gtpayResponse.Get(_gatewayLuncher.GtpayTranxAmtSmallDenom)), gtpayRequeryResponse.Amount));
+                messageBuilder.AppendLine(string.Format("<li>" + T("Plugins.SmartStore.GTPay.Attacked.GTPayTransactionAmountModifiedMessage") + "</li>", Convert.ToDecimal(gtpayResponse.Get(_gatewayLuncher.GtpayTranxAmtSmallDenom)), gtpayRequeryResponse.Amount));
+
+                //messageBuilder.AppendLine(string.Format("<li>GTPay Transaction Amount was modified from {0} to {1} in transit</li>", Convert.ToDecimal(gtpayResponse.Get(_gatewayLuncher.GtpayTranxAmtSmallDenom)), gtpayRequeryResponse.Amount));
             }
             if (gtpayRequeryResponse.MertID != merchId)
             {
-                messageBuilder.AppendLine("<li>GTPay Merchant ID was modified in transit</li>");
+                messageBuilder.AppendLine("<li>" + T("Plugins.SmartStore.GTPay.Attacked.GTPayMerchantIDModifiedMessage") + "</li>");
+                //messageBuilder.AppendLine("<li>GTPay Merchant ID was modified in transit</li>");
             }
             if (gtpayRequeryResponse.ResponseCode != gtpayResponse[_gatewayLuncher.GtpayTranxStatusCode])
             {
-                messageBuilder.AppendLine("<li>GTPay Response Code was modified in transit</li>");
+                messageBuilder.AppendLine("<li>" + T("Plugins.SmartStore.GTPay.Attacked.GTPayResponseCodeModifiedMessage") + "</li>");
+                //messageBuilder.AppendLine("<li>GTPay Response Code was modified in transit</li>");
             }
             if (gtpayRequeryResponse.ResponseDescription != gtpayResponse[_gatewayLuncher.GtpayTranxStatusMsg])
             {
-                messageBuilder.AppendLine("<li>GTPay Response Description was modified in transit</li>");
+                messageBuilder.AppendLine("<li>" + T("Plugins.SmartStore.GTPay.Attacked.GTPayResponseDescriptionModifiedMessage") + "</li>");
+                //messageBuilder.AppendLine("<li>GTPay Response Description was modified in transit</li>");
             }
 
             if (messageBuilder.Length > 0)
             {
                 messageBuilder.Append("</ol>");
-                messageBuilder.Append("<div>Kindly report this issue to your system adminstrator immediately</div>");
-                messageBuilder.Insert(0, "<div>The following 'Man In The Middle Attack' occured during the transction processing! </div><ol>");
+                messageBuilder.Append("<div>" + T("Plugins.SmartStore.GTPay.ReportIssueToSystemAdminstratorMessage") + "</div>");
+                messageBuilder.Insert(0, "<div>" + T("Plugins.SmartStore.GTPay.ManInTheMiddleAttackOccurredMessage") + " </div><ol>");
+
+                //messageBuilder.Append("<div>Kindly report this issue to your system adminstrator immediately</div>");
+                //messageBuilder.Insert(0, "<div>The following 'Man In The Middle Attack' occured during the transction processing! </div><ol>");
             }
 
             return messageBuilder.ToString();
@@ -1013,14 +921,25 @@ namespace SmartStore.GTPay.Controllers
         private bool TransactionCurrencyIsInvalid(string requestCurrency, string responseCurrency)
         {
             bool isInvalid = true;
-            if (requestCurrency == "566" && (responseCurrency == "NGN" || responseCurrency == "566"))
+
+            GTPaySupportedCurrency currency = _supportedCurrencyService.GetSupportedCurrencyByCode(requestCurrency.ToInt());
+            if (currency == null || currency.Id <= 0)
+                throw new Exception(T("Plugins.SmartStore.GTPay.GTPayCurrenyFailedOnRetrievalMessage"));
+
+            if (requestCurrency == currency.Code.ToString() && (responseCurrency == currency.Alias || responseCurrency == currency.Code.ToString()))
             {
                 isInvalid = false;
             }
-            else if (requestCurrency == "840" && (responseCurrency == "USD" || responseCurrency == "840"))
-            {
-                isInvalid = false;
-            }
+           
+
+            //if (requestCurrency == "566" && (responseCurrency == "NGN" || responseCurrency == "566"))
+            //{
+            //    isInvalid = false;
+            //}
+            //else if (requestCurrency == "840" && (responseCurrency == "USD" || responseCurrency == "840"))
+            //{
+            //    isInvalid = false;
+            //}
 
             return isInvalid;
         }
@@ -1028,83 +947,40 @@ namespace SmartStore.GTPay.Controllers
         {
             StringBuilder messageBuilder = new StringBuilder();
 
-            //if (paymentRequest[_gatewayLuncher.GtpayTranxId] != gatewayResponse[_gatewayLuncher.GtpayTranxId])
-            //{
-            //    messageBuilder.Append(string.Format("<li>GTPay Transaction Id was modified in transit from {0} to {1}</li>", paymentRequest[_gatewayLuncher.GtpayTranxId], gatewayResponse[_gatewayLuncher.GtpayTranxId]));
-            //}
             if (paymentRequest[_gatewayLuncher.GtpayMertId] != merchantId)
             {
-                messageBuilder.Append("<li>GTPay Merchant Id was modified in transit</li>");
+                messageBuilder.AppendLine("<li>" + T("Plugins.SmartStore.GTPay.Attacked.GTPayMerchantIDModifiedMessage") + "</li>");
+                //messageBuilder.Append("<li>GTPay Merchant ID was modified in transit</li>");
             }
-            //if (paymentRequest[_gatewayLuncher.GtpayTranxAmt] != gatewayResponse[_gatewayLuncher.GtpayTranxAmtSmallDenom])
-            //{
-            //    messageBuilder.Append(string.Format("<li>GTPay Transaction Amount was modified intransit from {0} to {1}</li>", paymentRequest[_gatewayLuncher.GtpayTranxAmt], gatewayResponse[_gatewayLuncher.GtpayTranxAmtSmallDenom]));
-            //}
             if (TransactionCurrencyIsInvalid(paymentRequest[_gatewayLuncher.GtpayTranxCurr], gatewayResponse[_gatewayLuncher.GtpayTranxCurr]))
             {
-                messageBuilder.Append(string.Format("<li>GTPay Transaction Currency was modified in transit from '{0}' to '{1}'</li>", paymentRequest[_gatewayLuncher.GtpayTranxCurr], gatewayResponse[_gatewayLuncher.GtpayTranxCurr]));
+                messageBuilder.Append(string.Format("<li>" + T("Plugins.SmartStore.GTPay.Attacked.GTPayTransactionCurrencyModifiedMessage") + "</li>", paymentRequest[_gatewayLuncher.GtpayTranxCurr], gatewayResponse[_gatewayLuncher.GtpayTranxCurr]));
+                //messageBuilder.Append(string.Format("<li>GTPay Transaction Currency was modified in transit from '{0}' to '{1}'</li>", paymentRequest[_gatewayLuncher.GtpayTranxCurr], gatewayResponse[_gatewayLuncher.GtpayTranxCurr]));
             }
             if (paymentRequest[_gatewayLuncher.GtpayCustId] != gatewayResponse[_gatewayLuncher.GtpayCustId])
             {
-                messageBuilder.Append(string.Format("<li>Customer Id was modified in transit from {0} to {1}</li>", paymentRequest[_gatewayLuncher.GtpayCustId], gatewayResponse[_gatewayLuncher.GtpayCustId]));
+                messageBuilder.Append(string.Format("<li>" + T("Plugins.SmartStore.GTPay.Attacked.GTPayCustomerIDModifiedMessage") + "</li>", paymentRequest[_gatewayLuncher.GtpayCustId], gatewayResponse[_gatewayLuncher.GtpayCustId]));
+                //messageBuilder.Append(string.Format("<li>Customer ID was modified in transit from {0} to {1}</li>", paymentRequest[_gatewayLuncher.GtpayCustId], gatewayResponse[_gatewayLuncher.GtpayCustId]));
             }
             if (paymentRequest[_gatewayLuncher.GtpayTranxNotiUrl] != gatewayResponse[_gatewayLuncher.SiteRedirectUrl])
             {
-                messageBuilder.Append(string.Format("<li>GTPay Redirect Url was modified from in transit from '{0}' to '{1}'</li>", paymentRequest[_gatewayLuncher.GtpayTranxNotiUrl], gatewayResponse[_gatewayLuncher.SiteRedirectUrl]));
+                messageBuilder.Append(string.Format("<li>" + T("Plugins.SmartStore.GTPay.Attacked.GTPayRedirectURLModifiedMessage") + "</li>", paymentRequest[_gatewayLuncher.GtpayTranxNotiUrl], gatewayResponse[_gatewayLuncher.SiteRedirectUrl]));
+                //messageBuilder.Append(string.Format("<li>GTPay Redirect Url was modified from in transit from '{0}' to '{1}'</li>", paymentRequest[_gatewayLuncher.GtpayTranxNotiUrl], gatewayResponse[_gatewayLuncher.SiteRedirectUrl]));
             }
 
             if (messageBuilder.Length > 0)
             {
                 messageBuilder.Append("</ol>");
-                messageBuilder.Append("<div>Kindly report this issue to your system adminstrator immediately</div>");
-                messageBuilder.Insert(0, "<div>The following 'Man In The Middle Attack' occured during the transction processing! </div><ol>");
+                messageBuilder.Append("<div>" + T("Plugins.SmartStore.GTPay.ReportIssueToSystemAdminstratorMessage") + "</div>");
+                messageBuilder.Insert(0, "<div>" + T("Plugins.SmartStore.GTPay.ManInTheMiddleAttackOccurredMessage") + " </div><ol>");
+
+                //messageBuilder.Append("<div>Kindly report this issue to your system adminstrator immediately</div>");
+                //messageBuilder.Insert(0, "<div>The following 'Man In The Middle Attack' occured during the transction processing! </div><ol>");
             }
 
             return messageBuilder.ToString();
 
-
-            //if (message.HasValue())
-            //{
-            //    message = "<div>The following 'Man In The Middle Attack' occured during the transction processing! </div><ol>" + message;
-            //}
-            //if (paymentRequest[_gatewayLuncher.GtpayTranxMemo] != gatewayResponse[_gatewayLuncher.GtpayTranxMemo])
-            //{
-            //    message.AppendLine(string.Format("GTPay Transaction Memo was modified from {0} to {1} in transit", paymentRequest[_gatewayLuncher.GtpayTranxMemo], gatewayResponse[_gatewayLuncher.GtpayTranxMemo]));
-            //}
-            //if (paymentRequest[_gatewayLuncher.GtpayEchoData] != gatewayResponse[_gatewayLuncher.GtpayEchoData])
-            //{
-            //    message.AppendLine(string.Format("GTPay Transaction Id was modified from {0} to {1} in transit", paymentRequest[_gatewayLuncher.GtpayEchoData], gatewayResponse[_gatewayLuncher.GtpayEchoData]));
-            //}
-            //else if (paymentRequest[_gatewayLuncher.GtpayGwayName] != gatewayResponse[_gatewayLuncher.GtpayGwayName])
-            //{
-            //    message.AppendLine(string.Format("GTPay Transaction Id was modified from {0} to {1} in transit", paymentRequest[_gatewayLuncher.GtpayGwayName], gatewayResponse[_gatewayLuncher.GtpayGwayName]));
-            //}
-            //if (paymentRequest[_gatewayLuncher.GtpayTranxCurr] != gatewayResponse[_gatewayLuncher.GtpayTranxCurr])
-            //{
-            //    messageBuilder.Append(string.Format("<li>GTPay Transaction Currency was modified in transit from '{0}' to '{1}'</li>", paymentRequest[_gatewayLuncher.GtpayTranxCurr], gatewayResponse[_gatewayLuncher.GtpayTranxCurr]));
-            //}
-            //if (paymentRequest[_gatewayLuncher.GtpayHash] != gatewayResponse[_gatewayLuncher.GtpayTranxHash])
-            //{
-            //    messageBuilder.Append("<li>GTPay Transaction Hash was modified in transit</li>");
-            //}
-
-            //return message.ToString();
         }
-
-        //private bool NoManInTheMiddleAttack(GTPayGatewayResponse gtpayRequeryResponse, NameValueCollection gtpayResponse, string merchId)
-        //{
-        //    decimal requeryAmount = gtpayRequeryResponse.Amount;
-        //    string requeryMerchantId = gtpayRequeryResponse.MertID;
-        //    string requeryResponseCode = gtpayRequeryResponse.ResponseCode;
-        //    string requeryResponseDescription = gtpayRequeryResponse.ResponseDescription;
-
-        //    decimal amount = Convert.ToDecimal(gtpayResponse.Get(_gatewayLuncher.GtpayTranxAmtSmallDenom));
-        //    string merchantId = merchId; 
-        //    string transactionStatusCode = gtpayResponse[_gatewayLuncher.GtpayTranxStatusCode];
-        //    string transactionStatusDescription = gtpayResponse[_gatewayLuncher.GtpayTranxStatusMsg];
-
-        //    return requeryAmount == amount && requeryMerchantId == merchantId && requeryResponseCode == transactionStatusCode && requeryResponseDescription == transactionStatusDescription;
-        //}
 
         private GTPayGatewayResponse GetTransactionDetailBy(string mertId, string amount, string tranxId, string hash)
         {
@@ -1113,7 +989,8 @@ namespace SmartStore.GTPay.Controllers
                 GTPaySettings gtpaySettings = GetGTPaySettings();
                 if (gtpaySettings == null)
                 {
-                    throw new Exception("GTPay settings could not be retrieved!");
+                    throw new Exception(T("Plugins.SmartStore.GTPay.GTPaySettingRetrievalFailedMessage"));
+                    //throw new Exception("GTPay settings could not be retrieved!");
                 }
 
                 HttpClient client = new HttpClient();
@@ -1129,8 +1006,11 @@ namespace SmartStore.GTPay.Controllers
 
         private StringBuilder BuildErrorHtml(string error)
         {
-            string errorTitle = "Error occured!";
-            string errorMessage = "Error occured during request processing! Plesae try again";
+            //string errorTitle = "Error occured!";
+            //string errorMessage = "Error occured during request processing! Plesae try again";
+
+            string errorTitle = T("Plugins.SmartStore.GTPay.ErrorOccured");
+            string errorMessage = T("Plugins.SmartStore.GTPay.ErrorOccuredMessage");
             _gatewayLuncher.IsSuccessful = false;
 
             StringBuilder response = new StringBuilder();
@@ -1176,11 +1056,16 @@ namespace SmartStore.GTPay.Controllers
             {
                 string borderColor = "red";
                 string alertType = "danger";
-                string errorTitle = "Your transaction failed!";
+                string errorTitle = T("Plugins.SmartStore.GTPay.YourTransactionFailedMessage");
+                //string errorTitle = "Your transaction failed!";
 
-                string otherError = _httpContext.Session[_gatewayLuncher.ErrorMessage] != null ? " other" : "";
+                //string otherError = _httpContext.Session[_gatewayLuncher.ErrorMessage] != null ? " other" : "";
+                string otherError = _httpContext.Session[_gatewayLuncher.ErrorMessage] != null ? " " + T("Plugins.SmartStore.GTPay.Other") : "";
                 string error = _httpContext.Session[_gatewayLuncher.ErrorMessage] != null ? _httpContext.Session[_gatewayLuncher.ErrorMessage].ToString() : "";
-                string transactionError = string.Format("{0} See below for{1} error details. Click the 'Continue shopping' button below to continue shopping", error, otherError);
+                //string transactionError = string.Format("{0} See below for{1} error details. Click the 'Continue shopping' button below to continue shopping", error, otherError);
+
+                string homePageUrl = _gatewayLuncher.GetRedirectUrl(_httpContext.Request, "Index", "Home");
+                string transactionError = string.Format(T("Plugins.SmartStore.GTPay.ErrorDetailMessage"), error, otherError, string.Format("<a href=\"{0}\"><i class=\"fa fa-home\"></i><span>", homePageUrl), "</span></a>");
                 transactionError = transactionError.Trim();
 
                 NameValueCollection gatewayMessage = GetGatewayResponse();
@@ -1190,7 +1075,8 @@ namespace SmartStore.GTPay.Controllers
                     string[] gtpay_echo_data = gatewayMessage[_gatewayLuncher.GtpayEchoData].Split(';');
 
                     response.Append("<div class=\"heading mt-3\">");
-                    response.Append("<h1 class=\"heading-title font-weight-light\">Error occurred!</h1>");
+                    response.Append("<h1 class=\"heading-title font-weight-light\">" + T("Plugins.SmartStore.GTPay.ErrorOccured") + "</h1>");
+                    //response.Append("<h1 class=\"heading-title font-weight-light\">Error occurred!</h1>");
                     response.Append("</div>");
 
                     response.Append("<div class=\"card card-block order-review-data-box mb-3\" style=\"border-color:" + borderColor + "\">");
@@ -1215,17 +1101,20 @@ namespace SmartStore.GTPay.Controllers
                     response.Append("<tbody>");
 
                     response.Append("<tr>");
-                    response.Append("<td><b>Transaction Status Code</b></td>");
+                    //response.Append("<td><b>Transaction Status Code</b></td>");
+                    response.Append("<td><b>" + T("Plugins.SmartStore.GTPay.Field.TransactionStatusCode") + "</b></td>");
                     response.Append("<td>" + gatewayMessage[_gatewayLuncher.GtpayTranxStatusCode] + "</td>");
                     response.Append("</tr>");
 
                     response.Append("<tr>");
-                    response.Append("<td><b>Failure Reason</b></td>");
+                    //response.Append("<td><b>Failure Reason</b></td>");
+                    response.Append("<td><b>" + T("Plugins.SmartStore.GTPay.FailureReason") + "</b></td>");
                     response.Append("<td>" + gatewayMessage[_gatewayLuncher.GtpayTranxStatusMsg] + "</td>");
                     response.Append("</tr>");
 
                     response.Append("<tr>");
-                    response.Append("<td><b>Transaction Ref. No.</b></td>");
+                    //response.Append("<td><b>Transaction Ref. No.</b></td>");
+                    response.Append("<td><b>" + T("Plugins.SmartStore.GTPay.TransactionRefNo") + "</b></td>");
                     response.Append("<td>" + gatewayMessage[_gatewayLuncher.GtpayTranxId] + "</td>");
                     response.Append("</tr>");
 
@@ -1305,7 +1194,6 @@ namespace SmartStore.GTPay.Controllers
         {
             try
             {
-
                 //send email notifications
                 int orderPlacedStoreOwnerNotificationQueuedEmailId = _workflowMessageService.SendOrderPlacedStoreOwnerNotification(order, _localizationSettings.DefaultAdminLanguageId);
                 if (orderPlacedStoreOwnerNotificationQueuedEmailId > 0)
@@ -1322,8 +1210,10 @@ namespace SmartStore.GTPay.Controllers
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.Error(ex, ex.Message);
+
                 //model.TestEmailShortErrorMessage = ex.ToAllMessages();
                 //model.TestEmailFullErrorMessage = ex.ToString();
             }

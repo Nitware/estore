@@ -41,15 +41,7 @@ namespace SmartStore.GTPay.Services
 
             _transactionStatusRepository.Update(gTPayTransactionStatus);
         }
-        //public virtual void DeleteAllGTPayTransactionStatus()
-        //{
-        //    List<GTPayTransactionStatus> gTPayTransactionStatusList = _transactionStatusRepository.Get(x => x.Id >= 0).ToList();
-        //    _transactionStatusRepository.DeleteRange(gTPayTransactionStatusList);
-        //}
-
-       
-
-
+      
 
 
 

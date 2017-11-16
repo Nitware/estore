@@ -108,7 +108,9 @@
 
 	$(document).ready(function () {
 		//search button
-		$('#btnSearch').click(function () {
+	    $('#btnSearch').click(function () {
+	        alert("1");
+
 			//search
 			var grid = $('#categories-grid').data('tGrid');
 			grid.currentPage = 1; //new search. Set page size to 1
@@ -150,7 +152,8 @@
 		});
 	});
 
-	function onDataBinding(e) {
+    function onDataBinding(e) {
+        alert("2");
 		var searchModel = {
 			SearchCategoryName: $('#@Html.FieldIdFor(model => model.SearchCategoryName)').val(),
 			SearchAlias: $('#@Html.FieldIdFor(model => model.SearchAlias)').val(),

@@ -4,7 +4,6 @@
 @using Telerik.Web.Mvc.UI;
 @model ConfigurationModel
 
-
 @using (Html.BeginForm())
 {
     <table class="adminContent">
@@ -26,6 +25,26 @@
                 @Html.ValidationMessageFor(model => model.ShowGatewayNameFirst)
             </td>
         </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.SendMailOnFailedTransaction)
+            </td>
+            <td class="adminData">
+                @Html.SettingEditorFor(model => model.SendMailOnFailedTransaction)
+                @Html.ValidationMessageFor(model => model.SendMailOnFailedTransaction)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.SmartLabelFor(model => model.TransactionSuccessCode)
+            </td>
+            <td class="adminData">
+                @Html.SettingEditorFor(model => model.TransactionSuccessCode)
+                @Html.ValidationMessageFor(model => model.TransactionSuccessCode)
+            </td>
+        </tr>
+        
+
         <tr>
             <td class="adminTitle">
                 @Html.SmartLabelFor(model => model.HashKey)
@@ -64,7 +83,8 @@
                 @Html.ValidationMessageFor(model => model.GatewayRequeryUrl)
             </td>
         </tr>
-        <tr>
+        
+        <tr >
             <td class="adminTitle">
                 @Html.SmartLabelFor(model => model.AdditionalFee)
             </td>
@@ -73,16 +93,7 @@
                 @Html.ValidationMessageFor(model => model.AdditionalFee)
             </td>
         </tr>
-        @*<tr>
-            <td class="adminTitle">
-                @Html.SmartLabelFor(model => model.AdditionalFee)
-            </td>
-            <td class="adminData">
-                @Html.SettingEditorFor(model => model.AdditionalFee)
-                @Html.ValidationMessageFor(model => model.AdditionalFee)
-            </td>
-        </tr>*@
-        <tr>
+        <tr >
             <td class="adminTitle">
                 @Html.SmartLabelFor(model => model.AdditionalFeePercentage)
             </td>

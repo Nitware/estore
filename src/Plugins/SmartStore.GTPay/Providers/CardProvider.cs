@@ -9,6 +9,7 @@ using SmartStore.GTPay.Settings;
 using SmartStore.Services.Payments;
 using System.Web.Mvc;
 using SmartStore.GTPay.Domain;
+using SmartStore.Services.Localization;
 
 namespace SmartStore.GTPay.Providers
 {
@@ -20,12 +21,14 @@ namespace SmartStore.GTPay.Providers
         private readonly HttpContextBase _httpContext;
         private readonly IGatewayLuncher _gatewayLuncher;
         private readonly IGTPayCurrencyService _supportedCurrencyService;
+        private readonly ILocalizationService _localizationService;
 
-        public CardProvider(HttpContextBase httpContext, IGatewayLuncher gatewayLuncher, IGTPayCurrencyService supportedCurrencyService)
+        public CardProvider(HttpContextBase httpContext, IGatewayLuncher gatewayLuncher, IGTPayCurrencyService supportedCurrencyService, ILocalizationService localizationService)
         {
             _httpContext = httpContext;
             _gatewayLuncher = gatewayLuncher;
             _supportedCurrencyService = supportedCurrencyService;
+            _localizationService = localizationService;
         }
 
         //public static List<SelectListItem> CardTypes
@@ -104,13 +107,15 @@ namespace SmartStore.GTPay.Providers
             GTPaySupportedCurrency supportedCurrency = _supportedCurrencyService.GetSupportedCurrencyById(selectedCurrencyId);
             if (supportedCurrency == null || supportedCurrency.Id <= 0)
             {
-                throw new ArgumentNullException("supportedCurrency retreival failed! Please try again");
+                throw new ArgumentNullException(_localizationService.GetResource("Plugins.SmartStore.GTPay.SupportedCurrencyNullArgument"));
+                //throw new ArgumentNullException("supportedCurrency retreival failed! Please try again");
             }
 
             GTPaySettings gtpaysettings = _httpContext.Session[_gatewayLuncher.GTPaySettings] as GTPaySettings;
             if (gtpaysettings == null)
             {
-                throw new ArgumentNullException("GTPaySettings could not be retreived! Please try again, but contact your system administrator after three unsuccessful trials");
+                throw new ArgumentNullException(_localizationService.GetResource("Plugins.SmartStore.GTPay.GTPaySettingsNullArgument"));
+                //throw new ArgumentNullException("GTPaySettings could not be retreived! Please try again, but contact your system administrator after three unsuccessful trials");
             }
 
             _gatewayLuncher.Lunch(postProcessPaymentRequest, supportedCurrency, gtpaysettings, _httpContext);

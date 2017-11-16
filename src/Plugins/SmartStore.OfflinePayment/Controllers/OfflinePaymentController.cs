@@ -489,7 +489,7 @@ namespace SmartStore.OfflinePayment.Controllers
 			model.CardholderName = (string)paymentData.Get("CardholderName");
 			model.CardNumber = (string)paymentData.Get("CardNumber");
 			model.CardCode = (string)paymentData.Get("CardCode");
-
+            
 			var creditCardType = (string)paymentData.Get("CreditCardType");
 			var selectedCcType = model.CreditCardTypes.Where(x => x.Value.Equals(creditCardType, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
 			if (selectedCcType != null)

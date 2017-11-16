@@ -19,6 +19,146 @@
     <Value>Determines whether to apply a percentage additional fee to the order total. If not enabled, a fixed value is used.</Value>
   </LocaleResource>
   
+  
+  <LocaleResource Name="GTPaySettingRetrievalFailedMessage">
+    <Value>GTPay settings could not be retrieved!</Value>
+  </LocaleResource>
+  <LocaleResource Name="GTPaySettingUpdateSuccessfulMessage">
+    <Value>GTPay setting update operation was successful</Value>
+  </LocaleResource>
+  <LocaleResource Name="GTPayTransactionLogUpdateFailedMessage">
+    <Value>GTPay Transaction Log update operation failed! </Value>
+  </LocaleResource>
+  <LocaleResource Name="GTPayTransactionLogUpdateSuccessfulMessage">
+    <Value>GTPay Transaction Log update operation was successful</Value>
+  </LocaleResource>
+  <LocaleResource Name="GTPayCurrencyUpdateSuccessfulMessage">
+    <Value>GTPay Supported Currency update operation was successful</Value>
+  </LocaleResource>
+  <LocaleResource Name="GTPayCurrenyFailedOnLoadMessage">
+    <Value>Supported curreny failed on load! Click the back button and try again.</Value>
+  </LocaleResource>
+   <LocaleResource Name="GTPayCurrenyFailedOnRetrievalMessage">
+    <Value>Supported currency retrieval failed!</Value>
+  </LocaleResource>
+  <LocaleResource Name="NoteTransactionReferenceNumberMessage">
+    <Value>Please note the below Transaction Reference Number, because you will need it to track your payment.</Value>
+  </LocaleResource>
+  <LocaleResource Name="TransactionRefNo">
+    <Value>Transaction Ref. No.:</Value>
+  </LocaleResource>
+  <LocaleResource Name="SuccessfulTransactionMessage">
+    <Value>Your transaction was successful</Value>
+  </LocaleResource>
+  <LocaleResource Name="EmailHasBeenSentMessage">
+    <Value>An email has been sent to your registered email ({0}). You can print or download your invoice by clicking the above 'Print' or 'Order as PDF' button respectively. To do a re-order, click the 'Re-order' button below or click {1} here{2} to go back to home page</Value>
+  </LocaleResource>
+  <LocaleResource Name="YourTransactionFailedMessage">
+    <Value>Your transaction failed!</Value>
+  </LocaleResource>
+  <LocaleResource Name="PaymentFailedMessage">
+    <Value>Your transaction failed with reason: {0}.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Field.Currency">
+    <Value>Currency</Value>
+  </LocaleResource>
+  <LocaleResource Name="Field.ResponseCode">
+    <Value>Response Code</Value>
+  </LocaleResource>
+  <LocaleResource Name="Field.ResponseDescription">
+    <Value>Response Description</Value>
+  </LocaleResource>
+  <LocaleResource Name="Field.MerchantReference">
+    <Value>Merchant Reference</Value>
+  </LocaleResource>
+  <LocaleResource Name="Field.TransactionStatus">
+    <Value>Transaction Status</Value>
+  </LocaleResource>
+  <LocaleResource Name="PaymentRequestSessionClearedMessage">
+    <Value>Payment Request session was accidentally cleared! Please contact your system administrator</Value>
+  </LocaleResource>
+  <LocaleResource Name="EmptyGatewayResponseMessage">
+    <Value>Gateway response is empty! Please click on the 'Continue button' below to initiate another transaction.</Value>
+  </LocaleResource>
+  <LocaleResource Name="OrderOrCustomerCannotBeRetreivedMessage">
+    <Value>Order or Customer cannot be retrieved!</Value>
+  </LocaleResource>
+  <LocaleResource Name="TransactionLogRetrievalFailedMessage">
+    <Value>Transaction log retrieval failed!</Value>
+  </LocaleResource>
+  <LocaleResource Name="Attacked.GTPayTransactionAmountModifiedMessage">
+    <Value>GTPay Transaction Amount was modified from {0} to {1} in transit</Value>
+  </LocaleResource>
+  <LocaleResource Name="Attacked.GTPayMerchantIDModifiedMessage">
+    <Value>GTPay Merchant ID was modified in transit</Value>
+  </LocaleResource>
+  <LocaleResource Name="Attacked.GTPayResponseCodeModifiedMessage">
+    <Value>GTPay Response Code was modified in transit</Value>
+  </LocaleResource>
+  <LocaleResource Name="Attacked.GTPayResponseDescriptionModifiedMessage">
+    <Value>GTPay Response Description was modified in transit</Value>
+  </LocaleResource>
+  <LocaleResource Name="ReportIssueToSystemAdminstratorMessage">
+    <Value>Kindly report this issue to your system adminstrator immediately</Value>
+  </LocaleResource>
+  <LocaleResource Name="ManInTheMiddleAttackOccurredMessage">
+    <Value>The following 'Man In The Middle Attack' occurred during the transction processing!</Value>
+  </LocaleResource>
+  <LocaleResource Name="Attacked.GTPayTransactionCurrencyModifiedMessage">
+    <Value>GTPay Transaction Currency was modified in transit from '{0}' to '{1}'</Value>
+  </LocaleResource>
+  <LocaleResource Name="Attacked.GTPayCustomerIDModifiedMessage">
+    <Value>Customer ID was modified in transit from {0} to {1}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Attacked.GTPayRedirectURLModifiedMessage">
+    <Value>GTPay Redirect URL was modified from in transit from '{0}' to '{1}'</Value>
+  </LocaleResource>
+  <LocaleResource Name="ErrorOccured">
+    <Value>Error occurred!</Value>
+  </LocaleResource>
+  <LocaleResource Name="ErrorOccuredMessage">
+    <Value>Error occurred during request processing! Plesae try again</Value>
+  </LocaleResource>
+   <LocaleResource Name="Other">
+    <Value>other</Value>
+  </LocaleResource>
+   <LocaleResource Name="ErrorDetailMessage">
+     <Value>{0} See below for{1} error details. Click the 'Continue shopping' button below to continue shopping, or click {2} here{3} to go back to home page.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Field.TransactionStatusCode">
+    <Value>Transaction Status Code</Value>
+  </LocaleResource>
+  <LocaleResource Name="FailureReason">
+    <Value>Failure Reason</Value>
+  </LocaleResource>
+  <LocaleResource Name="ManInTheMiddleAttackMessage">
+    <Value>One or more transaction parameters have been modified in transit! The system has aborted this transaction to save you from malicious attack. Please click the 'Continue shopping' button below to initiate another transaction, or click {0} here{1} to go to the home page. Sorry for the inconveniences this might have caused you.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Items">
+    <Value>items</Value>
+  </LocaleResource>
+  <LocaleResource Name="Item">
+    <Value>item</Value>
+  </LocaleResource>
+  <LocaleResource Name="NameAndEmailExist">
+    <Value>{0} ({1}) ordered {2} that cost {3} with order ID of {4}</Value>
+  </LocaleResource>
+  <LocaleResource Name="NameAndEmailDoesNotExist">
+    <Value>Customer with ID of '{0}' ordered {1} that cost {2} with order ID of {3}</Value>
+  </LocaleResource>
+  <LocaleResource Name="SupportedCurrencyNullArgument">
+    <Value>supportedCurrency retrieval failed! Please try again</Value>
+  </LocaleResource>
+  <LocaleResource Name="GTPaySettingsNullArgument">
+    <Value>GTPaySettings could not be retrieved! Please try again, but contact your system administrator after three unsuccessful trials</Value>
+  </LocaleResource>
+  <LocaleResource Name="PluginInstalled">
+    <Value>Plugin installed: SystemName: {0}, Version: {1}, Description: '{2}'</Value>
+  </LocaleResource>
+  <LocaleResource Name="PluginUninstalled">
+    <Value>Plugin uninstalled: SystemName: {0}, Version: {1}, Description: '{2}'</Value>
+  </LocaleResource>
+  
 
   <LocaleResource Name="CurrencyTab">
     <Value>Supported Currencies</Value>
@@ -59,7 +199,7 @@
       
      
       <LocaleResource Name="Fields.TransactionStatus">
-        <Value>Payment Status</Value>
+        <Value>Status</Value>
       </LocaleResource>
       <LocaleResource Name="Fields.TransactionStatus.Hint">
         <Value>Payment status after order completion</Value>

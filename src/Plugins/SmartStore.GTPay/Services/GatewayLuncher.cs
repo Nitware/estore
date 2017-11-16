@@ -13,6 +13,8 @@ using SmartStore.Core.Domain.Orders;
 using SmartStore.GTPay.Domain;
 using SmartStore.GTPay.Settings;
 using System.Collections.Specialized;
+using SmartStore.Core.Domain.Localization;
+using SmartStore.Services.Localization;
 
 namespace SmartStore.GTPay.Services
 {
@@ -20,12 +22,7 @@ namespace SmartStore.GTPay.Services
     {
         private int noOfTrial;
         private readonly ITransactionLogService _transactionLogService;
-        
-        //private string _hash = "D3D1D05AFE42AD50818167EAC73C109168A0F108F32645C8B59E897FA930DA44F9230910DAC9E20641823799A107A02068F7BC0F4CC41D2952E249552255710F";
-
-        //public string HashKey { get { return _hash; } }
-        public bool IsSuccessful { get; set; }
-        public static int OrderId { get; set; }
+        private readonly ILocalizationService _localizationService;
 
         private string _gtpay_mert_id = "gtpay_mert_id";
         private string _gtpay_tranx_id = "gtpay_tranx_id";
@@ -46,10 +43,11 @@ namespace SmartStore.GTPay.Services
         private string _gatewayMessage = "gatewayMessage";
         private string _transactionRef = "transactionRef";
         private string _isManInTheMiddleAttack = "isManInTheMiddleAttack";
-        private string _manInTheMiddleAttackMessage = "One or more transaction parameters have been modified in transit! The system has aborted this transaction to save you from malicious attack. Please click the 'Continue shopping' button below to initiate another transaction, or click <a href=\"{0}\"><i class=\"fa fa-home\"></i><span> here</span></a> to go to the home page. Sorry for the inconveniences this might have caused you.";
+        private string _manInTheMiddleAttackMessage; 
+
+        //private string _manInTheMiddleAttackMessage = "One or more transaction parameters have been modified in transit! The system has aborted this transaction to save you from malicious attack. Please click the 'Continue shopping' button below to initiate another transaction, or click <a href=\"{0}\"><i class=\"fa fa-home\"></i><span> here</span></a> to go to the home page. Sorry for the inconveniences this might have caused you.";
         private string _errorOccurred = "errorOccurred";
         private string _errorMessage = "errorMessage";
-        //private string _gtpay_mert_id_value = "8692";
         private string _gtpay_verification_hash = "gtpay_verification_hash";
         private string _selected_currency_id = "selected_currency_id";
         private string _gtpay_settings = "GTPaySettings";
@@ -58,8 +56,10 @@ namespace SmartStore.GTPay.Services
         private string _site_redirect_url = "site_redirect_url";
         private string _gtpay_tranx_hash = "gtpay_tranx_hash";
 
+        public bool IsSuccessful { get; set; }
+        public static int OrderId { get; set; }
+
         public string GtpayMertId { get { return _gtpay_mert_id; } }
-        //public string GtpayMertIdValue { get { return _gtpay_mert_id_value; } }
         public string GtpayTranxId { get { return _gtpay_tranx_id; } }
         public string GtpayTranxAmt { get { return _gtpay_tranx_amt; } }
         public string GtpayTranxCurr { get { return _gtpay_tranx_curr; } }
@@ -88,11 +88,13 @@ namespace SmartStore.GTPay.Services
         public string PamentRequestParameter { get { return _pament_request_parameter; } }
         public string SiteRedirectUrl { get { return _site_redirect_url; } }
         public string GtpayTranxHash { get { return _gtpay_tranx_hash; } }
-
-
-        public GatewayLuncher(ITransactionLogService transactionLogService)
+        
+        public GatewayLuncher(ITransactionLogService transactionLogService, ILocalizationService localizationService)
         {
+            _localizationService = localizationService;
             _transactionLogService = transactionLogService;
+            
+            _manInTheMiddleAttackMessage = string.Format(_localizationService.GetResource("Plugins.SmartStore.GTPay.ManInTheMiddleAttackMessage"), "<a href=\"{0}\"><i class=\"fa fa-home\"></i><span>", "</span></a>");
         }
 
         public void Lunch(PostProcessPaymentRequest postProcessPaymentRequest, GTPaySupportedCurrency currency, GTPaySettings gtpaySetting, HttpContextBase httpContext)
@@ -100,32 +102,24 @@ namespace SmartStore.GTPay.Services
             OrderId = postProcessPaymentRequest.Order.Id;
             Tuple<string, string> nameAndEmail = GetNameAndEmail(postProcessPaymentRequest.Order.BillingAddress);
 
-            //decimal orderTotal = Math.Truncate(postProcessPaymentRequest.Order.OrderTotal * 100);
             decimal orderTotal = Math.Truncate(postProcessPaymentRequest.Order.OrderTotal * currency.LeastValueUnitMultiplier);
             string gtpay_tranx_memo = GetOrderSummary(nameAndEmail, postProcessPaymentRequest.Order);
             string gtpay_tranx_id = httpContext.Session[TransactionRef] as string;
             
-            //string gtpay_mert_id = "0908";
             string gtpay_mert_id = gtpaySetting.MerchantId;
             string gtpay_tranx_amt = orderTotal.ToString();
-            //string gtpay_tranx_amt = "0";
             string gtpay_tranx_curr = currency.Code.ToString();
-            //string gtpay_tranx_curr = "840";
             string gtpay_cust_id = postProcessPaymentRequest.Order.Customer.Id.ToString();
             string gtpay_cust_name = nameAndEmail.Item1;
             string gtpay_tranx_noti_url = GetRedirectUrl(httpContext.Request, "Details", "Order", OrderId);
             
-            //string hash = HashKey;
             string hash = gtpaySetting.HashKey;
             string parameters_to_hash = gtpay_mert_id + gtpay_tranx_id + gtpay_tranx_amt + gtpay_tranx_curr + gtpay_cust_id + gtpay_tranx_noti_url + hash;
             string gtpay_echo_data = gtpay_mert_id + ";" + hash + ";" + nameAndEmail.Item1 + ";" + nameAndEmail.Item2 + ";" + gtpay_cust_id + ";" + postProcessPaymentRequest.Order.Id;
             string gtpay_hash = GenerateSHA512String(parameters_to_hash);
-            
-            //string url = "http://gtweb2.gtbank.com/orangelocker/gtpaym/tranx.aspx";
             string url = gtpaySetting.GatewayPostUrl;
             string gtpay_gway_name = currency.Gateway;
-
-            
+                       
 
             //store payment request parameter in session
             NameValueCollection paymentRequest = new NameValueCollection();
@@ -143,6 +137,7 @@ namespace SmartStore.GTPay.Services
             httpContext.Session[PamentRequestParameter] = paymentRequest;
 
             //gtpay_tranx_noti_url = "SR" + gtpay_tranx_noti_url;
+            //gtpay_cust_id = gtpay_cust_id + 2;
 
             HttpResponseBase response = httpContext.Response;
             response.Clear();
@@ -151,7 +146,6 @@ namespace SmartStore.GTPay.Services
             form.Append("<html>");
             form.AppendFormat("<body onload='document.forms[0].submit()'>");
             form.AppendFormat("<form action='{0}' method='post'>", url);
-            
             form.AppendFormat("<input type='hidden' name='" + GtpayMertId + "' value='{0}'>", gtpay_mert_id);
             form.AppendFormat("<input type='hidden' name='" + GtpayTranxId + "' value='{0}'>", gtpay_tranx_id);
             form.AppendFormat("<input type='hidden' name='" + GtpayTranxAmt + "' value='{0}'>", gtpay_tranx_amt);
@@ -181,15 +175,19 @@ namespace SmartStore.GTPay.Services
             }
 
             string orderSummary = null;
-            string item = order.OrderItems.Count > 1 ? " items" : " item";
+            string item = order.OrderItems.Count > 1 ? " " + _localizationService.GetResource("Plugins.SmartStore.GTPay.Items") : " " + _localizationService.GetResource("Plugins.SmartStore.GTPay.Item");
 
             if (nameAndEmail != null && nameAndEmail.Item1.HasValue())
             {
-                orderSummary = nameAndEmail.Item1 + " (" + order.Customer.Id + ")" + " ordered " + order.OrderItems.Count + item + " that cost " + order.OrderTotal.ToString("n") + " with order ID of " + order.Id;
+                orderSummary = string.Format(_localizationService.GetResource("Plugins.SmartStore.GTPay.NameAndEmailExist"), nameAndEmail.Item1, order.Customer.Id, order.OrderItems.Count + item, order.OrderTotal.ToString("n"), order.Id);
+
+                //orderSummary = nameAndEmail.Item1 + " (" + order.Customer.Id + ")" + " ordered " + order.OrderItems.Count + item + " that cost " + order.OrderTotal.ToString("n") + " with order ID of " + order.Id;
             }
             else
             {
-                orderSummary = "Customer with ID of '" + order.Customer.Id + "'" + " ordered " + order.OrderItems.Count + item + " that cost " + order.OrderTotal.ToString("n") + " with order ID of " + order.Id;
+                orderSummary = string.Format(_localizationService.GetResource("Plugins.SmartStore.GTPay.NameAndEmailDoesNotExist"), order.Customer.Id, order.OrderItems.Count + item, order.OrderTotal.ToString("n"), order.Id);
+
+                //orderSummary = "Customer with ID of '" + order.Customer.Id + "'" + " ordered " + order.OrderItems.Count + item + " that cost " + order.OrderTotal.ToString("n") + " with order ID of " + order.Id;
             }
 
             return orderSummary;
@@ -283,25 +281,9 @@ namespace SmartStore.GTPay.Services
             }
 
             return "SRI" + builder.ToString();
-
-            //return "SRI5535739914645655";
         }
 
-        //private int GenerateSeed()
-        //{
-        //    int seed = 0;
-        //    string guid = Guid.NewGuid().ToString("N");
-
-        //    foreach (char character in guid)
-        //    {
-        //        seed += character.ToInt();
-        //    }
-
-        //    return seed;
-        //}
-
-
-
+      
 
 
 

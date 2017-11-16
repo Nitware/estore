@@ -33,8 +33,9 @@
         </tr>
         <tr>
             <td class="adminData" colspan="2">
-                <div >
-                    @Html.Partial("_TransactionListGrid", Model)
+                <div id="tl-grid">
+                    @Html.Partial("_TransactionListGrid")
+                    @*@Html.Partial("_TransactionListGrid", Model)*@
                 </div>
             </td>
 
@@ -45,13 +46,16 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+
         function onDataBinding(e) {
+            alert("");
+
             var searchModel = {
                 TransactionDate: $('#@Html.FieldIdFor(model => model.TransactionRequest.Date)').val(),
                 TransactionRefNo: $('#@Html.FieldIdFor(model => model.TransactionRequest.ReferenceNo)').val(),
             };
 
-            alert(searchModel);
+            alert(searchModel + "---000");
 
             e.data = searchModel;
         }
@@ -65,11 +69,13 @@
                 return;
             }
 
-            var grid = $('#transaction-log-grid').data('tGrid');
-            alert(grid);
-            grid.currentPage = 1; //new search. Set page size to 1
-            grid.ajaxRequest();
-            return false;
+            ////var grid = $('#transaction-log-grid').tGrid();
+            //var grid = $('#transaction-log-grid').data('tGrid');
+            ////alert(grid);
+            ////alert($('#transaction-log-grid').data('tGrid'));
+            //grid.currentPage = 1;
+            //grid.ajaxRequest();
+            //return false;
 
 
 
@@ -85,7 +91,7 @@
 
             //$(grid).data("kendoGrid").dataSource.data([]);
 
-            //findTransaction(date, referenceNo);
+            findTransaction(date, referenceNo);
         })
 
         function findTransaction(date, referenceNo) {
@@ -104,7 +110,7 @@
                 //},
 
                 success: function (result) {
-                    $("#grid").html(result);
+                    $("#tl-grid").html(result);
 
                     @*if (jsonResult.isSuccessful) {
                         window.location.href = '@Url.Action("Result", "Search", new { Area = "Common" })';
@@ -121,7 +127,7 @@
             return false;
         }
 
-        
+
 
 
     })

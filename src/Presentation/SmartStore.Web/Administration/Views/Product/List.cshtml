@@ -200,6 +200,8 @@
 
 			//search button
 			$('#search-products').click(function () {
+
+			   
 				//search
 				var grid = $('#products-grid').data('tGrid');
 				grid.currentPage = 1; //new search. Set page size to 1
@@ -207,6 +209,8 @@
 				//clear selected checkboxes
 				$('.checkboxGroups').attr('checked', false).change();
 				selectedIds = [];
+
+				
 				return false;
 			});
 
@@ -269,7 +273,9 @@
 			});
 		});
 
-		function productsGrid_onDataBinding(e) {
+        function productsGrid_onDataBinding(e) {
+           
+
 			var searchModel = {
 				SearchProductName: $('#@Html.FieldIdFor(model => model.SearchProductName)').val(),
 				SearchCategoryId: $('#SearchCategoryId').val(),

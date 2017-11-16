@@ -77,12 +77,16 @@ namespace SmartStore.GTPay
             //save settings
             _settingService.SaveSetting(new GTPaySettings()
             {
+                MerchantId = "8692",
                 ShowGatewayInterface = true,
                 ShowGatewayNameFirst = true,
+                SendMailOnFailedTransaction = false,
                 GatewayPostUrl = "http://gtweb2.gtbank.com/orangelocker/gtpaym/tranx.aspx",
                 GatewayRequeryUrl = "https://gtweb2.gtbank.com/GTPayService/gettransactionstatus.json",
                 HashKey = "D3D1D05AFE42AD50818167EAC73C109168A0F108F32645C8B59E897FA930DA44F9230910DAC9E20641823799A107A02068F7BC0F4CC41D2952E249552255710F",
-                MerchantId = "8692",
+                TransactionSuccessCode = "00",
+                AdditionalFeePercentage = false,
+                AdditionalFee = 0,
 
                 //DescriptionText = "@Plugins.Payments.Manual.PaymentInfoDescription"
             });
@@ -92,7 +96,7 @@ namespace SmartStore.GTPay
 
             base.Install();
 
-            _logger.Info(string.Format("Plugin installed: SystemName: {0}, Version: {1}, Description: '{2}'", PluginDescriptor.SystemName, PluginDescriptor.Version, PluginDescriptor.FriendlyName));
+            _logger.Info(string.Format(_localizationService.GetResource("Plugins.SmartStore.GTPay.PluginInstalled"), PluginDescriptor.SystemName, PluginDescriptor.Version, PluginDescriptor.FriendlyName));
         }
 
         public override void Uninstall()
@@ -106,7 +110,7 @@ namespace SmartStore.GTPay
 
             base.Uninstall();
 
-            _logger.Info(string.Format("Plugin uninstalled: SystemName: {0}, Version: {1}, Description: '{2}'", PluginDescriptor.SystemName, PluginDescriptor.Version, PluginDescriptor.FriendlyName));
+            _logger.Info(string.Format(_localizationService.GetResource("Plugins.SmartStore.GTPay.PluginUninstalled"), PluginDescriptor.SystemName, PluginDescriptor.Version, PluginDescriptor.FriendlyName));
         }
 
 

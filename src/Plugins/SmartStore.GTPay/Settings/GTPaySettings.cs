@@ -18,8 +18,10 @@ namespace SmartStore.GTPay.Settings
         public string GatewayRequeryUrl { get; set; }
         public bool ShowGatewayInterface { get; set; }
         public bool ShowGatewayNameFirst { get; set; }
-        
-       
+        public bool SendMailOnFailedTransaction { get; set; }
+        public string TransactionSuccessCode { get; set; }
+
+
     }
 
 }

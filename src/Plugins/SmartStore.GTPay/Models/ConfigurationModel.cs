@@ -27,9 +27,12 @@ namespace SmartStore.GTPay.Models
         [SmartResourceDisplayName("Plugins.SmartStore.GTPay.DescriptionText")]
         public string DescriptionText { get; set; }
 
+        //[SmartResourceDisplayName("Plugins.SmartStore.GTPay.Fields.UsePercentage")]
+        //public bool UsePercentage { get; set; }
+
         [SmartResourceDisplayName("Plugins.SmartStore.GTPay.AdditionalFee")]
         public decimal AdditionalFee { get; set; }
-
+        
         [SmartResourceDisplayName("Plugins.SmartStore.GTPay.AdditionalFeePercentage")]
         public bool AdditionalFeePercentage { get; set; }
         
@@ -50,6 +53,12 @@ namespace SmartStore.GTPay.Models
 
         [SmartResourceDisplayName("Plugins.Payments.GTPay.Fields.ShowGatewayNameFirst")]
         public bool ShowGatewayNameFirst { get; set; }
+
+        [SmartResourceDisplayName("Plugins.Payments.GTPay.Fields.SendMailOnFailedTransaction")]
+        public bool SendMailOnFailedTransaction { get; set; }
+
+        [SmartResourceDisplayName("Plugins.Payments.GTPay.Fields.TransactionSuccessCode")]
+        public string TransactionSuccessCode { get; set; }
 
         public List<GTPayCurrencyModel> SupportedCurrencies { get; set; }
         public GTPayCurrencyModel SupportedCurrency { get; set; }
